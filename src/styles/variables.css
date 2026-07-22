@@ -1,0 +1,19 @@
+/**
+ * Fallback tokens so styles don't flash unstyled before <UIProvider> mounts
+ * (e.g. during SSR). UIProvider overrides these inline once it hydrates.
+ */
+:root {
+  --kui-brand: 99 91 255;
+  --kui-brand-hover: 82 74 240;
+  --kui-brand-fg: 255 255 255;
+  --kui-surface: 255 255 255;
+  --kui-surface-raised: 247 247 251;
+  --kui-surface-sunken: 237 237 244;
+  --kui-border: 226 226 235;
+  --kui-text: 23 23 31;
+  --kui-text-muted: 107 107 122;
+  --kui-danger: 220 38 38;
+  --kui-danger-fg: 255 255 255;
+  --kui-radius: 0.5rem;
+  --kui-font: "Inter var", system-ui, sans-serif;
+}

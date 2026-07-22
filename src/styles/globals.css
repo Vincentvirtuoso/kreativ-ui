@@ -1,0 +1,16 @@
+@import "./variables.css";
+@import "./animations.css";
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+[data-kreativ-theme] {
+  font-family: var(--kui-font, system-ui, -apple-system, sans-serif);
+  color: rgb(var(--kui-text, 0 0 0));
+  background: rgb(var(--kui-surface, 255 255 255));
+  min-height: 100vh;
+}
