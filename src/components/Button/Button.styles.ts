@@ -8,10 +8,14 @@ export const buttonBase =
 
 export const buttonVariants: Record<Variant, string> = {
   solid:
-    "bg-[rgb(var(--kui-brand))] text-[rgb(var(--kui-brand-fg))] hover:bg-[rgb(var(--kui-brand-hover))]",
+    "bg-brand text-brand-fg hover:bg-brand-hover",
+
   outline:
-    "border border-[rgb(var(--kui-border))] text-[rgb(var(--kui-text))] bg-transparent hover:bg-[rgb(var(--kui-surface-raised))]",
+    "border border-border text-text bg-transparent hover:bg-surface-raised",
+
   ghost:
-    "text-[rgb(var(--kui-text))] bg-transparent hover:bg-[rgb(var(--kui-surface-raised))]",
-  soft: "bg-[rgb(var(--kui-surface-raised))] text-[rgb(var(--kui-text))] hover:bg-[rgb(var(--kui-surface-sunken))]",
+    "text-text bg-transparent hover:bg-surface-raised",
+
+  soft:
+    "bg-surface-raised text-text hover:bg-surface-sunken",
 };

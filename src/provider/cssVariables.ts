@@ -112,7 +112,7 @@ function hslToRgb(h: number, s: number, l: number): string {
   const r = Math.round(f(0) * 255);
   const g = Math.round(f(8) * 255);
   const b = Math.round(f(4) * 255);
-  return `${r}, ${g}, ${b}`;
+  return `${r} ${g} ${b}`;
 }
 
 function adjustColor(
@@ -122,30 +122,58 @@ function adjustColor(
   role: "bg" | "fg" | "border" | "brand",
 ): string {
   const parsed = parseColor(color);
+
   if (!parsed) return color;
 
   let { h, s, l } = parsed;
 
-  const satFactor = intensity / 50;
-  s = Math.min(100, Math.max(0, Math.round(s * satFactor)));
+  const intensityFactor = intensity / 50;
 
-  const contrastFactor = 1 + (intensity - 50) / 100;
+  s = Math.min(
+    100,
+    Math.max(0, Math.round(s * intensityFactor)),
+  );
 
-  if (role === "fg") {
-    if (mode === "light") {
-      l = Math.max(0, Math.round(l * (1 - (contrastFactor - 1) * 0.4)));
-    } else {
-      l = Math.min(100, Math.round(l * (1 + (contrastFactor - 1) * 0.4)));
-    }
-  } else if (role === "bg") {
-    if (mode === "light") {
-      l = Math.min(100, Math.round(l * (1 + (contrastFactor - 1) * 0.15)));
-    } else {
-      l = Math.max(0, Math.round(l * (1 - (contrastFactor - 1) * 0.15)));
-    }
+  const contrast = (intensity - 50) / 100;
+
+  switch (role) {
+    case "fg":
+      l =
+        mode === "dark"
+          ? Math.min(100, l + Math.abs(contrast) * 20)
+          : Math.max(0, l - Math.abs(contrast) * 20);
+      break;
+
+    case "bg":
+      l =
+        mode === "dark"
+          ? Math.max(5, l - 70)
+          : Math.min(95, l + 70);
+      break;
+
+    case "border":
+      l =
+        mode === "dark"
+          ? Math.max(15, l - 40)
+          : Math.min(90, l + 40);
+      break;
+
+    case "brand":
+      l = Math.min(
+        90,
+        Math.max(
+          10,
+          l + contrast * 10,
+        ),
+      );
+      break;
   }
 
-  return hslToRgb(h, s, l);
+  return hslToRgb(
+    Math.round(h),
+    Math.round(s),
+    Math.round(l),
+  );
 }
 
 export function tokensToCssVars(
@@ -156,24 +184,34 @@ export function tokensToCssVars(
   const { colors, radius, font } = tokens;
 
   const colorVars: Record<string, string> = {};
+
   for (const { key, role } of COLOR_CONFIG) {
     const colorValue = colors[key as keyof typeof colors];
-    if (colorValue) {
-      const varName = `--kui-${toKebabCase(key)}`;
-      colorVars[varName] = adjustColor(
-        colorValue,
-        intensity,
-        mode,
-        role as any,
-      );
-    }
+
+    if (!colorValue) continue;
+
+    const varName = `--kui-${toKebabCase(key)}`;
+
+    colorVars[varName] = adjustColor(
+      colorValue,
+      intensity,
+      mode,
+      role as "bg" | "fg" | "border" | "brand",
+    );
   }
 
   return {
     ...colorVars,
+
     "--kui-radius": radius,
     "--kui-font": font,
+
+    "--kui-mode": mode,
+
     "--kui-intensity": String(intensity),
-    "--kui-contrast-multiplier": String(1 + (intensity - 50) / 100),
+
+    "--kui-contrast-multiplier": String(
+      1 + (intensity - 50) / 100,
+    ),
   };
 }

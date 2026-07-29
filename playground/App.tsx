@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 import { UIProvider, Button, useTheme, useSizeStyle } from "../src";
 
-// ---- Intensity Controls ----
+
 function IntensityControls({
   intensity,
   onIntensityChange,
@@ -17,7 +17,7 @@ function IntensityControls({
   };
 
   return (
-    <div className="space-y-2 p-4 border border-border rounded-lg bg-surface-raised">
+    <div className="space-y-2 p-4 border border-[rgb(var(--kui-border))] rounded-lg bg-surface-raised">
       <div className="flex items-center gap-4">
         <span className="text-sm font-medium text-text-muted">Intensity</span>
         <span className="text-sm font-mono bg-surface-sunken px-2 py-0.5 rounded">
@@ -30,7 +30,7 @@ function IntensityControls({
             max="100"
             value={numericValue}
             onChange={(e) => onIntensityChange(Number(e.target.value))}
-            className="w-full accent-brand"
+            className="w-full accent-"
           />
         </div>
       </div>
@@ -61,7 +61,6 @@ function IntensityControls({
   );
 }
 
-// ---- Demo Badge (unchanged) ----
 function DemoBadge({
   size = "md",
   children,
@@ -80,7 +79,6 @@ function DemoBadge({
   );
 }
 
-// ---- Mode Toggle (unchanged) ----
 function ModeToggle() {
   const { mode, resolvedMode, setMode } = useTheme();
   return (
@@ -154,52 +152,25 @@ export function App() {
     number | "subtle" | "default" | "bold"
   >(50);
 
+  const theme = {
+    intensity,
+    sizes: {
+      xl: {
+        height: "1.5rem",
+        paddingX: "2rem",
+        fontSize: "1.125rem",
+        gap: "0.75rem",
+        iconSize: "1.5rem",
+      },
+    },
+  }
+
+
   return (
     <UIProvider
       defaultMode="system"
       fallbackSize="lg"
-      theme={{
-        intensity,
-        sizes: {
-          xl: {
-            height: "1.5rem",
-            paddingX: "2rem",
-            fontSize: "1.125rem",
-            gap: "0.75rem",
-            iconSize: "1.5rem",
-          },
-        },
-        light: {
-          colors: {
-            brand: "rgb(110, 230, 25)",
-            brandHover: "hsl(95, 80%, 45%)",
-            brandFg: "hsl(0, 0%, 100%)",
-            surface: "hsl(0, 0%, 98%)",
-            surfaceRaised: "hsl(0, 0%, 100%)",
-            surfaceSunken: "hsl(0, 0%, 92%)",
-            border: "hsl(0, 0%, 85%)",
-            text: "hsl(0, 0%, 10%)",
-            textMuted: "hsl(0, 0%, 40%)",
-            danger: "hsl(0, 80%, 50%)",
-            dangerFg: "hsl(0, 0%, 100%)",
-          },
-        },
-        dark: {
-          colors: {
-            brand: "hsl(223, 80%, 60%)",
-            brandHover: "hsl(32, 80%, 65%)",
-            brandFg: "hsl(0, 0%, 100%)",
-            surface: "hsl(0, 0%, 12%)",
-            surfaceRaised: "hsl(0, 0%, 18%)",
-            surfaceSunken: "hsl(0, 0%, 8%)",
-            border: "hsl(0, 0%, 30%)",
-            text: "hsl(0, 0%, 95%)",
-            textMuted: "hsl(0, 0%, 60%)",
-            danger: "hsl(0, 80%, 50%)",
-            dangerFg: "hsl(0, 0%, 100%)",
-          },
-        },
-      }}
+      theme={theme}
     >
       <Playground intensity={intensity} onIntensityChange={setIntensity} />
     </UIProvider>

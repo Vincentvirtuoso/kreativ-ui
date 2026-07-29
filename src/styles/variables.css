@@ -1,7 +1,3 @@
-/**
- * Fallback tokens so styles don't flash unstyled before <UIProvider> mounts
- * (e.g. during SSR). UIProvider overrides these inline once it hydrates.
- */
 :root {
   --kui-brand: 99 91 255;
   --kui-brand-hover: 82 74 240;
