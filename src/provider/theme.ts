@@ -1,4 +1,4 @@
-import type { SizeScale, Theme } from "@/types/theme";
+import { SizeScale, Theme } from "@/types";
 
 export const defaultSizes: SizeScale = {
   xs: {
@@ -46,6 +46,22 @@ export const defaultTheme: Theme = {
       textMuted: "hsl(0, 0%, 40%)",
       danger: "hsl(0, 80%, 50%)",
       dangerFg: "hsl(0, 0%, 100%)",
+
+      destructive: "hsl(0, 80%, 50%)",
+      destructiveFg: "hsl(0, 0%, 100%)",
+      destructiveHover: "hsl(0, 80%, 45%)",
+
+      success: "hsl(142, 76%, 36%)",
+      successFg: "hsl(0, 0%, 100%)",
+      successHover: "hsl(142, 76%, 30%)",
+
+      warning: "hsl(38, 92%, 50%)",
+      warningFg: "hsl(0, 0%, 100%)",
+      warningHover: "hsl(38, 92%, 43%)",
+
+      info: "hsl(200, 80%, 45%)",
+      infoFg: "hsl(0, 0%, 100%)",
+      infoHover: "hsl(200, 80%, 38%)",
     },
     radius: "0.5rem",
     font: "Inter, sans-serif",
@@ -63,6 +79,22 @@ export const defaultTheme: Theme = {
       textMuted: "hsl(0, 0%, 60%)",
       danger: "hsl(0, 80%, 55%)",
       dangerFg: "hsl(0, 0%, 100%)",
+
+      destructive: "hsl(0, 80%, 55%)",
+      destructiveFg: "hsl(0, 0%, 100%)",
+      destructiveHover: "hsl(0, 80%, 60%)",
+
+      success: "hsl(142, 70%, 45%)",
+      successFg: "hsl(0, 0%, 100%)",
+      successHover: "hsl(142, 70%, 50%)",
+
+      warning: "hsl(38, 92%, 55%)",
+      warningFg: "hsl(0, 0%, 100%)",
+      warningHover: "hsl(38, 92%, 60%)",
+
+      info: "hsl(200, 80%, 60%)",
+      infoFg: "hsl(0, 0%, 100%)",
+      infoHover: "hsl(200, 80%, 68%)",
     },
     radius: "0.5rem",
     font: "Inter, sans-serif",

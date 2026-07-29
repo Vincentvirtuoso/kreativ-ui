@@ -36,7 +36,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           buttonVariants[variant],
           overrides?.variants?.[variant],
           fullWidth && "w-full",
-          overrides?.base,
+          overrides?.base, 
+          isLoading && 'animate-kui-pulse',
           className
         )}
         style={{ ...sizeStyle, ...style }}
@@ -45,7 +46,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {isLoading && (
           <span
-            className="kui-animate-spin rounded-full border-2 border-current border-t-transparent"
+            className="animate-kui-spin rounded-full border-2 border-current border-t-transparent"
             style={{ width: iconSize, height: iconSize }}
             aria-hidden="true"
           />

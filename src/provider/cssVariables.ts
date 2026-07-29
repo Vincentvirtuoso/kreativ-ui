@@ -1,7 +1,7 @@
 import type { ThemeTokens } from "@/types/theme";
 import { COLOR_CONFIG } from "./colorConfig";
 
-function toKebabCase(str: string): string {
+export function toKebabCase(str: string): string {
   return str.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
 }
 
@@ -192,12 +192,12 @@ export function tokensToCssVars(
 
     const varName = `--kui-${toKebabCase(key)}`;
 
-    colorVars[varName] = adjustColor(
+    colorVars[varName] = `rgb(${adjustColor(
       colorValue,
       intensity,
       mode,
       role as "bg" | "fg" | "border" | "brand",
-    );
+    )})`;
   }
 
   return {

@@ -1,50 +1,108 @@
-# kreativ-ui
+# Kreativ UI
 
-A themeable React component library. Styling is Tailwind + CSS variables, so
-consumers get Tailwind's DX while still being able to re-theme everything
-at runtime (colors, radius, font, dark mode, per-component overrides)
-without rebuilding your CSS.
+A modern, themeable React component library built with **React**, **Tailwind CSS v4**, and **CSS Variables**.
 
-## Install (once published)
+Kreativ UI provides a runtime theme engine, allowing colors, typography, radius, animations, and component styles to be customized **without rebuilding CSS**.
+
+---
+
+## ✨ Features
+
+* 🎨 Runtime theme switching
+* 🌙 Light, dark and system modes
+* ⚡ Tailwind CSS v4 integration
+* 🎯 CSS Variable powered design tokens
+* 🧩 Component-level theme overrides
+* 🎭 Built-in animation utilities
+* 📦 Tree-shakeable
+* ♿ Accessible component APIs
+* 💪 Fully typed with TypeScript
+
+---
+
+## 📦 Installation
 
 ```bash
 npm install kreativ-ui
 ```
 
+Import the stylesheet once.
+
 ```tsx
-import { UIProvider, Button } from "kreativ-ui";
+import "kreativ-ui/styles.css";
+```
+
+---
+
+## 🚀 Quick Start
+
+```tsx
+import { Button, UIProvider } from "kreativ-ui";
 import "kreativ-ui/styles.css";
 
 export default function App() {
   return (
     <UIProvider defaultMode="system">
-      <Button variant="solid">Click me</Button>
+      <Button>Click me</Button>
     </UIProvider>
   );
 }
 ```
 
-## Local development
+---
 
-```bash
-npm install
-npm run dev      # Vite playground at localhost:5173 — live-edit components here
-npm run build    # tsup bundles src/ + tailwind CLI compiles dist/styles.css
-npm run typecheck
+# Theme Provider
+
+Wrap your application once.
+
+```tsx
+<UIProvider defaultMode="system">
+  <App />
+</UIProvider>
 ```
 
-## Theming
+### Available Modes
 
-Every color token is a CSS variable (`--kui-brand`, `--kui-surface`, etc.)
-set by `<UIProvider>` on a wrapping element. Override any subset:
+* `"light"`
+* `"dark"`
+* `"system"`
+
+Switch themes anywhere.
+
+```tsx
+import { useTheme } from "kreativ-ui";
+
+function ThemeSwitcher() {
+  const { mode, setMode } = useTheme();
+
+  return (
+    <>
+      <button onClick={() => setMode("light")}>Light</button>
+      <button onClick={() => setMode("dark")}>Dark</button>
+      <button onClick={() => setMode("system")}>System</button>
+    </>
+  );
+}
+```
+
+---
+
+# Custom Themes
+
+Override only what you need.
 
 ```tsx
 <UIProvider
   theme={{
-    light: { colors: { brand: "16 185 129" } }, // emerald
-    dark: { colors: { brand: "52 211 153" } },
-    components: {
-      Button: { variants: { solid: "rounded-full" } },
+    light: {
+      colors: {
+        brand: "16 185 129",
+      },
+    },
+    dark: {
+      colors: {
+        brand: "52 211 153",
+      },
     },
   }}
 >
@@ -52,36 +110,290 @@ set by `<UIProvider>` on a wrapping element. Override any subset:
 </UIProvider>
 ```
 
-`resolvedMode` is `"light" | "dark"`, computed from `defaultMode` +
-`prefers-color-scheme`. Switch it with `useTheme().setMode(...)`.
+---
 
-## Adding a new component (the Button pattern)
+# Theme Tokens
 
-Every component folder follows the same four files — copy `Button/` as a
-starting point:
+## Colors
 
 ```
-components/Input/
-├── Input.tsx          # forwardRef component, reads useTheme() overrides
-├── Input.types.ts     # Props interface extending the right HTML*Attributes
-├── Input.styles.ts     # base / variant / size class-map constants
-└── index.ts            # re-exports component + its Props type
+brand
+brandHover
+brandFg
+
+surface
+surfaceRaised
+surfaceSunken
+
+border
+
+text
+textMuted
+
+danger
+dangerFg
+
+destructive
+destructiveHover
+destructiveFg
+
+success
+successHover
+successFg
+
+warning
+warningHover
+warningFg
+
+info
+infoHover
+infoFg
 ```
 
-1. Define `*.types.ts` first — extend the matching native HTML attributes
-   interface plus `Styleable`.
-2. Define `*.styles.ts` — plain string constants keyed by `Variant`/`Size`
-   from `types/common.ts`, so every component shares the same variant
-   vocabulary.
-3. Build the component with `cn(base, variants[variant], overrides, className)`
-   so consumer overrides from `theme.components` always win.
-4. Export from `index.ts`, then add `export * from "./components/Input"` to
-   `src/index.ts`.
+## Radius
 
-## Publishing checklist
+```ts
+radius
+```
 
-- [ ] Bump version in `package.json`
-- [ ] `npm run build` — verify `dist/index.js`, `dist/index.cjs`,
-      `dist/index.d.ts`, `dist/styles.css` all exist
-- [ ] `npm pack` and inspect the tarball contents before first publish
-- [ ] `npm publish` (add `--access public` if the name is scoped)
+## Typography
+
+```ts
+font
+```
+
+## Motion
+
+```ts
+durationFast
+durationNormal
+durationSlow
+
+easeDefault
+easeIn
+easeOut
+```
+
+---
+
+# Components
+
+## Button
+
+```tsx
+<Button>
+  Click me
+</Button>
+```
+
+### Variants
+
+```tsx
+<Button variant="solid" />
+<Button variant="outline" />
+<Button variant="ghost" />
+<Button variant="soft" />
+```
+
+### Sizes
+
+```tsx
+<Button size="xs" />
+<Button size="sm" />
+<Button size="md" />
+<Button size="lg" />
+```
+
+### Loading
+
+```tsx
+<Button loading>
+  Saving...
+</Button>
+```
+
+### Disabled
+
+```tsx
+<Button disabled>
+  Submit
+</Button>
+```
+
+---
+
+# Built-in Animations
+
+Tailwind animation utilities are included.
+
+```tsx
+<div className="animate-kui-fade-in" />
+```
+
+### Available Animations
+
+```
+animate-kui-spin
+
+animate-kui-fade-in
+animate-kui-fade-out
+
+animate-kui-scale-in
+animate-kui-scale-out
+
+animate-kui-slide-up
+animate-kui-slide-down
+animate-kui-slide-left
+animate-kui-slide-right
+
+animate-kui-bounce
+animate-kui-pulse
+animate-kui-ping
+
+animate-kui-shake
+
+animate-kui-expand
+animate-kui-collapse
+
+animate-kui-shimmer
+```
+
+---
+
+# Project Structure
+
+```
+src/
+│
+├── components/
+│   └── Button/
+│       ├── Button.tsx
+│       ├── Button.styles.ts
+│       ├── Button.types.ts
+│       └── index.ts
+│
+├── context/
+├── hooks/
+├── styles/
+├── theme/
+├── types/
+├── utils/
+│
+└── index.ts
+```
+
+---
+
+# Creating a New Component
+
+Every component follows the same structure.
+
+```
+Component/
+├── Component.tsx
+├── Component.styles.ts
+├── Component.types.ts
+└── index.ts
+```
+
+Guidelines:
+
+1. Define the component props in `*.types.ts`.
+2. Define reusable style maps in `*.styles.ts`.
+3. Read component theme overrides using `useTheme()`.
+4. Merge styles using your `cn()` utility.
+5. Export the component and its types from `index.ts`.
+
+---
+
+# Development
+
+Install dependencies.
+
+```bash
+npm install
+```
+
+Run the playground.
+
+```bash
+npm run dev
+```
+
+Build the library.
+
+```bash
+npm run build
+```
+
+Run type checking.
+
+```bash
+npm run typecheck
+```
+
+---
+
+# Publishing
+
+```bash
+npm version patch
+npm run build
+npm publish
+```
+
+---
+
+# Roadmap
+
+## Core
+
+* ✅ Runtime theme engine
+* ✅ CSS variable tokens
+* ✅ Light / Dark / System modes
+* ✅ Tailwind v4 integration
+* ✅ Animation utilities
+* ✅ Button
+
+## Form
+
+* ⏳ Input
+* ⏳ Textarea
+* ⏳ Select
+* ⏳ Checkbox
+* ⏳ Radio
+* ⏳ Switch
+* ⏳ Slider
+* ⏳ Combobox
+
+## Feedback
+
+* ⏳ Alert
+* ⏳ Toast
+* ⏳ Progress
+* ⏳ Spinner
+* ⏳ Skeleton
+
+## Data Display
+
+* ⏳ Badge
+* ⏳ Avatar
+* ⏳ Card
+* ⏳ Table
+* ⏳ Data Grid
+
+## Navigation
+
+* ⏳ Tabs
+* ⏳ Accordion
+* ⏳ Breadcrumb
+* ⏳ Pagination
+
+## Overlay
+
+* ⏳ Dialog
+* ⏳ Drawer
+* ⏳ Popover
+* ⏳ Tooltip
+* ⏳ Dropdown Menu
+

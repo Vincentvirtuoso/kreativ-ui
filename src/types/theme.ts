@@ -12,6 +12,18 @@ export interface ColorTokens {
   textMuted: ColorToken;
   danger: ColorToken;
   dangerFg: ColorToken;
+  destructive: ColorToken;
+  destructiveFg: ColorToken;
+  destructiveHover: ColorToken;
+  success: ColorToken;
+  successFg: ColorToken;
+  successHover: ColorToken;
+  warning: ColorToken;
+  warningFg: ColorToken;
+  warningHover: ColorToken;
+  info: ColorToken;
+  infoFg: ColorToken;
+  infoHover: ColorToken;
 }
 
 export interface ThemeTokens {

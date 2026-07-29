@@ -17,7 +17,7 @@ function IntensityControls({
   };
 
   return (
-    <div className="space-y-2 p-4 border border-[rgb(var(--kui-border))] rounded-lg bg-surface-raised">
+    <div className="space-y-2 p-4 border border-border rounded-lg bg-surface-raised">
       <div className="flex items-center gap-4">
         <span className="text-sm font-medium text-text-muted">Intensity</span>
         <span className="text-sm font-mono bg-surface-sunken px-2 py-0.5 rounded">
@@ -116,6 +116,7 @@ function Playground({
         />
       </div>
 
+      {/* Core variants */}
       <div className="flex flex-wrap items-center gap-3">
         <Button variant="solid">Solid</Button>
         <Button variant="outline">Outline</Button>
@@ -123,6 +124,54 @@ function Playground({
         <Button variant="soft">Soft</Button>
       </div>
 
+      {/* Semantic solid variants */}
+      <div className="flex flex-wrap items-center gap-3">
+        <Button variant="destructive">Destructive</Button>
+        <Button variant="success">Success</Button>
+        <Button variant="warning">Warning</Button>
+        <Button variant="info">Info</Button>
+      </div>
+
+      {/* Semantic outline variants */}
+      <div className="flex flex-wrap items-center gap-3">
+        <Button variant="outline-destructive">Outline Destructive</Button>
+        <Button variant="outline-success">Outline Success</Button>
+        <Button variant="outline-warning">Outline Warning</Button>
+        <Button variant="outline-info">Outline Info</Button>
+      </div>
+
+      {/* Semantic ghost variants */}
+      <div className="flex flex-wrap items-center gap-3">
+        <Button variant="ghost-destructive">Ghost Destructive</Button>
+        <Button variant="ghost-success">Ghost Success</Button>
+        <Button variant="ghost-warning">Ghost Warning</Button>
+        <Button variant="ghost-info">Ghost Info</Button>
+      </div>
+
+      {/* Semantic soft variants */}
+      <div className="flex flex-wrap items-center gap-3">
+        <Button variant="soft-destructive">Soft Destructive</Button>
+        <Button variant="soft-success">Soft Success</Button>
+        <Button variant="soft-warning">Soft Warning</Button>
+        <Button variant="soft-info">Soft Info</Button>
+        <Button variant="soft-brand">Soft Brand</Button>
+      </div>
+
+      {/* Brand variants */}
+      <div className="flex flex-wrap items-center gap-3">
+        <Button variant="outline-brand">Outline Brand</Button>
+        <Button variant="ghost-brand">Ghost Brand</Button>
+        <Button variant="link">Link</Button>
+      </div>
+
+      {/* White variants (useful on dark backgrounds) */}
+      <div className="flex flex-wrap items-center gap-3 bg-gray-900 p-4 rounded-lg">
+        <Button variant="solid-white">Solid White</Button>
+        <Button variant="outline-white">Outline White</Button>
+        <Button variant="ghost-white">Ghost White</Button>
+      </div>
+
+      {/* Size scale */}
       <div className="flex flex-wrap items-center gap-3">
         <Button size="xs">XS</Button>
         <Button size="sm">Small</Button>
