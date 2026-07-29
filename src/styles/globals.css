@@ -19,7 +19,6 @@
   --color-danger: var(--kui-danger);
   --color-danger-fg: var(--kui-danger-fg);
 
-  /* New semantic color tokens */
   --color-destructive: var(--kui-destructive);
   --color-destructive-fg: var(--kui-destructive-fg);
   --color-destructive-hover: var(--kui-destructive-hover);
