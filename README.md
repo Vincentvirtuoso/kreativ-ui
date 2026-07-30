@@ -222,6 +222,120 @@ easeOut
 
 ---
 
+## ThemeToggler
+
+A built-in component for switching between light, dark, and optionally system theme modes. It integrates with `UIProvider` and updates the active color mode using `useTheme()`.
+
+### Basic Usage
+
+```tsx
+import { ThemeToggler } from "kreativ-ui";
+
+function App() {
+  return <ThemeToggler />;
+}
+```
+
+### System Mode
+
+Enable the system theme option.
+
+```tsx
+<ThemeToggler allowSystem />
+```
+
+### Icon Only
+
+Render compact icon buttons.
+
+```tsx
+<ThemeToggler iconOnly allowSystem />
+```
+
+### Variants
+
+Customize the appearance of active and inactive buttons.
+
+```tsx
+<ThemeToggler
+  variant="outline"
+  activeVariant="solid"
+/>
+```
+
+### Vertical Layout
+
+```tsx
+<ThemeToggler
+  orientation="vertical"
+  allowSystem
+/>
+```
+
+### Custom Labels
+
+```tsx
+<ThemeToggler
+  allowSystem
+  labels={{
+    light: "Day",
+    dark: "Night",
+    system: "Auto",
+  }}
+/>
+```
+
+### Custom Icons
+
+```tsx
+import {
+  SunMedium,
+  MoonStar,
+  LaptopMinimal,
+} from "lucide-react";
+
+<ThemeToggler
+  allowSystem
+  icons={{
+    light: <SunMedium size={18} />,
+    dark: <MoonStar size={18} />,
+    system: <LaptopMinimal size={18} />,
+  }}
+/>
+```
+
+### Button Props
+
+Pass shared props to every internal button.
+
+```tsx
+<ThemeToggler
+  allowSystem
+  buttonProps={{
+    isLoading: true,
+  }}
+/>
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `Variant` | `"ghost"` | Variant used for inactive buttons. |
+| `activeVariant` | `Variant` | `"solid"` | Variant used for the active theme button. |
+| `size` | `SizeValue` | `"sm"` | Size of all buttons. |
+| `iconOnly` | `boolean` | `false` | Display icons without labels. |
+| `allowSystem` | `boolean` | `false` | Include the system theme option. |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction. |
+| `rounded` | `boolean` | `true` | Applies rounded styling to the container. |
+| `unstyled` | `boolean` | `false` | Removes the default wrapper styling. |
+| `labels` | `Partial<Record<"light" \| "dark" \| "system", string>>` | — | Override button labels. |
+| `icons` | `Partial<Record<"light" \| "dark" \| "system", ReactNode>>` | — | Override default icons. |
+| `buttonProps` | `Partial<ButtonProps>` | — | Props forwarded to every button. |
+| `className` | `string` | — | Additional classes for the wrapper. |
+
+---
+
 # Built-in Animations
 
 Tailwind animation utilities are included.

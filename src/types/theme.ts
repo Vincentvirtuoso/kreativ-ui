@@ -66,7 +66,6 @@ export interface Theme {
 }
 
 export type ThemeOverride = {
-  intensity?: number | "subtle" | "default" | "bold";
   light?: Partial<ThemeTokens>;
   dark?: Partial<ThemeTokens>;
   sizes?: Record<string, Partial<SizeToken>>;

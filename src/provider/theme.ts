@@ -176,8 +176,6 @@ export function resolveTokens(
   };
 
 
-  
-
   if (colors.brand && !colors.brandHover) {
     colors.brandHover = darken(
       colors.brand,
@@ -192,9 +190,6 @@ export function resolveTokens(
   }
 
 
-
-  
-
   if (colors.surface && !colors.surfaceRaised) {
     colors.surfaceRaised =
       lighten(colors.surface, 10);
@@ -205,9 +200,6 @@ export function resolveTokens(
     colors.surfaceSunken =
       darken(colors.surface, 10);
   }
-
-
-
 
 
   if (colors.danger && !colors.dangerFg) {

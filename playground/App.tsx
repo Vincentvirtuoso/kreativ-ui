@@ -1,65 +1,5 @@
-import { useState } from "react";
 import type { ReactNode } from "react";
 import { UIProvider, Button, ThemeToggler, useSizeStyle, ThemeOverride } from "../src";
-
-
-function IntensityControls({
-  intensity,
-  onIntensityChange,
-}: {
-  intensity: number | "subtle" | "default" | "bold";
-  onIntensityChange: (value: number | "subtle" | "default" | "bold") => void;
-}) {
-  const numericValue = typeof intensity === "number" ? intensity : 50;
-
-  const handlePreset = (preset: "subtle" | "default" | "bold") => {
-    onIntensityChange(preset);
-  };
-
-  return (
-    <div className="space-y-2 p-4 border border-border rounded-lg bg-surface-sunken">
-      <div className="flex items-center gap-4">
-        <span className="text-sm font-medium text-text-muted">Intensity</span>
-        <span className="text-text text-sm font-mono bg-surface-raised px-2 py-0.5 rounded">
-          {typeof intensity === "number" ? intensity : intensity}
-        </span>
-        <div className="flex-1">
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={numericValue}
-            onChange={(e) => onIntensityChange(Number(e.target.value))}
-            className="w-full accent-"
-          />
-        </div>
-      </div>
-      <div className="flex gap-2">
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => handlePreset("subtle")}
-        >
-          Subtle (20)
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => handlePreset("default")}
-        >
-          Default (50)
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => handlePreset("bold")}
-        >
-          Bold (85)
-        </Button>
-      </div>
-    </div>
-  );
-}
 
 function DemoBadge({
   size = "md",
@@ -81,25 +21,99 @@ function DemoBadge({
 
 function ModeToggle() {
   return (
-    <ThemeToggler />
+    <div className="flex flex-wrap gap-6">
+      <section className="space-y-3">
+        <h3 className="text-lg font-semibold">Default</h3>
+        <ThemeToggler />
+      </section>
+
+      <section className="space-y-3">
+        <h3 className="text-lg font-semibold">Outline</h3>
+        <ThemeToggler
+          variant="outline"
+          activeVariant="solid"
+        />
+      </section>
+
+      <section className="space-y-3">
+        <h3 className="text-lg font-semibold">Soft</h3>
+        <ThemeToggler
+          variant="soft"
+          activeVariant="solid"
+        />
+      </section>
+
+      <section className="space-y-3">
+        <h3 className="text-lg font-semibold">Icon Only</h3>
+        <ThemeToggler
+          iconOnly
+          allowSystem
+        />
+      </section>
+
+      <section className="space-y-3">
+        <h3 className="text-lg font-semibold">Vertical</h3>
+        <ThemeToggler
+          orientation="vertical"
+          allowSystem
+        />
+      </section>
+
+      <section className="space-y-3">
+        <h3 className="text-lg font-semibold">No Rounded</h3>
+        <ThemeToggler
+          rounded={false}
+          allowSystem
+        />
+      </section>
+
+      <section className="space-y-3">
+        <h3 className="text-lg font-semibold">Custom Labels</h3>
+        <ThemeToggler
+          allowSystem
+          labels={{
+            light: "Day",
+            dark: "Night",
+            system: "Auto",
+          }}
+        />
+      </section>
+
+      <section className="space-y-3">
+        <h3 className="text-lg font-semibold">Large</h3>
+        <ThemeToggler
+          size="lg"
+          allowSystem
+        />
+      </section>
+
+      <section className="space-y-3">
+        <h3 className="text-lg font-semibold">Button Props</h3>
+        <ThemeToggler
+          allowSystem
+          buttonProps={{
+            isLoading: true,
+          }}
+        />
+      </section>
+
+      <section className="space-y-3">
+        <h3 className="text-lg font-semibold">Unstyled</h3>
+        <ThemeToggler
+          allowSystem
+          unstyled
+        />
+      </section>
+    </div>
   );
 }
 
-function Playground({
-  intensity,
-  onIntensityChange,
-}: {
-  intensity: number | "subtle" | "default" | "bold";
-  onIntensityChange: (value: number | "subtle" | "default" | "bold") => void;
-}) {
+
+function Playground() {
   return (
-    <div className="min-h-screen bg-surface p-10 space-y-8">
+    <div className="min-h-screen bg-surface p-10 space-y-8 text-text">
       <div className="space-y-4">
         <ModeToggle />
-        <IntensityControls
-          intensity={intensity}
-          onIntensityChange={onIntensityChange}
-        />
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
@@ -173,14 +187,9 @@ function Playground({
   );
 }
 
-// ---- App ----
 export function App() {
-  const [intensity, setIntensity] = useState<
-    number | "subtle" | "default" | "bold"
-  >(50);
 
   const theme: ThemeOverride = {
-    intensity,
     sizes: {
       xl: {
         height: "1.5rem",
@@ -200,7 +209,7 @@ export function App() {
       fallbackSize="lg"
       theme={theme}
     >
-      <Playground intensity={intensity} onIntensityChange={setIntensity} />
+      <Playground />
     </UIProvider>
   );
 }

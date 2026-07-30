@@ -8,7 +8,7 @@ import {
 } from "react";
 
 import { ThemeContext } from "./ThemeContext";
-import { defaultTheme } from "./theme";
+import { defaultTheme, resolveTokens } from "./theme";
 import { tokensToCssVars } from "./cssVariables";
 import { mergeTheme } from "@/utils/mergeTheme";
 import type { ColorMode, ThemeOverride } from "@/types/theme";
@@ -68,15 +68,23 @@ export function UIProvider({
     [themeOverride],
   );
 
-  const cssVars = useMemo(
-    () =>
-      tokensToCssVars(
-        mergedTheme[resolvedMode],
-        mergedTheme.intensity,
-        resolvedMode,
-      ),
-    [mergedTheme, resolvedMode],
-  );
+  const cssVars = useMemo(() => {
+
+    const resolvedTokens = resolveTokens(
+      mergedTheme[resolvedMode]
+    );
+
+
+    return tokensToCssVars(
+      resolvedTokens,
+      mergedTheme.intensity,
+      resolvedMode
+    );
+
+  }, [
+    mergedTheme,
+    resolvedMode,
+  ]);
 
   if (
     import.meta.env.NODE_ENV !== "production" &&
