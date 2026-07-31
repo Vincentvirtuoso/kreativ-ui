@@ -1,14 +1,31 @@
 import { createContext, useContext } from "react";
 
-interface FormFieldContextValue {
+
+export interface FormFieldContextValue {
     id: string;
-    describedBy?: string;
+
+    descriptionId?: string;
+
+    messageId?: string;
+
     invalid: boolean;
-    required?: boolean;
+
+    required: boolean;
 }
 
-export const FormFieldContext = createContext<FormFieldContextValue | null>(null);
+
+export const FormFieldContext =
+    createContext<FormFieldContextValue | null>(null);
+
 
 export function useFormField() {
-    return useContext(FormFieldContext);
+    const context = useContext(FormFieldContext);
+
+    if (!context) {
+        throw new Error(
+            "FormField components must be used inside <FormField />"
+        );
+    }
+
+    return context;
 }

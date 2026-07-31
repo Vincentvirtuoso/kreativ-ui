@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useId, useRef, useState, type Ref } from "react";
 import { cn } from "@/utils/cn";
-import { inputBase, inputWrapperVariants, inputSizeVariants,  } from "./Input.styles";
+import { inputBase, inputWrapperVariants, inputSizeVariants, } from "./Input.styles";
 import { inputKindIcons, Spinner, Eye, EyeOff, ClearIcon } from "./Input.icons";
 import type { InputProps } from "./Input.types";
 import { inputKindDefaults } from "./Input.constants";
@@ -64,8 +64,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const effectiveType = isPasswordField ? (visible ? "text" : "password") : resolvedType;
 
     const KindIcon = inputKindIcons[kind];
-    const defaultStartIcon = !hideKindIcon && KindIcon ? <KindIcon size={16} /> : undefined;
-    const startSlot = startAdornment ?? defaultStartIcon;
+    const defaultStartIcon = !hideKindIcon && KindIcon ? <KindIcon size={15} /> : undefined;
+    const startSlot = <span className="shrink-0 flex items-center justify-center">
+      {startAdornment ?? defaultStartIcon}
+    </span>;
 
     const builtInEnd: React.ReactNode[] = [];
     if (isPasswordField) {
@@ -97,14 +99,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       );
     }
 
-    // Precedence for the end slot: loading > explicit endAdornment >
-    // built-ins (password toggle, clear — these can coexist together).
     const endSlot = isLoading ? (
       <Spinner />
     ) : endAdornment ? (
       endAdornment
     ) : builtInEnd.length ? (
-      <div className="flex items-center gap-1.5">{builtInEnd}</div>
+      <div className="flex items-center gap-1.5 shrink-0">{builtInEnd}</div>
     ) : undefined;
 
     const hasIcon = !!startSlot || !!endSlot;
@@ -157,7 +157,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           defaultValue={defaultValue}
           onChange={handleChange}
           readOnly={isLoading || readOnlyProp}
-          disabled={disabled}
+          disabled={isLoading || disabled}
           aria-invalid={ariaInvalid}
           aria-describedby={messageId}
           aria-required={props.required}

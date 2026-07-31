@@ -39,7 +39,6 @@ export function FormPlayground() {
 
     const inputEl = (
         <Input
-            key={`${clearable}-${kind}`} 
             variant={variant}
             inputSize={size}
             error={invalid}
@@ -49,8 +48,8 @@ export function FormPlayground() {
             isLoading={isLoading}
             clearable={clearable}
             kind={kind}
-            startAdornment={startAdornment ? <SearchIcon /> : undefined}
-            endAdornment={endAdornment && !endAdornmentDisabled ? <MailIcon /> : undefined}
+            startAdornment={startAdornment ? <SearchIcon size={18} /> : undefined}
+            endAdornment={endAdornment && !endAdornmentDisabled ? <MailIcon size={18} /> : undefined}
         />
     );
 
@@ -126,12 +125,23 @@ export function FormPlayground() {
 
     const preview = useFormField ? (
         <FormField
-            label={label}
             required={required}
             error={invalid ? errorMessage : undefined}
-            description={!invalid ? description : undefined}
         >
-            {inputEl}
+            <FormField.Label>
+                {label}
+            </FormField.Label>
+
+            <FormField.Control>
+                {inputEl}
+            </FormField.Control>
+
+            {description && (
+                <FormField.Description>
+                    {description}
+                </FormField.Description>
+            )}
+
         </FormField>
     ) : (
         inputEl
@@ -154,16 +164,51 @@ export function FormPlayground() {
     const code = useFormField
         ? [
             `<FormField`,
-            `  label="${label}"`,
             required && `  required`,
-            invalid ? `  error="${errorMessage}"` : description && `  description="${description}"`,
+            invalid && `  error="${errorMessage}"`,
             `>`,
-            `  <Input${attrLines.length ? "\n    " + attrLines.join("\n    ") + "\n  " : " "}/>`,
+
+            `  <FormField.Label>`,
+            `    ${label}`,
+            `  </FormField.Label>`,
+
+            ``,
+
+            `  <FormField.Control>`,
+            `    <Input${attrLines.length
+                ? "\n      " + attrLines.join("\n     ") + "\n    "
+                : " "
+            }/>`,
+            `  </FormField.Control>`,
+
+            description && !invalid
+                ? [
+                    ``,
+                    `  <FormField.Description>`,
+                    `    ${description}`,
+                    `  </FormField.Description>`,
+                ].join("\n")
+                : "",
+
+            invalid
+                ? [
+                    ``,
+                    `  <FormField.Message>`,
+                    `    ${errorMessage}`,
+                    `  </FormField.Message>`,
+                ].join("\n")
+                : "",
+
             `</FormField>`,
         ]
             .filter(Boolean)
             .join("\n")
-        : [`<Input${attrLines.length ? "\n  " + attrLines.join("\n  ") + "\n" : " "}/>`].join("\n");
+        : [
+            `<Input${attrLines.length
+                ? "\n  " + attrLines.join("\n  ") + "\n"
+                : " "
+            }/>`,
+        ].join("\n");
 
     const getAttributes = (el: HTMLElement | null) => ({
         id: el?.getAttribute("id") ?? null,
