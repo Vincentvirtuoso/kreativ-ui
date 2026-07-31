@@ -1,2 +1,2 @@
 export { ThemeToggler } from "./ThemeToggler";
-export type { ThemeTogglerProps } from "./ThemeToggler.types";
+export * from "./ThemeToggler.types";

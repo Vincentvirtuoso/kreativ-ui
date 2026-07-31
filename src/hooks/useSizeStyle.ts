@@ -15,7 +15,6 @@ export function useSizeStyle(size: string): ResolvedSize {
 
     if (!token) {
       if (import.meta.env.NODE_ENV !== "production") {
-        // eslint-disable-next-line no-console
         console.warn(
           `[kreativ-ui] Unknown size "${size}". Falling back to "${fallbackSize}". ` +
             `Register it with <UIProvider theme={{ sizes: { ${size}: { height: "...", paddingX: "...", fontSize: "..." } } }} />.`,

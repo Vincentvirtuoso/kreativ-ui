@@ -1,4 +1,5 @@
 import { SizeScale, Theme } from "@/types";
+import type { ThemeTokens } from "@/types/theme";
 
 export const defaultSizes: SizeScale = {
   xs: {
@@ -103,7 +104,7 @@ export const defaultTheme: Theme = {
   components: {},
 };
 
-import type { ThemeTokens } from "@/types/theme";
+
 
 
 function clamp(value: number) {

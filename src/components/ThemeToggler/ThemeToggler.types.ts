@@ -1,11 +1,29 @@
 import type { ButtonProps } from "@/components/Button";
-import type { SizeValue } from "@/types";
+import type { BaseTransition, Orientation, SizeValue } from "@/types";
+import { ButtonVariant } from "../Button/Button.types";
+
+export type ThemeTogglerDisplay = "buttons" | "cycle";
+
+export const THEME_TOGGLER_VARIANTS: ButtonVariant[] = [
+    "ghost",
+    "outline",
+    "solid",
+    "soft",
+    "ghost-brand",
+    "outline-brand",
+    "soft-brand",
+    "solid-white",
+    "outline-white",
+    "ghost-white",
+];
+
+export type ThemeTogglerVariant = typeof THEME_TOGGLER_VARIANTS[number];
 
 export interface ThemeTogglerProps {
 
-    variant?: ButtonProps["variant"];
+    variant?: ThemeTogglerVariant;
 
-    activeVariant?: ButtonProps["variant"];
+    activeVariant?: ThemeTogglerVariant;
 
     size?: SizeValue;
 
@@ -13,7 +31,7 @@ export interface ThemeTogglerProps {
 
     allowSystem?: boolean;
 
-    orientation?: "horizontal" | "vertical";
+    orientation?: Orientation;
 
     rounded?: boolean;
 
@@ -32,8 +50,9 @@ export interface ThemeTogglerProps {
     };
 
     className?: string;
+    transition?: {type: BaseTransition; duration?: number; delay?: number, easing?: string};
 
-    display?: "buttons" | "cycle";
+    display?: ThemeTogglerDisplay;
     
     buttonProps?: Partial<ButtonProps>;
 }

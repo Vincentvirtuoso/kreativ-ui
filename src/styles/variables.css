@@ -2,6 +2,9 @@
   --kui-radius: 0.5rem;
   --kui-font: "Inter var", system-ui, sans-serif;
 
+  --kui-input-height: 2.5rem;
+  --kui-input-padding: 1rem;
+
   --kui-duration-fast: 150ms;
   --kui-duration-normal: 200ms;
   --kui-duration-slow: 300ms;

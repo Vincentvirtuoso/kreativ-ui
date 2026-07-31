@@ -28,6 +28,8 @@ export type Variant =
   | "soft-brand"
   | "ghost-white";
 
+  export type ButtonVariant = Variant;
+
 export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>, Styleable {
   variant?: Variant;
