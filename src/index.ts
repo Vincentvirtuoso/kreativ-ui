@@ -3,6 +3,7 @@ export * from "./components/ThemeToggler";
 export * from "./components/Input";
 export * from "./components/FormField";
 export * from "./components/Select";
+export * from "./components/Textarea";
 
 export * from "./provider";
 

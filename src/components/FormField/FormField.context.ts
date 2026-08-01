@@ -3,15 +3,12 @@ import { createContext, useContext } from "react";
 
 export interface FormFieldContextValue {
     id: string;
-
     descriptionId?: string;
     describedBy?: string;
-
     messageId?: string;
-
     invalid: boolean;
-
     required: boolean;
+    reportValidity: (result: { invalid: boolean; message?: string } | null) => void;
 }
 
 

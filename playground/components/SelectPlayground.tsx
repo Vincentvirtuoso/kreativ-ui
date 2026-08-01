@@ -124,9 +124,6 @@ export function SelectPlayground() {
                 </FormField.Description>
             )}
 
-            {/* {error && (
-                <FormField.Message />
-            )} */}
         </FormField>
     ) : (
         renderSelect()

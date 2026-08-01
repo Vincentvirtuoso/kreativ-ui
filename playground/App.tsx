@@ -1,17 +1,17 @@
-import type { ReactNode } from "react";
-import { UIProvider,  useSizeStyle, ThemeOverride } from "../src";
+import { UIProvider, ThemeOverride } from "../src";
 import { FormPlayground } from "./components/FormPlayground";
 import { ButtonPlayground } from "./components/ButtonPlayground";
 import { ThemeTogglerPlayground } from "./components/ThemeTogglerPlayground";
 import { SelectPlayground } from "./components/SelectPlayground";
+import { TextareaPlayground } from "./components/TextareaPlayground";
 
 function Playground() {
   return (
     <div className="min-h-screen bg-surface p-5 space-y-8 text-text">
-     <ThemeTogglerPlayground />
+      <ThemeTogglerPlayground />
       <FormPlayground />
-     <SelectPlayground/>
-
+      <SelectPlayground />
+      <TextareaPlayground />
       <ButtonPlayground />
 
 
