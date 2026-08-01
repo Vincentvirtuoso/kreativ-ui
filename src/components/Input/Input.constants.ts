@@ -34,10 +34,12 @@ export const inputKindDefaults: InputKindDefaults = {
     },
     "password-current": {
         type: "password",
-        autoComplete: "current-password", placeholder: "••••••••"
+        autoComplete: "current-password", 
+        placeholder: "••••••••"
     },
     "password-new": {
-        type: "password", autoComplete: "new-password",
+        type: "password",
+        autoComplete: "new-password",
         placeholder: "Create a password"
     },
 

@@ -5,6 +5,7 @@ export interface FormFieldContextValue {
     id: string;
 
     descriptionId?: string;
+    describedBy?: string;
 
     messageId?: string;
 
@@ -28,4 +29,8 @@ export function useFormField() {
     }
 
     return context;
+}
+
+export function useOptionalFormField() {
+    return useContext(FormFieldContext);
 }

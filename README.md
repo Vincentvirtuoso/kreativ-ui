@@ -503,6 +503,379 @@ Error replaces description when both are provided.
 
 ---
 
+# Select
+
+A fully accessible, customizable select component with keyboard navigation, grouped options, clearable selections, and optional integration with `FormField`.
+
+## Features
+
+- ♿ Accessible (ARIA-compliant combobox)
+- ⌨️ Full keyboard navigation
+- 🎨 Multiple variants and sizes
+- 🧩 Compound component API
+- 📝 Works standalone or inside `FormField`
+- ❌ Clearable selections
+- ✅ Error and success states
+- 🔒 Disabled state
+- 🎯 Controlled and uncontrolled modes
+- 📦 Hidden input support for HTML forms
+
+---
+
+## Import
+
+```tsx
+import { Select } from "@kreativ-ui/react";
+```
+
+---
+
+## Basic Usage
+
+```tsx
+<Select placeholder="Select a country">
+    <Select.Trigger>
+        <Select.Value />
+    </Select.Trigger>
+
+    <Select.Content>
+        <Select.Item value="ng">Nigeria</Select.Item>
+        <Select.Item value="gh">Ghana</Select.Item>
+        <Select.Item value="za">South Africa</Select.Item>
+    </Select.Content>
+</Select>
+```
+
+---
+
+## Controlled
+
+```tsx
+const [value, setValue] = useState("");
+
+<Select
+    value={value}
+    onValueChange={setValue}
+>
+    <Select.Trigger>
+        <Select.Value />
+    </Select.Trigger>
+
+    <Select.Content>
+        <Select.Item value="react">React</Select.Item>
+        <Select.Item value="vue">Vue</Select.Item>
+        <Select.Item value="svelte">Svelte</Select.Item>
+    </Select.Content>
+</Select>
+```
+
+---
+
+## Uncontrolled
+
+```tsx
+<Select defaultValue="react">
+    <Select.Trigger>
+        <Select.Value />
+    </Select.Trigger>
+
+    <Select.Content>
+        <Select.Item value="react">React</Select.Item>
+        <Select.Item value="vue">Vue</Select.Item>
+        <Select.Item value="angular">Angular</Select.Item>
+    </Select.Content>
+</Select>
+```
+
+---
+
+## Placeholder
+
+```tsx
+<Select placeholder="Choose an option">
+    <Select.Trigger>
+        <Select.Value />
+    </Select.Trigger>
+
+    <Select.Content>
+        ...
+    </Select.Content>
+</Select>
+```
+
+---
+
+## Clearable
+
+```tsx
+<Select clearable defaultValue="react">
+    <Select.Trigger>
+        <Select.Value />
+    </Select.Trigger>
+
+    <Select.Content>
+        ...
+    </Select.Content>
+</Select>
+```
+
+---
+
+## Disabled
+
+```tsx
+<Select disabled>
+    <Select.Trigger>
+        <Select.Value />
+    </Select.Trigger>
+
+    <Select.Content>
+        ...
+    </Select.Content>
+</Select>
+```
+
+---
+
+## Validation States
+
+### Error
+
+```tsx
+<Select error>
+    ...
+</Select>
+```
+
+### Success
+
+```tsx
+<Select success>
+    ...
+</Select>
+```
+
+When used inside a `FormField`, the validation state is inherited automatically.
+
+```tsx
+<FormField invalid>
+    <Select>
+        ...
+    </Select>
+</FormField>
+```
+
+Explicit `error` always takes precedence over inherited state.
+
+---
+
+## Variants
+
+```tsx
+<Select variant="outline" />
+<Select variant="filled" />
+<Select variant="ghost" />
+```
+
+---
+
+## Sizes
+
+```tsx
+<Select size="sm" />
+<Select size="md" />
+<Select size="lg" />
+```
+
+---
+
+## Option Groups
+
+```tsx
+<Select>
+    <Select.Trigger>
+        <Select.Value />
+    </Select.Trigger>
+
+    <Select.Content>
+        <Select.Group>
+            <Select.Label>Frontend</Select.Label>
+
+            <Select.Item value="react">
+                React
+            </Select.Item>
+
+            <Select.Item value="vue">
+                Vue
+            </Select.Item>
+        </Select.Group>
+
+        <Select.Group>
+            <Select.Label>Backend</Select.Label>
+
+            <Select.Item value="node">
+                Node.js
+            </Select.Item>
+
+            <Select.Item value="go">
+                Go
+            </Select.Item>
+        </Select.Group>
+    </Select.Content>
+</Select>
+```
+
+---
+
+## Form Integration
+
+Works with native HTML forms.
+
+```tsx
+<Select
+    name="framework"
+    defaultValue="react"
+>
+    ...
+</Select>
+```
+
+A hidden input is rendered automatically.
+
+---
+
+## React Hook Form
+
+```tsx
+<Controller
+    control={control}
+    name="framework"
+    render={({ field }) => (
+        <Select
+            value={field.value}
+            onValueChange={field.onChange}
+        >
+            <Select.Trigger>
+                <Select.Value />
+            </Select.Trigger>
+
+            <Select.Content>
+                ...
+            </Select.Content>
+        </Select>
+    )}
+/>
+```
+
+---
+
+## Keyboard Support
+
+| Key | Action |
+|------|--------|
+| ↑ | Previous option |
+| ↓ | Next option |
+| Enter | Select highlighted option |
+| Space | Open / Select option |
+| Home | First option |
+| End | Last option |
+| Esc | Close dropdown |
+| Backspace | Clear selection (when `clearable`) |
+| Delete | Clear selection (when `clearable`) |
+
+---
+
+# API
+
+## Select
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| value | string | — | Controlled value |
+| defaultValue | string | — | Initial value |
+| onValueChange | `(value?: string) => void` | — | Called when value changes |
+| placeholder | string | — | Placeholder text |
+| clearable | boolean | false | Allows clearing the selection |
+| disabled | boolean | false | Disables the component |
+| required | boolean | false | Marks the field as required |
+| name | string | — | Hidden input name |
+| variant | Variant | `"outline"` | Visual style |
+| size | Size | `"md"` | Component size |
+| error | boolean | false | Shows error state |
+| success | boolean | false | Shows success state |
+| className | string | — | Additional classes |
+
+---
+
+## Select.Trigger
+
+The interactive trigger that opens the dropdown.
+
+---
+
+## Select.Value
+
+Displays the selected option or placeholder.
+
+---
+
+## Select.Content
+
+Container for dropdown items.
+
+---
+
+## Select.Item
+
+| Prop | Type | Description |
+|------|------|-------------|
+| value | string | Item value |
+| disabled | boolean | Disables the option |
+
+---
+
+## Select.Group
+
+Groups related options.
+
+---
+
+## Select.Label
+
+Heading for a group of options.
+
+---
+
+## Accessibility
+
+- Uses the WAI-ARIA Combobox pattern
+- Supports screen readers
+- Keyboard accessible
+- Focus management
+- Proper ARIA attributes
+- Native form submission support
+
+---
+
+## Component Structure
+
+```tsx
+<Select>
+    <Select.Trigger>
+        <Select.Value />
+    </Select.Trigger>
+
+    <Select.Content>
+        <Select.Group>
+            <Select.Label />
+            <Select.Item />
+        </Select.Group>
+    </Select.Content>
+</Select>
+```
+
+---
+
 # Built-in Animations
 
 Kreativ UI includes Tailwind‑compatible animation utilities.
