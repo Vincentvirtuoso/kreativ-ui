@@ -876,6 +876,121 @@ Heading for a group of options.
 
 ---
 
+## Textarea
+
+A flexible textarea with variant, size, auto‑resize, character counter, validation, clearable, and `FormField` integration.
+
+### Basic Usage
+
+```tsx
+import { Textarea } from "kreativ-ui";
+
+<Textarea placeholder="Write a message..." />
+```
+
+### Variants
+
+The `variant` prop controls the visual style of the textarea wrapper.
+
+```tsx
+<Textarea variant="outline" />
+<Textarea variant="filled" />
+<Textarea variant="ghost" />
+```
+
+### Sizes
+
+```tsx
+<Textarea size="sm" />
+<Textarea size="md" />
+<Textarea size="lg" />
+```
+
+### Resize Behavior
+
+```tsx
+<Textarea resize="both" />
+<Textarea resize="none" />
+<Textarea resize="horizontal" />
+<Textarea resize="vertical" />  // default
+```
+
+### Auto Resize
+
+```tsx
+<Textarea autoResize minRows={2} maxRows={6} />
+```
+
+### Character Counter
+
+```tsx
+<Textarea characterCounter maxLength={200} />
+```
+
+### Clearable
+
+```tsx
+<Textarea clearable onClear={() => console.log("cleared")} />
+```
+
+### Validation
+
+```tsx
+<Textarea
+  onValidate={(value) => value.length >= 3 || "Must be at least 3 characters"}
+/>
+```
+
+### Trim on Blur
+
+```tsx
+<Textarea trimOnBlur />
+```
+
+### With FormField
+
+```tsx
+<FormField label="Message" required>
+  <FormField.Control>
+    <Textarea
+      placeholder="Your message..."
+      characterCounter
+      maxLength={500}
+    />
+  </FormField.Control>
+</FormField>
+```
+
+### Props (Textarea)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | InputVariant | `"outline"` | Visual style of the wrapper |
+| `size` | InputSize | `"md"` | Height, padding, font size |
+| `fullWidth` | `boolean` | `true` | Stretch to container width |
+| `resize` | `"none" \| "both" \| "horizontal" \| "vertical"` | `"vertical"` | CSS `resize` behavior |
+| `autoResize` | `boolean` | `false` | Automatically grow/shrink with content |
+| `minRows` | `number` | — | Minimum rows (when `autoResize` is `true`) |
+| `maxRows` | `number` | — | Maximum rows (when `autoResize` is `true`) |
+| `clearable` | `boolean` | `false` | Shows a clear button when value is present |
+| `onClear` | `() => void` | — | Called after clear |
+| `characterCounter` | `boolean` | `false` | Shows character count and optional `maxLength` |
+| `trimOnBlur` | `boolean` | `false` | Trim whitespace on blur |
+| `error` | `boolean` | `false` | Danger styling and `aria-invalid` |
+| `success` | `boolean` | `false` | Success styling |
+| `disabled` | `boolean` | `false` | Disables the textarea |
+| `required` | `boolean` | `false` | Marks as required and sets `aria-required` |
+| `onValidate` | `(value: string) => boolean \| string` | — | Custom validation, returns `true` (valid), `false` (invalid), or a string (error message) |
+| `value` / `defaultValue` | `string` | — | Controlled / uncontrolled value |
+| `onChange` / `onBlur` | `(event) => void` | — | Standard event handlers |
+
+```
+All standard `<textarea>` attributes (except `size`) are forwarded.
+
+```
+
+---
+
 # Built-in Animations
 
 Kreativ UI includes Tailwind‑compatible animation utilities.
