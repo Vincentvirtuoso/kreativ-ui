@@ -8,15 +8,15 @@ Kreativ UI provides a runtime theme engine, allowing colors, typography, radius,
 
 ## ✨ Features
 
-* 🎨 Runtime theme switching (light, dark, system)
-* 🌙 Built‑in `ThemeToggler` with optional animated icon transitions
-* ⚡ Tailwind CSS v4 integration
-* 🎯 CSS Variable powered design tokens
-* 🧩 Component‑level theme overrides
-* 🎭 Built‑in animation utilities (spin, fade, scale, slide, bounce, pulse, shimmer, and more)
-* ♿ Fully accessible (ARIA, keyboard navigation, focus management)
-* 📦 Tree‑shakable and TypeScript‑first
-* 🧩 Smart form components: `Input` with **kind** defaults, `FormField` with automatic ARIA wiring
+- 🎨 Runtime theme switching (light, dark, system)
+- 🌙 Built‑in `ThemeToggler` with optional animated icon transitions
+- ⚡ Tailwind CSS v4 integration
+- 🎯 CSS Variable powered design tokens
+- 🧩 Component‑level theme overrides
+- 🎭 Built‑in animation utilities (spin, fade, scale, slide, bounce, pulse, shimmer, and more)
+- ♿ Fully accessible (ARIA, keyboard navigation, focus management)
+- 📦 Tree‑shakable and TypeScript‑first
+- 🧩 Smart form components: `Input` with **kind** defaults, `FormField` with automatic ARIA wiring
 
 ---
 
@@ -37,7 +37,7 @@ import "kreativ-ui/styles.css";
 ## 🚀 Quick Start
 
 ```tsx
-import { Button, UIProvider } from "kreativ-ui";
+import { Button, UIProvider } from "@splenddev/kreativ-ui";
 import "kreativ-ui/styles.css";
 
 export default function App() {
@@ -63,14 +63,14 @@ Wrap your application with `UIProvider` to enable theme context.
 
 ### Available Modes
 
-* `"light"`
-* `"dark"`
-* `"system"` (follows OS preference)
+- `"light"`
+- `"dark"`
+- `"system"` (follows OS preference)
 
 Switch themes anywhere using the `useTheme` hook.
 
 ```tsx
-import { useTheme } from "kreativ-ui";
+import { useTheme } from "@splenddev/kreativ-ui";
 
 function ThemeSwitcher() {
   const { mode, setMode } = useTheme();
@@ -96,13 +96,13 @@ Override only the tokens you need. Pass a `theme` object to `UIProvider`.
   theme={{
     light: {
       colors: {
-        brand: "16 185 129",   // emerald-600
+        brand: "16 185 129", // emerald-600
         brandFg: "255 255 255",
       },
     },
     dark: {
       colors: {
-        brand: "52 211 153",   // emerald-400
+        brand: "52 211 153", // emerald-400
         brandFg: "0 0 0",
       },
     },
@@ -122,46 +122,46 @@ All CSS variables are generated automatically and applied to the `<html>` elemen
 
 ## Colors
 
-| Token | Description |
-|-------|-------------|
-| `brand` | Primary accent color (RGB values) |
-| `brandHover` | Hover state of brand |
-| `brandFg` | Foreground (text/icon) on brand |
-| `surface` | Background of surfaces |
-| `surfaceRaised` | Elevated surfaces (cards, modals) |
-| `surfaceSunken` | Sunken surfaces (inputs, inset) |
-| `border` | Default border color |
-| `text` | Primary text |
-| `textMuted` | Secondary / muted text |
-| `danger` | Error/danger color |
-| `dangerFg` | Foreground on danger |
-| `destructive` / `destructiveHover` / `destructiveFg` | Destructive actions |
-| `success` / `successHover` / `successFg` | Success states |
-| `warning` / `warningHover` / `warningFg` | Warning states |
-| `info` / `infoHover` / `infoFg` | Informational states |
+| Token                                                | Description                       |
+| ---------------------------------------------------- | --------------------------------- |
+| `brand`                                              | Primary accent color (RGB values) |
+| `brandHover`                                         | Hover state of brand              |
+| `brandFg`                                            | Foreground (text/icon) on brand   |
+| `surface`                                            | Background of surfaces            |
+| `surfaceRaised`                                      | Elevated surfaces (cards, modals) |
+| `surfaceSunken`                                      | Sunken surfaces (inputs, inset)   |
+| `border`                                             | Default border color              |
+| `text`                                               | Primary text                      |
+| `textMuted`                                          | Secondary / muted text            |
+| `danger`                                             | Error/danger color                |
+| `dangerFg`                                           | Foreground on danger              |
+| `destructive` / `destructiveHover` / `destructiveFg` | Destructive actions               |
+| `success` / `successHover` / `successFg`             | Success states                    |
+| `warning` / `warningHover` / `warningFg`             | Warning states                    |
+| `info` / `infoHover` / `infoFg`                      | Informational states              |
 
 ## Radius
 
 ```ts
-radius   // default: 0.375rem (6px)
+radius; // default: 0.375rem (6px)
 ```
 
 ## Typography
 
 ```ts
-font     // font-family stack
+font; // font-family stack
 ```
 
 ## Motion
 
 ```ts
-durationFast    // 150ms
-durationNormal  // 300ms
-durationSlow    // 500ms
+durationFast; // 150ms
+durationNormal; // 300ms
+durationSlow; // 500ms
 
-easeDefault     // ease-in-out
-easeIn          // ease-in
-easeOut         // ease-out
+easeDefault; // ease-in-out
+easeIn; // ease-in
+easeOut; // ease-out
 ```
 
 ---
@@ -227,14 +227,14 @@ A versatile button with variant, size, loading, and icon support.
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `Variant` | `"solid"` | Visual style |
-| `size` | `SizeValue` | `"md"` | Size (supports custom sizes via theme) |
-| `isLoading` | `boolean` | `false` | Shows spinner and disables |
-| `leftIcon` / `rightIcon` | `ReactNode` | — | Icon elements |
-| `fullWidth` | `boolean` | `false` | Stretches to container width |
-| `disabled` | `boolean` | `false` | Disables interactions |
+| Prop                     | Type        | Default   | Description                            |
+| ------------------------ | ----------- | --------- | -------------------------------------- |
+| `variant`                | `Variant`   | `"solid"` | Visual style                           |
+| `size`                   | `SizeValue` | `"md"`    | Size (supports custom sizes via theme) |
+| `isLoading`              | `boolean`   | `false`   | Shows spinner and disables             |
+| `leftIcon` / `rightIcon` | `ReactNode` | —         | Icon elements                          |
+| `fullWidth`              | `boolean`   | `false`   | Stretches to container width           |
+| `disabled`               | `boolean`   | `false`   | Disables interactions                  |
 
 ---
 
@@ -245,9 +245,9 @@ A ready‑to‑use theme switcher that integrates with `UIProvider`. Supports bu
 ### Basic Usage
 
 ```tsx
-import { ThemeToggler } from "kreativ-ui";
+import { ThemeToggler } from "@splenddev/kreativ-ui";
 
-<ThemeToggler />
+<ThemeToggler />;
 ```
 
 ### With System Mode
@@ -295,7 +295,7 @@ import { SunMedium, MoonStar, LaptopMinimal } from "lucide-react";
     dark: <MoonStar size={18} />,
     system: <LaptopMinimal size={18} />,
   }}
-/>
+/>;
 ```
 
 ### Cycle Mode with Animation
@@ -318,22 +318,22 @@ Supported transition types: `"none"`, `"fade"`, `"slide"`, `"scale"`, `"rotate"`
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `ThemeTogglerVariant` | `"ghost"` | Variant for inactive buttons |
-| `activeVariant` | `ThemeTogglerVariant` | `"solid"` | Variant for active button |
-| `size` | `SizeValue` | `"sm"` | Button size |
-| `iconOnly` | `boolean` | `false` | Hide labels, show icons only |
-| `allowSystem` | `boolean` | `false` | Show system theme option |
-| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |
-| `rounded` | `boolean` | `true` | Rounded container corners |
-| `unstyled` | `boolean` | `false` | Remove wrapper styles |
-| `display` | `"buttons" \| "cycle"` | `"buttons"` | Show all buttons or a single cycling button |
-| `transition` | `ThemeTogglerTransition` | `{ type: "none", duration: 300, easing: "ease-in-out" }` | Animation configuration for cycle mode |
-| `labels` | `Partial<Record<"light" \| "dark" \| "system", string>>` | — | Override labels |
-| `icons` | `Partial<Record<"light" \| "dark" \| "system", ReactNode>>` | — | Override icons |
-| `buttonProps` | `Partial<ButtonProps>` | — | Props passed to every internal button |
-| `className` | `string` | — | Additional wrapper class |
+| Prop            | Type                                                        | Default                                                  | Description                                 |
+| --------------- | ----------------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------- |
+| `variant`       | `ThemeTogglerVariant`                                       | `"ghost"`                                                | Variant for inactive buttons                |
+| `activeVariant` | `ThemeTogglerVariant`                                       | `"solid"`                                                | Variant for active button                   |
+| `size`          | `SizeValue`                                                 | `"sm"`                                                   | Button size                                 |
+| `iconOnly`      | `boolean`                                                   | `false`                                                  | Hide labels, show icons only                |
+| `allowSystem`   | `boolean`                                                   | `false`                                                  | Show system theme option                    |
+| `orientation`   | `"horizontal" \| "vertical"`                                | `"horizontal"`                                           | Layout direction                            |
+| `rounded`       | `boolean`                                                   | `true`                                                   | Rounded container corners                   |
+| `unstyled`      | `boolean`                                                   | `false`                                                  | Remove wrapper styles                       |
+| `display`       | `"buttons" \| "cycle"`                                      | `"buttons"`                                              | Show all buttons or a single cycling button |
+| `transition`    | `ThemeTogglerTransition`                                    | `{ type: "none", duration: 300, easing: "ease-in-out" }` | Animation configuration for cycle mode      |
+| `labels`        | `Partial<Record<"light" \| "dark" \| "system", string>>`    | —                                                        | Override labels                             |
+| `icons`         | `Partial<Record<"light" \| "dark" \| "system", ReactNode>>` | —                                                        | Override icons                              |
+| `buttonProps`   | `Partial<ButtonProps>`                                      | —                                                        | Props passed to every internal button       |
+| `className`     | `string`                                                    | —                                                        | Additional wrapper class                    |
 
 ---
 
@@ -344,9 +344,9 @@ A flexible text input with variants, sizes, validation states, adornments, and *
 ### Basic Usage
 
 ```tsx
-import { Input } from "kreativ-ui";
+import { Input } from "@splenddev/kreativ-ui";
 
-<Input placeholder="you@company.com" />
+<Input placeholder="you@company.com" />;
 ```
 
 ### Variants
@@ -423,21 +423,21 @@ To suppress the icon that comes with certain kinds (e.g., `email`, `search`):
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `"outline" \| "filled" \| "ghost"` | `"outline"` | Visual style |
-| `inputSize` | `"sm" \| "md" \| "lg"` | `"md"` | Height, padding, font size |
-| `kind` | `InputKind` | `"text"` | Sets defaults for `type`, `inputMode`, `autoComplete`, placeholder, and icon |
-| `hideKindIcon` | `boolean` | `false` | Suppress the default icon from `kind` |
-| `error` | `boolean` | `false` | Danger styling and `aria-invalid` |
-| `success` | `boolean` | `false` | Success styling |
-| `rounded` | `boolean` | `false` | Fully rounded wrapper |
-| `fullWidth` | `boolean` | `true` | Stretch to container width |
-| `isLoading` | `boolean` | `false` | Shows spinner and marks read‑only |
-| `clearable` | `boolean` | `false` | Shows clear button when value present |
-| `onClear` | `() => void` | — | Called after clear |
-| `startAdornment` / `endAdornment` | `ReactNode` | — | Content before/after input |
-| `className` / `inputClassName` | `string` | — | Additional class(es) |
+| Prop                              | Type                               | Default     | Description                                                                  |
+| --------------------------------- | ---------------------------------- | ----------- | ---------------------------------------------------------------------------- |
+| `variant`                         | `"outline" \| "filled" \| "ghost"` | `"outline"` | Visual style                                                                 |
+| `inputSize`                       | `"sm" \| "md" \| "lg"`             | `"md"`      | Height, padding, font size                                                   |
+| `kind`                            | `InputKind`                        | `"text"`    | Sets defaults for `type`, `inputMode`, `autoComplete`, placeholder, and icon |
+| `hideKindIcon`                    | `boolean`                          | `false`     | Suppress the default icon from `kind`                                        |
+| `error`                           | `boolean`                          | `false`     | Danger styling and `aria-invalid`                                            |
+| `success`                         | `boolean`                          | `false`     | Success styling                                                              |
+| `rounded`                         | `boolean`                          | `false`     | Fully rounded wrapper                                                        |
+| `fullWidth`                       | `boolean`                          | `true`      | Stretch to container width                                                   |
+| `isLoading`                       | `boolean`                          | `false`     | Shows spinner and marks read‑only                                            |
+| `clearable`                       | `boolean`                          | `false`     | Shows clear button when value present                                        |
+| `onClear`                         | `() => void`                       | —           | Called after clear                                                           |
+| `startAdornment` / `endAdornment` | `ReactNode`                        | —           | Content before/after input                                                   |
+| `className` / `inputClassName`    | `string`                           | —           | Additional class(es)                                                         |
 
 All standard `<input>` attributes (except `size`) are forwarded.
 
@@ -450,11 +450,11 @@ Wraps a form control (e.g., `Input`) and automatically wires `id`, `aria-describ
 ### Basic Usage
 
 ```tsx
-import { FormField, Input } from "kreativ-ui";
+import { FormField, Input } from "@splenddev/kreativ-ui";
 
 <FormField label="Email address">
   <Input kind="email" />
-</FormField>
+</FormField>;
 ```
 
 ### With Description
@@ -473,10 +473,7 @@ import { FormField, Input } from "kreativ-ui";
 Error replaces description when both are provided.
 
 ```tsx
-<FormField
-  label="Email address"
-  error="Enter a valid email address."
->
+<FormField label="Email address" error="Enter a valid email address.">
   <Input kind="email" error />
 </FormField>
 ```
@@ -491,15 +488,15 @@ Error replaces description when both are provided.
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `string` | — | Label text, linked to control |
-| `description` | `string` | — | Helper text (hidden when `error` set) |
-| `error` | `string` | — | Error message, linked via `aria-describedby` |
-| `required` | `boolean` | `false` | Shows required indicator and sets `aria-required` |
-| `id` | `string` | auto‑generated | Explicit `id` for the control |
-| `className` | `string` | — | Additional wrapper classes |
-| `children` | `ReactNode` | — | The form control (must accept `id` prop) |
+| Prop          | Type        | Default        | Description                                       |
+| ------------- | ----------- | -------------- | ------------------------------------------------- |
+| `label`       | `string`    | —              | Label text, linked to control                     |
+| `description` | `string`    | —              | Helper text (hidden when `error` set)             |
+| `error`       | `string`    | —              | Error message, linked via `aria-describedby`      |
+| `required`    | `boolean`   | `false`        | Shows required indicator and sets `aria-required` |
+| `id`          | `string`    | auto‑generated | Explicit `id` for the control                     |
+| `className`   | `string`    | —              | Additional wrapper classes                        |
+| `children`    | `ReactNode` | —              | The form control (must accept `id` prop)          |
 
 ---
 
@@ -534,15 +531,15 @@ import { Select } from "@kreativ-ui/react";
 
 ```tsx
 <Select placeholder="Select a country">
-    <Select.Trigger>
-        <Select.Value />
-    </Select.Trigger>
+  <Select.Trigger>
+    <Select.Value />
+  </Select.Trigger>
 
-    <Select.Content>
-        <Select.Item value="ng">Nigeria</Select.Item>
-        <Select.Item value="gh">Ghana</Select.Item>
-        <Select.Item value="za">South Africa</Select.Item>
-    </Select.Content>
+  <Select.Content>
+    <Select.Item value="ng">Nigeria</Select.Item>
+    <Select.Item value="gh">Ghana</Select.Item>
+    <Select.Item value="za">South Africa</Select.Item>
+  </Select.Content>
 </Select>
 ```
 
@@ -553,20 +550,17 @@ import { Select } from "@kreativ-ui/react";
 ```tsx
 const [value, setValue] = useState("");
 
-<Select
-    value={value}
-    onValueChange={setValue}
->
-    <Select.Trigger>
-        <Select.Value />
-    </Select.Trigger>
+<Select value={value} onValueChange={setValue}>
+  <Select.Trigger>
+    <Select.Value />
+  </Select.Trigger>
 
-    <Select.Content>
-        <Select.Item value="react">React</Select.Item>
-        <Select.Item value="vue">Vue</Select.Item>
-        <Select.Item value="svelte">Svelte</Select.Item>
-    </Select.Content>
-</Select>
+  <Select.Content>
+    <Select.Item value="react">React</Select.Item>
+    <Select.Item value="vue">Vue</Select.Item>
+    <Select.Item value="svelte">Svelte</Select.Item>
+  </Select.Content>
+</Select>;
 ```
 
 ---
@@ -575,15 +569,15 @@ const [value, setValue] = useState("");
 
 ```tsx
 <Select defaultValue="react">
-    <Select.Trigger>
-        <Select.Value />
-    </Select.Trigger>
+  <Select.Trigger>
+    <Select.Value />
+  </Select.Trigger>
 
-    <Select.Content>
-        <Select.Item value="react">React</Select.Item>
-        <Select.Item value="vue">Vue</Select.Item>
-        <Select.Item value="angular">Angular</Select.Item>
-    </Select.Content>
+  <Select.Content>
+    <Select.Item value="react">React</Select.Item>
+    <Select.Item value="vue">Vue</Select.Item>
+    <Select.Item value="angular">Angular</Select.Item>
+  </Select.Content>
 </Select>
 ```
 
@@ -593,13 +587,11 @@ const [value, setValue] = useState("");
 
 ```tsx
 <Select placeholder="Choose an option">
-    <Select.Trigger>
-        <Select.Value />
-    </Select.Trigger>
+  <Select.Trigger>
+    <Select.Value />
+  </Select.Trigger>
 
-    <Select.Content>
-        ...
-    </Select.Content>
+  <Select.Content>...</Select.Content>
 </Select>
 ```
 
@@ -609,13 +601,11 @@ const [value, setValue] = useState("");
 
 ```tsx
 <Select clearable defaultValue="react">
-    <Select.Trigger>
-        <Select.Value />
-    </Select.Trigger>
+  <Select.Trigger>
+    <Select.Value />
+  </Select.Trigger>
 
-    <Select.Content>
-        ...
-    </Select.Content>
+  <Select.Content>...</Select.Content>
 </Select>
 ```
 
@@ -625,13 +615,11 @@ const [value, setValue] = useState("");
 
 ```tsx
 <Select disabled>
-    <Select.Trigger>
-        <Select.Value />
-    </Select.Trigger>
+  <Select.Trigger>
+    <Select.Value />
+  </Select.Trigger>
 
-    <Select.Content>
-        ...
-    </Select.Content>
+  <Select.Content>...</Select.Content>
 </Select>
 ```
 
@@ -642,26 +630,20 @@ const [value, setValue] = useState("");
 ### Error
 
 ```tsx
-<Select error>
-    ...
-</Select>
+<Select error>...</Select>
 ```
 
 ### Success
 
 ```tsx
-<Select success>
-    ...
-</Select>
+<Select success>...</Select>
 ```
 
 When used inside a `FormField`, the validation state is inherited automatically.
 
 ```tsx
 <FormField invalid>
-    <Select>
-        ...
-    </Select>
+  <Select>...</Select>
 </FormField>
 ```
 
@@ -693,35 +675,27 @@ Explicit `error` always takes precedence over inherited state.
 
 ```tsx
 <Select>
-    <Select.Trigger>
-        <Select.Value />
-    </Select.Trigger>
+  <Select.Trigger>
+    <Select.Value />
+  </Select.Trigger>
 
-    <Select.Content>
-        <Select.Group>
-            <Select.Label>Frontend</Select.Label>
+  <Select.Content>
+    <Select.Group>
+      <Select.Label>Frontend</Select.Label>
 
-            <Select.Item value="react">
-                React
-            </Select.Item>
+      <Select.Item value="react">React</Select.Item>
 
-            <Select.Item value="vue">
-                Vue
-            </Select.Item>
-        </Select.Group>
+      <Select.Item value="vue">Vue</Select.Item>
+    </Select.Group>
 
-        <Select.Group>
-            <Select.Label>Backend</Select.Label>
+    <Select.Group>
+      <Select.Label>Backend</Select.Label>
 
-            <Select.Item value="node">
-                Node.js
-            </Select.Item>
+      <Select.Item value="node">Node.js</Select.Item>
 
-            <Select.Item value="go">
-                Go
-            </Select.Item>
-        </Select.Group>
-    </Select.Content>
+      <Select.Item value="go">Go</Select.Item>
+    </Select.Group>
+  </Select.Content>
 </Select>
 ```
 
@@ -732,11 +706,8 @@ Explicit `error` always takes precedence over inherited state.
 Works with native HTML forms.
 
 ```tsx
-<Select
-    name="framework"
-    defaultValue="react"
->
-    ...
+<Select name="framework" defaultValue="react">
+  ...
 </Select>
 ```
 
@@ -748,22 +719,17 @@ A hidden input is rendered automatically.
 
 ```tsx
 <Controller
-    control={control}
-    name="framework"
-    render={({ field }) => (
-        <Select
-            value={field.value}
-            onValueChange={field.onChange}
-        >
-            <Select.Trigger>
-                <Select.Value />
-            </Select.Trigger>
+  control={control}
+  name="framework"
+  render={({ field }) => (
+    <Select value={field.value} onValueChange={field.onChange}>
+      <Select.Trigger>
+        <Select.Value />
+      </Select.Trigger>
 
-            <Select.Content>
-                ...
-            </Select.Content>
-        </Select>
-    )}
+      <Select.Content>...</Select.Content>
+    </Select>
+  )}
 />
 ```
 
@@ -771,17 +737,17 @@ A hidden input is rendered automatically.
 
 ## Keyboard Support
 
-| Key | Action |
-|------|--------|
-| ↑ | Previous option |
-| ↓ | Next option |
-| Enter | Select highlighted option |
-| Space | Open / Select option |
-| Home | First option |
-| End | Last option |
-| Esc | Close dropdown |
+| Key       | Action                             |
+| --------- | ---------------------------------- |
+| ↑         | Previous option                    |
+| ↓         | Next option                        |
+| Enter     | Select highlighted option          |
+| Space     | Open / Select option               |
+| Home      | First option                       |
+| End       | Last option                        |
+| Esc       | Close dropdown                     |
 | Backspace | Clear selection (when `clearable`) |
-| Delete | Clear selection (when `clearable`) |
+| Delete    | Clear selection (when `clearable`) |
 
 ---
 
@@ -789,21 +755,21 @@ A hidden input is rendered automatically.
 
 ## Select
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| value | string | — | Controlled value |
-| defaultValue | string | — | Initial value |
-| onValueChange | `(value?: string) => void` | — | Called when value changes |
-| placeholder | string | — | Placeholder text |
-| clearable | boolean | false | Allows clearing the selection |
-| disabled | boolean | false | Disables the component |
-| required | boolean | false | Marks the field as required |
-| name | string | — | Hidden input name |
-| variant | Variant | `"outline"` | Visual style |
-| size | Size | `"md"` | Component size |
-| error | boolean | false | Shows error state |
-| success | boolean | false | Shows success state |
-| className | string | — | Additional classes |
+| Prop          | Type                       | Default     | Description                   |
+| ------------- | -------------------------- | ----------- | ----------------------------- |
+| value         | string                     | —           | Controlled value              |
+| defaultValue  | string                     | —           | Initial value                 |
+| onValueChange | `(value?: string) => void` | —           | Called when value changes     |
+| placeholder   | string                     | —           | Placeholder text              |
+| clearable     | boolean                    | false       | Allows clearing the selection |
+| disabled      | boolean                    | false       | Disables the component        |
+| required      | boolean                    | false       | Marks the field as required   |
+| name          | string                     | —           | Hidden input name             |
+| variant       | Variant                    | `"outline"` | Visual style                  |
+| size          | Size                       | `"md"`      | Component size                |
+| error         | boolean                    | false       | Shows error state             |
+| success       | boolean                    | false       | Shows success state           |
+| className     | string                     | —           | Additional classes            |
 
 ---
 
@@ -827,9 +793,9 @@ Container for dropdown items.
 
 ## Select.Item
 
-| Prop | Type | Description |
-|------|------|-------------|
-| value | string | Item value |
+| Prop     | Type    | Description         |
+| -------- | ------- | ------------------- |
+| value    | string  | Item value          |
 | disabled | boolean | Disables the option |
 
 ---
@@ -861,16 +827,16 @@ Heading for a group of options.
 
 ```tsx
 <Select>
-    <Select.Trigger>
-        <Select.Value />
-    </Select.Trigger>
+  <Select.Trigger>
+    <Select.Value />
+  </Select.Trigger>
 
-    <Select.Content>
-        <Select.Group>
-            <Select.Label />
-            <Select.Item />
-        </Select.Group>
-    </Select.Content>
+  <Select.Content>
+    <Select.Group>
+      <Select.Label />
+      <Select.Item />
+    </Select.Group>
+  </Select.Content>
 </Select>
 ```
 
@@ -883,9 +849,9 @@ A flexible textarea with variant, size, auto‑resize, character counter, valida
 ### Basic Usage
 
 ```tsx
-import { Textarea } from "kreativ-ui";
+import { Textarea } from "@splenddev/kreativ-ui";
 
-<Textarea placeholder="Write a message..." />
+<Textarea placeholder="Write a message..." />;
 ```
 
 ### Variants
@@ -952,37 +918,33 @@ The `variant` prop controls the visual style of the textarea wrapper.
 ```tsx
 <FormField label="Message" required>
   <FormField.Control>
-    <Textarea
-      placeholder="Your message..."
-      characterCounter
-      maxLength={500}
-    />
+    <Textarea placeholder="Your message..." characterCounter maxLength={500} />
   </FormField.Control>
 </FormField>
 ```
 
 ### Props (Textarea)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | InputVariant | `"outline"` | Visual style of the wrapper |
-| `size` | InputSize | `"md"` | Height, padding, font size |
-| `fullWidth` | `boolean` | `true` | Stretch to container width |
-| `resize` | `"none" \| "both" \| "horizontal" \| "vertical"` | `"vertical"` | CSS `resize` behavior |
-| `autoResize` | `boolean` | `false` | Automatically grow/shrink with content |
-| `minRows` | `number` | — | Minimum rows (when `autoResize` is `true`) |
-| `maxRows` | `number` | — | Maximum rows (when `autoResize` is `true`) |
-| `clearable` | `boolean` | `false` | Shows a clear button when value is present |
-| `onClear` | `() => void` | — | Called after clear |
-| `characterCounter` | `boolean` | `false` | Shows character count and optional `maxLength` |
-| `trimOnBlur` | `boolean` | `false` | Trim whitespace on blur |
-| `error` | `boolean` | `false` | Danger styling and `aria-invalid` |
-| `success` | `boolean` | `false` | Success styling |
-| `disabled` | `boolean` | `false` | Disables the textarea |
-| `required` | `boolean` | `false` | Marks as required and sets `aria-required` |
-| `onValidate` | `(value: string) => boolean \| string` | — | Custom validation, returns `true` (valid), `false` (invalid), or a string (error message) |
-| `value` / `defaultValue` | `string` | — | Controlled / uncontrolled value |
-| `onChange` / `onBlur` | `(event) => void` | — | Standard event handlers |
+| Prop                     | Type                                             | Default      | Description                                                                               |
+| ------------------------ | ------------------------------------------------ | ------------ | ----------------------------------------------------------------------------------------- |
+| `variant`                | InputVariant                                     | `"outline"`  | Visual style of the wrapper                                                               |
+| `size`                   | InputSize                                        | `"md"`       | Height, padding, font size                                                                |
+| `fullWidth`              | `boolean`                                        | `true`       | Stretch to container width                                                                |
+| `resize`                 | `"none" \| "both" \| "horizontal" \| "vertical"` | `"vertical"` | CSS `resize` behavior                                                                     |
+| `autoResize`             | `boolean`                                        | `false`      | Automatically grow/shrink with content                                                    |
+| `minRows`                | `number`                                         | —            | Minimum rows (when `autoResize` is `true`)                                                |
+| `maxRows`                | `number`                                         | —            | Maximum rows (when `autoResize` is `true`)                                                |
+| `clearable`              | `boolean`                                        | `false`      | Shows a clear button when value is present                                                |
+| `onClear`                | `() => void`                                     | —            | Called after clear                                                                        |
+| `characterCounter`       | `boolean`                                        | `false`      | Shows character count and optional `maxLength`                                            |
+| `trimOnBlur`             | `boolean`                                        | `false`      | Trim whitespace on blur                                                                   |
+| `error`                  | `boolean`                                        | `false`      | Danger styling and `aria-invalid`                                                         |
+| `success`                | `boolean`                                        | `false`      | Success styling                                                                           |
+| `disabled`               | `boolean`                                        | `false`      | Disables the textarea                                                                     |
+| `required`               | `boolean`                                        | `false`      | Marks as required and sets `aria-required`                                                |
+| `onValidate`             | `(value: string) => boolean \| string`           | —            | Custom validation, returns `true` (valid), `false` (invalid), or a string (error message) |
+| `value` / `defaultValue` | `string`                                         | —            | Controlled / uncontrolled value                                                           |
+| `onChange` / `onBlur`    | `(event) => void`                                | —            | Standard event handlers                                                                   |
 
 ```
 All standard `<textarea>` attributes (except `size`) are forwarded.
@@ -993,7 +955,7 @@ All standard `<textarea>` attributes (except `size`) are forwarded.
 
 ### Updated README (Checkbox section only – drop‑in)
 
-```markdown
+````markdown
 ## Checkbox
 
 A customizable checkbox with label, description, validation states, and support for indeterminate state. Works seamlessly with `FormField` for automatic ARIA wiring.
@@ -1001,10 +963,11 @@ A customizable checkbox with label, description, validation states, and support 
 ### Basic Usage
 
 ```tsx
-import { Checkbox } from "kreativ-ui";
+import { Checkbox } from "@splenddev/kreativ-ui";
 
-<Checkbox label="Accept terms" />
+<Checkbox label="Accept terms" />;
 ```
+````
 
 ### Sizes
 
@@ -1030,10 +993,7 @@ import { Checkbox } from "kreativ-ui";
 ### With Description
 
 ```tsx
-<Checkbox
-  label="Accept terms"
-  description="You must agree to continue."
-/>
+<Checkbox label="Accept terms" description="You must agree to continue." />
 ```
 
 ### Disabled & Required
@@ -1052,20 +1012,20 @@ import { Checkbox } from "kreativ-ui";
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `checked` | `boolean` | — | Controlled checked state |
-| `defaultChecked` | `boolean` | `false` | Uncontrolled initial state |
-| `onCheckedChange` | `(checked: boolean) => void` | — | Callback when checked state changes |
-| `indeterminate` | `boolean` | `false` | Visually indeterminate state (parent checkbox) |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size of the box |
-| `error` | `boolean` | `false` | Danger styling and `aria-invalid` |
-| `success` | `boolean` | `false` | Success styling |
-| `disabled` | `boolean` | `false` | Disables the checkbox |
-| `required` | `boolean` | `false` | Sets `aria-required` |
-| `label` | `ReactNode` | — | Label text or element (wired to input via `htmlFor`) |
-| `description` | `ReactNode` | — | Help text, wired via `aria-describedby` |
-| `className` | `string` | — | Additional wrapper class |
+| Prop              | Type                         | Default | Description                                          |
+| ----------------- | ---------------------------- | ------- | ---------------------------------------------------- |
+| `checked`         | `boolean`                    | —       | Controlled checked state                             |
+| `defaultChecked`  | `boolean`                    | `false` | Uncontrolled initial state                           |
+| `onCheckedChange` | `(checked: boolean) => void` | —       | Callback when checked state changes                  |
+| `indeterminate`   | `boolean`                    | `false` | Visually indeterminate state (parent checkbox)       |
+| `size`            | `"sm" \| "md" \| "lg"`       | `"md"`  | Size of the box                                      |
+| `error`           | `boolean`                    | `false` | Danger styling and `aria-invalid`                    |
+| `success`         | `boolean`                    | `false` | Success styling                                      |
+| `disabled`        | `boolean`                    | `false` | Disables the checkbox                                |
+| `required`        | `boolean`                    | `false` | Sets `aria-required`                                 |
+| `label`           | `ReactNode`                  | —       | Label text or element (wired to input via `htmlFor`) |
+| `description`     | `ReactNode`                  | —       | Help text, wired via `aria-describedby`              |
+| `className`       | `string`                     | —       | Additional wrapper class                             |
 
 All standard `<input type="checkbox">` attributes (except `type`, `size`, `checked`, `defaultChecked`) are forwarded.
 
@@ -1078,7 +1038,7 @@ A controlled group of radio buttons with labels, descriptions, validation states
 ### Basic Usage
 
 ```tsx
-import { RadioGroup, Radio } from "kreativ-ui";
+import { RadioGroup, Radio } from "@splenddev/kreativ-ui";
 
 function App() {
   const [value, setValue] = useState("option1");
@@ -1129,13 +1089,19 @@ function App() {
 ### Disabled & Required
 
 ```tsx
-<RadioGroup disabled required>...</RadioGroup>
+<RadioGroup disabled required>
+  ...
+</RadioGroup>
 ```
 
 ### With FormField
 
 ```tsx
-<FormField label="Choose your preference" error="Please select an option" required>
+<FormField
+  label="Choose your preference"
+  error="Please select an option"
+  required
+>
   <RadioGroup value={value} onValueChange={setValue}>
     <Radio value="opt1" label="Option 1" />
     <Radio value="opt2" label="Option 2" />
@@ -1156,33 +1122,34 @@ You can also disable individual radios via the `disabled` prop on `Radio`, which
 
 ### Props (RadioGroup)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string` | — | Controlled selected value |
-| `defaultValue` | `string` | — | Uncontrolled initial value |
-| `onValueChange` | `(value: string) => void` | — | Callback when selection changes |
-| `name` | `string` | auto‑generated | Shared `name` for all radio inputs |
-| `disabled` | `boolean` | `false` | Disables all radios in the group |
-| `required` | `boolean` | `false` | Sets `aria-required` on the group |
-| `orientation` | `"horizontal" \| "vertical"` | `"vertical"` | Layout direction |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size of all radio bubbles |
-| `error` | `boolean` | `false` | Danger styling and `aria-invalid` |
-| `success` | `boolean` | `false` | Success styling |
-| `className` | `string` | — | Additional wrapper class |
-| `children` | `ReactNode` | — | `Radio` components |
+| Prop            | Type                         | Default        | Description                        |
+| --------------- | ---------------------------- | -------------- | ---------------------------------- |
+| `value`         | `string`                     | —              | Controlled selected value          |
+| `defaultValue`  | `string`                     | —              | Uncontrolled initial value         |
+| `onValueChange` | `(value: string) => void`    | —              | Callback when selection changes    |
+| `name`          | `string`                     | auto‑generated | Shared `name` for all radio inputs |
+| `disabled`      | `boolean`                    | `false`        | Disables all radios in the group   |
+| `required`      | `boolean`                    | `false`        | Sets `aria-required` on the group  |
+| `orientation`   | `"horizontal" \| "vertical"` | `"vertical"`   | Layout direction                   |
+| `size`          | `"sm" \| "md" \| "lg"`       | `"md"`         | Size of all radio bubbles          |
+| `error`         | `boolean`                    | `false`        | Danger styling and `aria-invalid`  |
+| `success`       | `boolean`                    | `false`        | Success styling                    |
+| `className`     | `string`                     | —              | Additional wrapper class           |
+| `children`      | `ReactNode`                  | —              | `Radio` components                 |
 
 ### Props (Radio)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string` | **required** | Unique value for this option |
-| `disabled` | `boolean` | `false` | Disables this specific radio |
-| `label` | `ReactNode` | — | Label text or element |
-| `description` | `ReactNode` | — | Help text, wired via `aria-describedby` |
-| `className` | `string` | — | Additional wrapper class |
+| Prop          | Type        | Default      | Description                             |
+| ------------- | ----------- | ------------ | --------------------------------------- |
+| `value`       | `string`    | **required** | Unique value for this option            |
+| `disabled`    | `boolean`   | `false`      | Disables this specific radio            |
+| `label`       | `ReactNode` | —            | Label text or element                   |
+| `description` | `ReactNode` | —            | Help text, wired via `aria-describedby` |
+| `className`   | `string`    | —            | Additional wrapper class                |
 
 All standard `<input type="radio">` attributes (except `type`, `size`, `checked`, `defaultChecked`, `onChange`, `name`, `value`) are forwarded to the underlying `<input>`.
-```
+
+````
 
 ---
 
@@ -1199,7 +1166,7 @@ All standard `<input type="radio">` attributes (except `type`, `size`, `checked`
 - ⏳ Switch
 - ⏳ Slider
 - ⏳ Combobox
-```
+````
 
 ---
 
@@ -1315,6 +1282,7 @@ npm publish
 # Roadmap
 
 ## Core
+
 - ✅ Runtime theme engine
 - ✅ CSS variable tokens
 - ✅ Light / Dark / System modes
@@ -1323,6 +1291,7 @@ npm publish
 - ✅ ThemeToggler with transitions
 
 ## Form
+
 - ✅ Input (with kind, clearable, loading, adornments)
 - ✅ FormField (automatic ARIA wiring)
 - ⏳ Textarea
@@ -1334,6 +1303,7 @@ npm publish
 - ⏳ Combobox
 
 ## Feedback
+
 - ⏳ Alert
 - ⏳ Toast
 - ⏳ Progress
@@ -1341,6 +1311,7 @@ npm publish
 - ⏳ Skeleton
 
 ## Data Display
+
 - ⏳ Badge
 - ⏳ Avatar
 - ⏳ Card
@@ -1348,12 +1319,14 @@ npm publish
 - ⏳ Data Grid
 
 ## Navigation
+
 - ⏳ Tabs
 - ⏳ Accordion
 - ⏳ Breadcrumb
 - ⏳ Pagination
 
 ## Overlay
+
 - ⏳ Dialog
 - ⏳ Drawer
 - ⏳ Popover

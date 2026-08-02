@@ -6,14 +6,14 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   clean: true,
-  minify: false,
   splitting: false,
   treeshake: true,
-  external: ["react", "react-dom"],
-  injectStyle: false,
-  esbuildOptions(options) {
-    options.banner = {
-      js: '"use client";',
-    };
+  keepNames: true,
+  minify: true,
+  target: "es2020",
+  outDir: "dist",
+  external: ["react", "react-dom", "react/jsx-runtime"],
+  banner: {
+    js: '"use client";',
   },
 });

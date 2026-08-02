@@ -14,7 +14,7 @@ export function useSizeStyle(size: string): ResolvedSize {
     let token = scale[size];
 
     if (!token) {
-      if (import.meta.env.NODE_ENV !== "production") {
+      if (process.env.NODE_ENV !== "production") {
         console.warn(
           `[kreativ-ui] Unknown size "${size}". Falling back to "${fallbackSize}". ` +
             `Register it with <UIProvider theme={{ sizes: { ${size}: { height: "...", paddingX: "...", fontSize: "..." } } }} />.`,

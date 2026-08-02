@@ -3,16 +3,8 @@ import { cn } from "@/utils/cn";
 import { inputBase, inputWrapperVariants, inputSizeVariants } from "../Input/Input.styles";
 import { ClearIcon } from "../Input/Input.icons";
 import { useComboboxContext } from "./Combobox.context";
-import type { InputVariant, InputSize } from "../Input/Input.types";
+import { ComboboxInputProps } from "./Combobox.types";
 
-interface ComboboxInputProps {
-    variant?: InputVariant;
-    size?: InputSize;
-    placeholder?: string;
-    clearable?: boolean;
-    allowFreeText?: boolean;
-    className?: string;
-}
 
 function orderedFilteredValues(ctx: ReturnType<typeof useComboboxContext>, query: string) {
     const q = query.trim().toLowerCase();

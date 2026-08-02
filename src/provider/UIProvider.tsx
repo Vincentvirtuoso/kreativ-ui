@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-  type JSX,
-} from "react";
+import { useEffect, useMemo, useState, type ReactNode, type JSX } from "react";
 
 import { ThemeContext } from "./ThemeContext";
 import { defaultTheme, resolveTokens } from "./theme";
@@ -56,11 +50,7 @@ export function UIProvider({
   const systemPrefersDark = useSystemPrefersDark();
 
   const resolvedMode =
-    mode === "system"
-      ? systemPrefersDark
-        ? "dark"
-        : "light"
-      : mode;
+    mode === "system" ? (systemPrefersDark ? "dark" : "light") : mode;
 
   const mergedTheme = useMemo(
     () => mergeTheme(defaultTheme, themeOverride),
@@ -68,25 +58,13 @@ export function UIProvider({
   );
 
   const cssVars = useMemo(() => {
+    const resolvedTokens = resolveTokens(mergedTheme[resolvedMode]);
 
-    const resolvedTokens = resolveTokens(
-      mergedTheme[resolvedMode]
-    );
-
-
-    return tokensToCssVars(
-      resolvedTokens,
-      mergedTheme.intensity,
-      resolvedMode
-    );
-
-  }, [
-    mergedTheme,
-    resolvedMode,
-  ]);
+    return tokensToCssVars(resolvedTokens, mergedTheme.intensity, resolvedMode);
+  }, [mergedTheme, resolvedMode]);
 
   if (
-    import.meta.env.NODE_ENV !== "production" &&
+    process.env.NODE_ENV !== "production" &&
     !mergedTheme.sizes[fallbackSize]
   ) {
     console.error(

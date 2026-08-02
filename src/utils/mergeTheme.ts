@@ -1,5 +1,4 @@
 import type {
-  IntensityMap,
   SizeScale,
   SizeToken,
   Theme,
@@ -7,17 +6,12 @@ import type {
   ThemeTokens,
 } from "@/types/theme";
 
-const CSS_LENGTH = /^-?\d*\.?\d+(px|rem|em|%|vh|vw|ch)$/;
-const INTENSITY_MAP: IntensityMap = { subtle: 20, default: 50, bold: 85 };
+import type { DeepPartial } from "@/types/common";
 
-function normalizeIntensity(input?: number | keyof IntensityMap): number {
-  if (typeof input === "number") return Math.min(100, Math.max(0, input));
-  if (typeof input === "string") return INTENSITY_MAP[input] ?? 50;
-  return 50;
-}
+const CSS_LENGTH = /^-?\d*\.?\d+(px|rem|em|%|vh|vw|ch)$/;
 
 function validateSizeToken(key: string, token: Partial<SizeToken>) {
-  if (import.meta.env.NODE_ENV === "production") return;
+  if (process.env.NODE_ENV === "production") return;
 
   (
     ["height", "paddingX", "fontSize", "gap", "iconSize", "radius"] as const
@@ -68,7 +62,7 @@ function toPx(value: string): number | undefined {
 
 function mergeTokens(
   base: ThemeTokens,
-  override?: Partial<ThemeTokens> & { colors?: Partial<ThemeTokens["colors"]> },
+  override?: DeepPartial<ThemeTokens>,
 ): ThemeTokens {
   if (!override) return base;
   return {
@@ -94,12 +88,9 @@ function mergeSizes(
 
 export function mergeTheme(base: Theme, override?: ThemeOverride): Theme {
   if (!override) return base;
-  const intensity =
-    override?.intensity !== undefined
-      ? normalizeIntensity(override.intensity)
-      : (base.intensity ?? 50);
+
   return {
-    intensity,
+    intensity: base.intensity,
     light: mergeTokens(base.light, override.light),
     dark: mergeTokens(base.dark, override.dark),
     sizes: mergeSizes(base.sizes, override.sizes),

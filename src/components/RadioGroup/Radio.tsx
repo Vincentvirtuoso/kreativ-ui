@@ -1,4 +1,3 @@
-import { useId } from "react";
 import { cn } from "@/utils/cn";
 import { useRadioGroupContext } from "./RadioGroup.context";
 import { radioBubbleVariants, radioDotSizes } from "./Radio.styles";
@@ -13,7 +12,6 @@ export function Radio({
   ...props
 }: RadioProps) {
   const group = useRadioGroupContext();
-  const autoId = useId();
   const id = `${group.name}-${value}`;
 
   const checked = group.value === value;

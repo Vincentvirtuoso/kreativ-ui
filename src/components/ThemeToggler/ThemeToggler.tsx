@@ -8,193 +8,196 @@ import type { ThemeTogglerProps } from "./ThemeToggler.types";
 import { cn } from "@/utils";
 
 const defaultTransition = {
-    type: "none",
-    duration: 300,
-    delay: 0,
-    easing: "ease-in-out",
+  type: "none",
+  duration: 300,
+  delay: 0,
+  easing: "ease-in-out",
 } as const;
 
 // Map transition type to animation variants for the icon
 const getIconVariants = (type: string) => {
-    switch (type) {
-        case "fade":
-            return {
-                initial: { opacity: 0 },
-                animate: { opacity: 1 },
-                exit: { opacity: 0 },
-            };
-        case "slide":
-            return {
-                initial: { opacity: 0, x: -20 },
-                animate: { opacity: 1, x: 0 },
-                exit: { opacity: 0, x: 20 },
-            };
-        case "scale":
-            return {
-                initial: { opacity: 0, scale: 0.5 },
-                animate: { opacity: 1, scale: 1 },
-                exit: { opacity: 0, scale: 1.5 },
-            };
-        case "rotate":
-            return {
-                initial: { opacity: 0, rotate: -90 },
-                animate: { opacity: 1, rotate: 0 },
-                exit: { opacity: 0, rotate: 90 },
-            };
-        case "none":
-        default:
-            return {
-                initial: { opacity: 1 },
-                animate: { opacity: 1 },
-                exit: { opacity: 1 },
-            };
-    }
+  switch (type) {
+    case "fade":
+      return {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        exit: { opacity: 0 },
+      };
+    case "slide":
+      return {
+        initial: { opacity: 0, x: -20 },
+        animate: { opacity: 1, x: 0 },
+        exit: { opacity: 0, x: 20 },
+      };
+    case "scale":
+      return {
+        initial: { opacity: 0, scale: 0.5 },
+        animate: { opacity: 1, scale: 1 },
+        exit: { opacity: 0, scale: 1.5 },
+      };
+    case "rotate":
+      return {
+        initial: { opacity: 0, rotate: -90 },
+        animate: { opacity: 1, rotate: 0 },
+        exit: { opacity: 0, rotate: 90 },
+      };
+    case "none":
+    default:
+      return {
+        initial: { opacity: 1 },
+        animate: { opacity: 1 },
+        exit: { opacity: 1 },
+      };
+  }
 };
 
 export function ThemeToggler({
-    variant = "ghost",
-    activeVariant = "solid",
-    size = "sm",
-    iconOnly = false,
-    allowSystem = false,
-    orientation = "horizontal",
-    rounded = false,
-    unstyled = false,
-    labels,
-    icons,
-    className,
-    buttonProps = {},
-    display = "buttons",
-    transition = defaultTransition,
+  variant = "ghost",
+  activeVariant = "solid",
+  size = "sm",
+  iconOnly = false,
+  allowSystem = false,
+  orientation = "horizontal",
+  rounded = false,
+  unstyled = false,
+  labels,
+  icons,
+  className,
+  buttonProps = {},
+  display = "buttons",
+  transition = defaultTransition,
 }: ThemeTogglerProps) {
-    const { mode, setMode, resolvedMode } = useTheme();
+  const { mode, setMode, resolvedMode } = useTheme();
 
-    const activeMode = allowSystem ? mode : resolvedMode;
+  const activeMode = allowSystem ? mode : resolvedMode;
 
-    const modes = [
-        {
-            key: "light" as const,
-            label: labels?.light ?? "Light",
-            icon: icons?.light ?? <Sun size={16} />,
-        },
-        {
-            key: "dark" as const,
-            label: labels?.dark ?? "Dark",
-            icon: icons?.dark ?? <Moon size={16} />,
-        },
-        ...(allowSystem
-            ? [
-                {
-                    key: "system" as const,
-                    label: labels?.system ?? "System",
-                    icon: icons?.system ?? <Monitor size={16} />,
-                },
-            ]
-            : []),
-    ];
+  const modes = [
+    {
+      key: "light" as const,
+      label: labels?.light ?? "Light",
+      icon: icons?.light ?? <Sun size={16} />,
+    },
+    {
+      key: "dark" as const,
+      label: labels?.dark ?? "Dark",
+      icon: icons?.dark ?? <Moon size={16} />,
+    },
+    ...(allowSystem
+      ? [
+          {
+            key: "system" as const,
+            label: labels?.system ?? "System",
+            icon: icons?.system ?? <Monitor size={16} />,
+          },
+        ]
+      : []),
+  ];
 
-    const allowedModes = modes.map((mode) => mode.key);
-    const currentMode = modes.find(({ key }) => key === activeMode) ?? modes[0];
+  const allowedModes = modes.map((mode) => mode.key);
+  const currentMode = modes.find(({ key }) => key === activeMode) ?? modes[0];
 
-    const effectiveRounded = rounded && !(orientation === "vertical" && !iconOnly);
+  const effectiveRounded =
+    rounded && !(orientation === "vertical" && !iconOnly);
 
-    useEffect(() => {
-        if (import.meta.env.DEV && rounded && !effectiveRounded) {
-            console.warn(
-                "[kreativ-ui/ThemeToggler] `rounded` is ignored when orientation='vertical' and iconOnly={false}."
-            );
-        }
-    }, [rounded, effectiveRounded]);
+  useEffect(() => {
+    if (process.env.DEV && rounded && !effectiveRounded) {
+      console.warn(
+        "[kreativ-ui/ThemeToggler] `rounded` is ignored when orientation='vertical' and iconOnly={false}.",
+      );
+    }
+  }, [rounded, effectiveRounded]);
 
-    const handleCycle = () => {
-        const index = allowedModes.indexOf(activeMode as typeof allowedModes[number]);
-        setMode(allowedModes[(index + 1) % allowedModes.length]);
-    };
-
-    const isActive = (key: typeof allowedModes[number]) =>
-        key === "system" ? mode === "system" : activeMode === key;
-
-    const containerClasses = cn(
-        "inline-flex gap-1",
-        orientation === "vertical" && "flex-col",
-        !unstyled && [
-            "border border-border bg-surface p-1",
-            effectiveRounded ? "rounded-full" : "rounded-lg",
-        ],
-        className
+  const handleCycle = () => {
+    const index = allowedModes.indexOf(
+      activeMode as (typeof allowedModes)[number],
     );
+    setMode(allowedModes[(index + 1) % allowedModes.length]);
+  };
 
-    const buttonRadius = effectiveRounded ? "rounded-full" : "rounded-lg";
+  const isActive = (key: (typeof allowedModes)[number]) =>
+    key === "system" ? mode === "system" : activeMode === key;
 
-    const animateIcon = display === "cycle" && transition.type !== "none";
-    const iconVariants = getIconVariants(transition.type || "none");
+  const containerClasses = cn(
+    "inline-flex gap-1",
+    orientation === "vertical" && "flex-col",
+    !unstyled && [
+      "border border-border bg-surface p-1",
+      effectiveRounded ? "rounded-full" : "rounded-lg",
+    ],
+    className,
+  );
 
-    // Build transition config for Framer Motion
-    const motionTransition = {
-        duration: (transition.duration || 300) / 1000,
-        delay: (transition.delay || 0) / 1000,
-        ease: (transition.easing || "ease-in-out") as any,
-    };
+  const buttonRadius = effectiveRounded ? "rounded-full" : "rounded-lg";
 
-    if (display === "cycle") {
-        return (
-            <Button
-                size={size}
-                variant={variant}
-                onClick={handleCycle}
-                aria-label={`Current theme: ${currentMode.label}`}
-                {...buttonProps}
-            >
-                <AnimatePresence mode="wait">
-                    <motion.span
-                        key={currentMode.key}
-                        initial={animateIcon ? iconVariants.initial : undefined}
-                        animate={animateIcon ? iconVariants.animate : undefined}
-                        exit={animateIcon ? iconVariants.exit : undefined}
-                        transition={motionTransition}
-                    >
-                        {currentMode.icon}
-                    </motion.span>
-                </AnimatePresence>
-                {!iconOnly && currentMode.label}
-            </Button>
-        );
-    }
+  const animateIcon = display === "cycle" && transition.type !== "none";
+  const iconVariants = getIconVariants(transition.type || "none");
 
-    const buttons = modes.map(({ key, label, icon }) => (
-        <Button
-            key={key}
-            size={size}
-            variant={isActive(key) ? activeVariant : variant}
-            onClick={() => setMode(key)}
-            className={buttonRadius}
-            leftIcon={icon}
-            aria-pressed={isActive(key)}
-            {...buttonProps}
-        >
-            {!iconOnly && label}
-        </Button>
-    ));
+  // Build transition config for Framer Motion
+  const motionTransition = {
+    duration: (transition.duration || 300) / 1000,
+    delay: (transition.delay || 0) / 1000,
+    ease: (transition.easing || "ease-in-out") as any,
+  };
 
-    if (unstyled) {
-        return (
-            <div
-                role="group"
-                aria-label="Theme selector"
-                className={cn(
-                    "inline-flex gap-1",
-                    orientation === "vertical" && "flex-col",
-                    className
-                )}
-            >
-                {buttons}
-            </div>
-        );
-    }
-
+  if (display === "cycle") {
     return (
-        <div role="group" aria-label="Theme selector" className={containerClasses}>
-            {buttons}
-        </div>
+      <Button
+        size={size}
+        variant={variant}
+        onClick={handleCycle}
+        aria-label={`Current theme: ${currentMode.label}`}
+        {...buttonProps}
+      >
+        <AnimatePresence mode="wait">
+          <motion.span
+            key={currentMode.key}
+            initial={animateIcon ? iconVariants.initial : undefined}
+            animate={animateIcon ? iconVariants.animate : undefined}
+            exit={animateIcon ? iconVariants.exit : undefined}
+            transition={motionTransition}
+          >
+            {currentMode.icon}
+          </motion.span>
+        </AnimatePresence>
+        {!iconOnly && currentMode.label}
+      </Button>
     );
+  }
+
+  const buttons = modes.map(({ key, label, icon }) => (
+    <Button
+      key={key}
+      size={size}
+      variant={isActive(key) ? activeVariant : variant}
+      onClick={() => setMode(key)}
+      className={buttonRadius}
+      leftIcon={icon}
+      aria-pressed={isActive(key)}
+      {...buttonProps}
+    >
+      {!iconOnly && label}
+    </Button>
+  ));
+
+  if (unstyled) {
+    return (
+      <div
+        role="group"
+        aria-label="Theme selector"
+        className={cn(
+          "inline-flex gap-1",
+          orientation === "vertical" && "flex-col",
+          className,
+        )}
+      >
+        {buttons}
+      </div>
+    );
+  }
+
+  return (
+    <div role="group" aria-label="Theme selector" className={containerClasses}>
+      {buttons}
+    </div>
+  );
 }

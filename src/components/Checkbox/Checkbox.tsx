@@ -46,7 +46,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         const checked = checkedProp !== undefined ? checkedProp : internalChecked;
         const hasWarned = useRef(false);
         useEffect(() => {
-            if (import.meta.env.NODE_ENV === "production") return;
+            if (process.env.NODE_ENV === "production") return;
             if (hasWarned.current) return;
             if (label && field?.hasExternalLabel) {
                 console.warn(

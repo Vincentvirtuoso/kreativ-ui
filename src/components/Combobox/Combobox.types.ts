@@ -31,3 +31,12 @@ export interface ComboboxItemProps {
     children: ReactNode;
     className?: string;
 }
+
+export interface ComboboxInputProps {
+    variant?: InputVariant;
+    size?: InputSize;
+    placeholder?: string;
+    clearable?: boolean;
+    allowFreeText?: boolean;
+    className?: string;
+}
