@@ -9,6 +9,8 @@ export interface FormFieldContextValue {
     invalid: boolean;
     required: boolean;
     reportValidity: (result: { invalid: boolean; message?: string } | null) => void;
+    registerLabel: () => () => void;
+    hasExternalLabel: boolean;
 }
 
 

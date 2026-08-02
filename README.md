@@ -991,6 +991,218 @@ All standard `<textarea>` attributes (except `size`) are forwarded.
 
 ---
 
+### Updated README (Checkbox section only – drop‑in)
+
+```markdown
+## Checkbox
+
+A customizable checkbox with label, description, validation states, and support for indeterminate state. Works seamlessly with `FormField` for automatic ARIA wiring.
+
+### Basic Usage
+
+```tsx
+import { Checkbox } from "kreativ-ui";
+
+<Checkbox label="Accept terms" />
+```
+
+### Sizes
+
+```tsx
+<Checkbox size="sm" />
+<Checkbox size="md" />
+<Checkbox size="lg" />
+```
+
+### Validation States
+
+```tsx
+<Checkbox error />
+<Checkbox success />
+```
+
+### Indeterminate
+
+```tsx
+<Checkbox indeterminate />
+```
+
+### With Description
+
+```tsx
+<Checkbox
+  label="Accept terms"
+  description="You must agree to continue."
+/>
+```
+
+### Disabled & Required
+
+```tsx
+<Checkbox disabled required />
+```
+
+### With FormField
+
+```tsx
+<FormField error="This field is required" required>
+  <Checkbox label="I agree to the terms" />
+</FormField>
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `checked` | `boolean` | — | Controlled checked state |
+| `defaultChecked` | `boolean` | `false` | Uncontrolled initial state |
+| `onCheckedChange` | `(checked: boolean) => void` | — | Callback when checked state changes |
+| `indeterminate` | `boolean` | `false` | Visually indeterminate state (parent checkbox) |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size of the box |
+| `error` | `boolean` | `false` | Danger styling and `aria-invalid` |
+| `success` | `boolean` | `false` | Success styling |
+| `disabled` | `boolean` | `false` | Disables the checkbox |
+| `required` | `boolean` | `false` | Sets `aria-required` |
+| `label` | `ReactNode` | — | Label text or element (wired to input via `htmlFor`) |
+| `description` | `ReactNode` | — | Help text, wired via `aria-describedby` |
+| `className` | `string` | — | Additional wrapper class |
+
+All standard `<input type="checkbox">` attributes (except `type`, `size`, `checked`, `defaultChecked`) are forwarded.
+
+---
+
+## RadioGroup & Radio
+
+A controlled group of radio buttons with labels, descriptions, validation states, and support for horizontal/vertical orientation. `RadioGroup` manages the selected value and shared props; `Radio` items are its children.
+
+### Basic Usage
+
+```tsx
+import { RadioGroup, Radio } from "kreativ-ui";
+
+function App() {
+  const [value, setValue] = useState("option1");
+
+  return (
+    <RadioGroup value={value} onValueChange={setValue}>
+      <Radio value="option1" label="Option 1" />
+      <Radio value="option2" label="Option 2" />
+      <Radio value="option3" label="Option 3" />
+    </RadioGroup>
+  );
+}
+```
+
+### With Descriptions
+
+```tsx
+<RadioGroup value={value} onValueChange={setValue}>
+  <Radio value="option1" label="Option 1" description="First choice" />
+  <Radio value="option2" label="Option 2" description="Second choice" />
+</RadioGroup>
+```
+
+### Sizes
+
+```tsx
+<RadioGroup size="sm">...</RadioGroup>
+<RadioGroup size="md">...</RadioGroup>
+<RadioGroup size="lg">...</RadioGroup>
+```
+
+### Orientation
+
+```tsx
+<RadioGroup orientation="horizontal">
+  <Radio value="opt1" label="Option 1" />
+  <Radio value="opt2" label="Option 2" />
+</RadioGroup>
+```
+
+### Validation States
+
+```tsx
+<RadioGroup error>...</RadioGroup>
+<RadioGroup success>...</RadioGroup>
+```
+
+### Disabled & Required
+
+```tsx
+<RadioGroup disabled required>...</RadioGroup>
+```
+
+### With FormField
+
+```tsx
+<FormField label="Choose your preference" error="Please select an option" required>
+  <RadioGroup value={value} onValueChange={setValue}>
+    <Radio value="opt1" label="Option 1" />
+    <Radio value="opt2" label="Option 2" />
+  </RadioGroup>
+</FormField>
+```
+
+### Individual Radio Disabling
+
+You can also disable individual radios via the `disabled` prop on `Radio`, which overrides the group’s `disabled` state for that item.
+
+```tsx
+<RadioGroup disabled={false}>
+  <Radio value="opt1" label="Enabled" />
+  <Radio value="opt2" label="Disabled" disabled />
+</RadioGroup>
+```
+
+### Props (RadioGroup)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | — | Controlled selected value |
+| `defaultValue` | `string` | — | Uncontrolled initial value |
+| `onValueChange` | `(value: string) => void` | — | Callback when selection changes |
+| `name` | `string` | auto‑generated | Shared `name` for all radio inputs |
+| `disabled` | `boolean` | `false` | Disables all radios in the group |
+| `required` | `boolean` | `false` | Sets `aria-required` on the group |
+| `orientation` | `"horizontal" \| "vertical"` | `"vertical"` | Layout direction |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size of all radio bubbles |
+| `error` | `boolean` | `false` | Danger styling and `aria-invalid` |
+| `success` | `boolean` | `false` | Success styling |
+| `className` | `string` | — | Additional wrapper class |
+| `children` | `ReactNode` | — | `Radio` components |
+
+### Props (Radio)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | **required** | Unique value for this option |
+| `disabled` | `boolean` | `false` | Disables this specific radio |
+| `label` | `ReactNode` | — | Label text or element |
+| `description` | `ReactNode` | — | Help text, wired via `aria-describedby` |
+| `className` | `string` | — | Additional wrapper class |
+
+All standard `<input type="radio">` attributes (except `type`, `size`, `checked`, `defaultChecked`, `onChange`, `name`, `value`) are forwarded to the underlying `<input>`.
+```
+
+---
+
+### Updated Roadmap (Form section)
+
+```markdown
+## Form
+- ✅ Input (with kind, clearable, loading, adornments)
+- ✅ Select (compound, groups, clearable)
+- ✅ Textarea (auto‑resize, counter, validation)
+- ✅ Checkbox (indeterminate, label, description)
+- ✅ RadioGroup (horizontal/vertical, validation)
+- ✅ FormField (automatic ARIA wiring)
+- ⏳ Switch
+- ⏳ Slider
+- ⏳ Combobox
+```
+
+---
+
 # Built-in Animations
 
 Kreativ UI includes Tailwind‑compatible animation utilities.

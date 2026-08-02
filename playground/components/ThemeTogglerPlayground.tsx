@@ -14,8 +14,8 @@ import { Orientation, Size } from "@/types";
 type BaseTransition = "none" | "fade" | "rotate" | "slide" | "scale";
 
 const SIZES: Size[] = ["xs", "sm", "md", "lg", "xl"];
-const ORIENTATIONS: Orientation[] = ["horizontal", "vertical"] as const;
-const DISPLAYS: ThemeTogglerDisplay[] = ["buttons", "cycle"] as const;
+const ORIENTATIONS: Orientation[] = ["horizontal", "vertical"] ;
+const DISPLAYS: ThemeTogglerDisplay[] = ["buttons", "cycle"] ;
 const TRANSITIONS: BaseTransition[] = ["none", "fade", "rotate", "slide", "scale"];
 
 export function ThemeTogglerPlayground() {

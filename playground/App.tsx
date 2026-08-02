@@ -4,6 +4,8 @@ import { ButtonPlayground } from "./components/ButtonPlayground";
 import { ThemeTogglerPlayground } from "./components/ThemeTogglerPlayground";
 import { SelectPlayground } from "./components/SelectPlayground";
 import { TextareaPlayground } from "./components/TextareaPlayground";
+import { CheckboxPlayground } from "./components/CheckboxPlayground";
+import { RadioGroupPlayground } from "./components/RadioGroupPlayground";
 
 function Playground() {
   return (
@@ -12,9 +14,9 @@ function Playground() {
       <FormPlayground />
       <SelectPlayground />
       <TextareaPlayground />
+      <CheckboxPlayground />
+      <RadioGroupPlayground />
       <ButtonPlayground />
-
-
     </div>
   );
 }

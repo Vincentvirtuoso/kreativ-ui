@@ -1,29 +1,18 @@
-import {
-    useFormField,
-} from "./FormField.context";
+import { useEffect } from "react";
+import type { ReactNode } from "react";
+import { cn } from "@/utils/cn";
+import { useFormField } from "./FormField.context";
 
+export function FormFieldLabel({ children, className }: { children: ReactNode; className?: string }) {
+    const field = useFormField(); 
 
-export function FormFieldLabel({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
-
-    const {
-        id,
-        required,
-    } = useFormField();
-
+    useEffect(() => field.registerLabel(), [field]);
 
     return (
-        <label
-            htmlFor={id}
-            className="text-sm font-medium text-text"
-        >
+        <label id={`${field.id}-label`} htmlFor={field.id} className={cn("text-sm font-medium text-text", className)}>           
             {children}
-
-            {required && (
-                <span className="ml-1 text-danger">
+            {field.required && (
+                <span aria-hidden className="ml-1 text-danger">
                     *
                 </span>
             )}

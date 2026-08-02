@@ -78,22 +78,12 @@ export function FormPlayground() {
                     </Chip>
                     <Chip active={useFormField} onClick={() => setUseFormField(v => !v)}>FormField</Chip>
                 </div>
-                {endAdornmentDisabled && (
-                    <p className="mt-1.5 font-mono text-[10px] text-text-muted">
-                        isLoading takes the end slot over endAdornment
-                    </p>
-                )}
             </div>
 
-            {clearable && (
-                <p className="mb-5 font-mono text-[10px] text-text-muted">
-                    type in the preview to see the clear button appear
-                </p>
-            )}
 
             {useFormField && (
                 <div>
-                    <p className="mb-2 font-mono text-[11px] text-text-muted">FormField copy</p>
+                    <p className="mb-2 font-mono text-[11px] text-text-muted">FormField</p>
                     <div className="mb-2">
                         <label className="mb-1 block font-mono text-[11px] text-text-muted">label</label>
                         <input

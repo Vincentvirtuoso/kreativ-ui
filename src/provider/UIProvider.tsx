@@ -2,7 +2,6 @@ import {
   useEffect,
   useMemo,
   useState,
-  type CSSProperties,
   type ReactNode,
   type JSX,
 } from "react";
