@@ -1,3 +1,5 @@
+import { DeepPartial } from "./common";
+
 export type ColorToken = string;
 
 export interface ColorTokens {
@@ -66,8 +68,8 @@ export interface Theme {
 }
 
 export type ThemeOverride = {
-  light?: Partial<ThemeTokens>;
-  dark?: Partial<ThemeTokens>;
+  light?: DeepPartial<ThemeTokens>;
+  dark?: DeepPartial<ThemeTokens>;
   sizes?: Record<string, Partial<SizeToken>>;
   components?: ComponentOverrides;
 };

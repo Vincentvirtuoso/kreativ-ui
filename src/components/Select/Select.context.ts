@@ -13,6 +13,7 @@ export interface SelectContextValue {
     disabled: boolean;
     variant: InputVariant;
     size: InputSize;
+    rounded?: boolean;
 
     open: boolean;
     setOpen: (open: boolean) => void;
@@ -24,6 +25,7 @@ export interface SelectContextValue {
     isSuccess: boolean;
     describedBy?: string;
     required?: boolean;
+    selectedLabel?: React.ReactNode;
 
     activeValue: string | undefined;
     setActiveValue: (value: string | undefined) => void;

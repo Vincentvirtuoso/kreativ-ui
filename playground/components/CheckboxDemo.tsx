@@ -11,7 +11,7 @@ type State = "none" | "error" | "success";
 const SIZES: InputSize[] = ["sm", "md", "lg"];
 const STATES: State[] = ["none", "error", "success"];
 
-export function CheckboxPlayground() {
+export function CheckboxDemo() {
     const [checked, setChecked] = useState(false);
     const [size, setSize] = useState<InputSize>("md");
     const [state, setState] = useState<State>("none");

@@ -1,14 +1,28 @@
-/** Converts a "#RRGGBB" hex string into kreativ-ui's "R G B" token format. */
-export function hexToRgbToken(hex: string): string {
-  const clean = hex.replace("#", "");
-  const bigint = parseInt(clean.length === 3 ? clean.split("").map((c) => c + c).join("") : clean, 16);
-  const r = (bigint >> 16) & 255;
-  const g = (bigint >> 8) & 255;
-  const b = bigint & 255;
-  return `${r} ${g} ${b}`;
+const RGB_RE = /^\s*(\d{1,3})\s+(\d{1,3})\s+(\d{1,3})\s*$/;
+const HEX_RE = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
+
+function clamp255(n: number) {
+  return Math.max(0, Math.min(255, n));
 }
 
-/** Wraps a "R G B" token in an rgb()/rgba() string, e.g. for inline styles. */
-export function rgbTokenToCss(token: string, alpha = 1): string {
-  return alpha === 1 ? `rgb(${token})` : `rgb(${token} / ${alpha})`;
+export function rgbStringToHex(rgb: string): string | null {
+  const match = RGB_RE.exec(rgb);
+  if (!match) return null;
+  const [, r, g, b] = match;
+  return (
+    "#" +
+    [r, g, b]
+      .map((c) => clamp255(Number(c)).toString(16).padStart(2, "0"))
+      .join("")
+  );
+}
+
+export function hexToRgbString(hex: string): string | null {
+  if (!HEX_RE.test(hex)) return null;
+  const full =
+    hex.length === 4 ? "#" + [...hex.slice(1)].map((c) => c + c).join("") : hex;
+  const r = parseInt(full.slice(1, 3), 16);
+  const g = parseInt(full.slice(3, 5), 16);
+  const b = parseInt(full.slice(5, 7), 16);
+  return `${r} ${g} ${b}`;
 }

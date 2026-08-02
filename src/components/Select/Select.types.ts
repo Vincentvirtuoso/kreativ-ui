@@ -7,6 +7,7 @@ export interface SelectProps
         "onChange"
     > {
     className?: string;
+    rounded?: boolean;
 
     error?: boolean;
     success?: boolean;
