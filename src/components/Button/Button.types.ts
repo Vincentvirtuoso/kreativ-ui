@@ -28,14 +28,25 @@ export type Variant =
   | "soft-brand"
   | "ghost-white";
 
-  export type ButtonVariant = Variant;
+export type ButtonVariant = Variant;
+export type ButtonSize = SizeValue | "icon";
 
 export interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>, Styleable {
+  extends Omit<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    | "onDrag"
+    | "onDragStart"
+    | "onDragEnd"
+    | "onAnimationStart"
+    | "onAnimationEnd"
+    | "onAnimationIteration"
+  >,
+    Styleable {
   variant?: Variant;
-  size?: SizeValue;
+  size?: ButtonSize;
   isLoading?: boolean;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   fullWidth?: boolean;
+  iconOnly?: boolean;
 }

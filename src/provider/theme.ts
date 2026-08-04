@@ -8,6 +8,7 @@ export const defaultSizes: SizeScale = {
     fontSize: "0.75rem",
     gap: "0.25rem",
     iconSize: "0.875rem",
+    radius: "0.65rem",
   },
   sm: {
     height: "2rem",
@@ -15,6 +16,7 @@ export const defaultSizes: SizeScale = {
     fontSize: "0.8125rem",
     gap: "0.375rem",
     iconSize: "1rem",
+    radius: "0.8rem",
   },
   md: {
     height: "2.5rem",
@@ -22,6 +24,7 @@ export const defaultSizes: SizeScale = {
     fontSize: "0.875rem",
     gap: "0.5rem",
     iconSize: "1.125rem",
+    radius: "1rem",
   },
   lg: {
     height: "3rem",
@@ -29,6 +32,7 @@ export const defaultSizes: SizeScale = {
     fontSize: "1rem",
     gap: "0.625rem",
     iconSize: "1.25rem",
+    radius: "1.25rem",
   },
 };
 
@@ -103,9 +107,6 @@ export const defaultTheme: Theme = {
   sizes: defaultSizes,
   components: {},
 };
-
-
-
 
 function clamp(value: number) {
   return Math.min(255, Math.max(0, value));

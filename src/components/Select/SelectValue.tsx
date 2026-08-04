@@ -7,7 +7,7 @@ export function SelectValue({ placeholder, className }: SelectValueProps) {
 
   const displayLabel = ctx.selectedLabel ?? placeholder ?? ctx.placeholder;
 
-  if (process.env.DEV && ctx.value !== undefined && ctx.items.size > 0) {
+  if (ctx.value !== undefined && ctx.items.size > 0) {
     const hasLabel = ctx.items.has(ctx.value);
     if (!hasLabel) {
       console.warn(

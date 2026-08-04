@@ -42,6 +42,7 @@ export interface IntensityMap {
 
 export interface SizeToken {
   height?: string;
+  width?: string;
   paddingX?: string;
   fontSize?: string;
   gap?: string;

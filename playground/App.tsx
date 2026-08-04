@@ -1,10 +1,11 @@
-import { UIProvider, ThemeOverride } from "../src";
+import { UIProvider, ThemeOverride, defaultTheme } from "../src";
 import ComponentsPlayground from "./components/ComponentsPlayground";
 import { useState } from "react";
 import { ThemeStudio } from "./components/ThemeStudio";
 
 export function App() {
     const [theme, setTheme] = useState<ThemeOverride>({
+        ...defaultTheme,
         sizes: {
             xl: {
                 height: "4.5rem",

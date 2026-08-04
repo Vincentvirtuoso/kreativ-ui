@@ -11,7 +11,7 @@ interface Props {
 
 export function ThemeStudio({ theme, onChange }: Props) {
   return (
-    <section className="mb-10 space-y-8 rounded-lg border border-border p-5">
+    <section className="mb-10 space-y-8 rounded-lg border border-border p-5 text-text">
       <header>
         <h2 className="font-medium">Theme Studio</h2>
         <p className="text-sm text-text-muted">Runtime theme overrides</p>

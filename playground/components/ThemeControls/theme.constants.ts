@@ -1,5 +1,4 @@
-import type { ColorTokens } from "@/types/theme";
-
+import type { ColorTokens, SizeToken } from "@/types/theme";
 
 export const COLOR_KEYS = Object.keys({
   brand: 0,
@@ -44,12 +43,11 @@ export const COLOR_GROUPS: { name: string; keys: (keyof ColorTokens)[] }[] = [
   { name: "Info", keys: ["info", "infoFg", "infoHover"] },
 ];
 
-
 export const SIZE_KEYS = [
-    "height",
-    "paddingX",
-    "fontSize",
-    "gap",
-    "iconSize",
-    "radius",
-] as const;
+  "height",
+  "paddingX",
+  "fontSize",
+  "gap",
+  "iconSize",
+  "radius",
+] as const satisfies readonly (keyof SizeToken)[];

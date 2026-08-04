@@ -63,10 +63,7 @@ export function UIProvider({
     return tokensToCssVars(resolvedTokens, mergedTheme.intensity, resolvedMode);
   }, [mergedTheme, resolvedMode]);
 
-  if (
-    process.env.NODE_ENV !== "production" &&
-    !mergedTheme.sizes[fallbackSize]
-  ) {
+  if (!mergedTheme.sizes[fallbackSize]) {
     console.error(
       `[kreativ-ui] fallbackSize="${fallbackSize}" is not a registered size in theme.sizes.`,
     );

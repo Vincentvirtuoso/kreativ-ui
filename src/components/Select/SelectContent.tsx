@@ -3,14 +3,13 @@ import { cn } from "@/utils/cn";
 import { useSelectContext } from "./Select.context";
 import type { SelectContentProps } from "./Select.types";
 
-const VIEWPORT_PADDING = 8; // gap kept from the viewport edge
+const VIEWPORT_PADDING = 8; 
 
 export function SelectContent({ className, children, ...props }: SelectContentProps) {
     const ctx = useSelectContext("SelectContent");
     const contentRef = useRef<HTMLDivElement>(null);
     const [side, setSide] = useState<"top" | "bottom">("bottom");
 
-    // Runs before paint, so there's no visible flip/flicker on open.
     useLayoutEffect(() => {
         if (!ctx.open) return;
         const trigger = ctx.triggerRef.current!;

@@ -14,7 +14,6 @@ const defaultTransition = {
   easing: "ease-in-out",
 } as const;
 
-// Map transition type to animation variants for the icon
 const getIconVariants = (type: string) => {
   switch (type) {
     case "fade":
@@ -100,7 +99,7 @@ export function ThemeToggler({
     rounded && !(orientation === "vertical" && !iconOnly);
 
   useEffect(() => {
-    if (process.env.DEV && rounded && !effectiveRounded) {
+    if (rounded && !effectiveRounded) {
       console.warn(
         "[kreativ-ui/ThemeToggler] `rounded` is ignored when orientation='vertical' and iconOnly={false}.",
       );
@@ -132,7 +131,6 @@ export function ThemeToggler({
   const animateIcon = display === "cycle" && transition.type !== "none";
   const iconVariants = getIconVariants(transition.type || "none");
 
-  // Build transition config for Framer Motion
   const motionTransition = {
     duration: (transition.duration || 300) / 1000,
     delay: (transition.delay || 0) / 1000,

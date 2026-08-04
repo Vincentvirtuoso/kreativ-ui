@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/Button/Button";
 import { buttonVariants } from "@/components/Button/Button.styles";
 import type { Variant } from "@/components/Button/Button.types";
-import { MailIcon, SearchIcon } from "lucide-react";
+import { MailIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { SegmentedControl } from "./shared/SegmentedControl";
 import { Chip } from "./shared/Chip";
 import { Playground } from "./shared/Playground";
@@ -10,7 +10,6 @@ import { useTheme } from "@/hooks";
 
 type Size = "sm" | "md" | "lg";
 const VARIANTS = Object.keys(buttonVariants) as Variant[];
-// const SIZES: Size[] = ["sm", "md", "lg"];
 
 export function ButtonPlayground() {
     const [variant, setVariant] = useState<Variant>("solid");
@@ -20,6 +19,7 @@ export function ButtonPlayground() {
     const [fullWidth, setFullWidth] = useState(false);
     const [leftIcon, setLeftIcon] = useState(false);
     const [rightIcon, setRightIcon] = useState(false);
+    const [iconOnly, setIconOnly] = useState(false);
 
     const { theme } = useTheme();
     const availableSizes = Object.keys(theme.sizes ?? {}) as Size[];
@@ -36,6 +36,7 @@ export function ButtonPlayground() {
                     <Chip active={fullWidth} onClick={() => setFullWidth(v => !v)}>fullWidth</Chip>
                     <Chip active={leftIcon} onClick={() => setLeftIcon(v => !v)}>leftIcon</Chip>
                     <Chip active={rightIcon} onClick={() => setRightIcon(v => !v)}>rightIcon</Chip>
+                    <Chip active={iconOnly} onClick={() => setIconOnly(v => !v)}>iconOnly</Chip>
                 </div>
             </div>
         </>
@@ -50,8 +51,9 @@ export function ButtonPlayground() {
             fullWidth={fullWidth}
             leftIcon={leftIcon ? <SearchIcon className="h-4 w-4" /> : undefined}
             rightIcon={rightIcon ? <MailIcon className="h-4 w-4" /> : undefined}
+            iconOnly={iconOnly}
         >
-            Button
+            {iconOnly?<PlusIcon className="h-4 w-4" />:'Button'}
         </Button>
     );
 

@@ -1,20 +1,15 @@
-const RGB_RE = /^\s*(\d{1,3})\s+(\d{1,3})\s+(\d{1,3})\s*$/;
 const HEX_RE = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
 
-function clamp255(n: number) {
-  return Math.max(0, Math.min(255, n));
-}
 
-export function rgbStringToHex(rgb: string): string | null {
-  const match = RGB_RE.exec(rgb);
-  if (!match) return null;
-  const [, r, g, b] = match;
-  return (
-    "#" +
-    [r, g, b]
-      .map((c) => clamp255(Number(c)).toString(16).padStart(2, "0"))
-      .join("")
-  );
+export function rgbToHex(rgb: string) {
+  const values = rgb
+    .replace(/[^\d,]/g, "")
+    .split(",")
+    .map(Number);
+
+  if (values.length !== 3) return "#000000";
+
+  return "#" + values.map((x) => x.toString(16).padStart(2, "0")).join("");
 }
 
 export function hexToRgbString(hex: string): string | null {

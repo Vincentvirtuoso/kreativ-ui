@@ -15,6 +15,7 @@ import { SelectValue } from "./SelectValue";
 import { SelectGroup } from "./SelectGroup";
 import { SelectLabel } from "./SelectLabel";
 import { useOptionalFormField } from "../FormField/FormField.context";
+import { cn } from "@/utils";
 
 export function Select({
   value: valueProp,
@@ -184,7 +185,7 @@ export function Select({
     <SelectContext.Provider value={ctxValue}>
       <div
         ref={rootRef}
-        className={className ?? "relative inline-block w-full"}
+        className={cn("relative inline-block w-full", className)}
         tabIndex={tabIndex}
         aria-invalid={ariaInvalid}
         aria-describedby={ariaDescribedBy}

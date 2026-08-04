@@ -127,7 +127,7 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
           data-state={ctx.open ? "open" : "closed"}
           onClick={() => !ctx.disabled && ctx.setOpen(!ctx.open)}
           onKeyDown={handleKeyDown}
-          className="relative min-w-0 flex-1 bg-transparent cursor-pointer text-left outline-none disabled:cursor-not-allowed h-full"
+          className="min-w-0 flex-1 bg-transparent cursor-pointer text-left outline-none disabled:cursor-not-allowed h-full"
           {...props}
         >
           {children}

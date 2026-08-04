@@ -8,25 +8,31 @@ import type {
 
 import type { DeepPartial } from "@/types/common";
 
-const CSS_LENGTH = /^-?\d*\.?\d+(px|rem|em|%|vh|vw|ch)$/;
+const CSS_SIZE =
+  /^-?\d*\.?\d+(px|rem|em|%|vh|vw|vmin|vmax|ch|ex|cm|mm|in|pt|pc|fr)$|^(auto|min-content|max-content|fit-content)$/;
+
+function isCssKeyword(value: string) {
+  return ["auto", "min-content", "max-content", "fit-content"].includes(value);
+}
 
 function validateSizeToken(key: string, token: Partial<SizeToken>) {
-  if (process.env.NODE_ENV === "production") return;
-
   (
     ["height", "paddingX", "fontSize", "gap", "iconSize", "radius"] as const
   ).forEach((field) => {
     const value = token[field];
     if (value === undefined) return;
 
-    if (!CSS_LENGTH.test(value)) {
+    if (!CSS_SIZE.test(value)) {
       console.error(
-        `[kreativ-ui] Invalid size "${key}.${field}": "${value}" is not a valid CSS length (e.g. "2.5rem", "40px").`,
+        `[kreativ-ui] Invalid size "${key}.${field}": "${value}" is not a valid CSS size.`,
       );
       return;
     }
 
+    if (isCssKeyword(value)) return;
+
     const num = parseFloat(value);
+
     if (num < 0) {
       console.error(
         `[kreativ-ui] Invalid size "${key}.${field}": "${value}" is negative.`,
@@ -37,6 +43,7 @@ function validateSizeToken(key: string, token: Partial<SizeToken>) {
   if (token.height && token.fontSize) {
     const heightPx = toPx(token.height);
     const fontSizePx = toPx(token.fontSize);
+
     if (
       heightPx !== undefined &&
       fontSizePx !== undefined &&
@@ -54,10 +61,19 @@ function validateSizeToken(key: string, token: Partial<SizeToken>) {
 }
 
 function toPx(value: string): number | undefined {
+  if (isCssKeyword(value)) return undefined;
+
   const num = parseFloat(value);
+
   if (Number.isNaN(num)) return undefined;
+
   if (value.endsWith("px")) return num;
-  if (value.endsWith("rem") || value.endsWith("em")) return num * 16;
+
+  if (value.endsWith("rem") || value.endsWith("em")) {
+    return num * 16;
+  }
+
+  return undefined;
 }
 
 function mergeTokens(

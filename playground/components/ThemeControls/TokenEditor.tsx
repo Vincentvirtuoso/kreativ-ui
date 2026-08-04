@@ -3,6 +3,7 @@ import type { ThemeOverride } from "@/types/theme";
 import { ColorEditor } from "./ColorEditor";
 import { COLOR_GROUPS } from "./theme.constants";
 import { defaultTheme } from "@/provider";
+import { rgbToHex } from "@/utils";
 
 interface TokenEditorProps {
   theme: ThemeOverride;
@@ -13,6 +14,7 @@ export function TokenEditor({ theme, onChange }: TokenEditorProps) {
   const [openGroups, setOpenGroups] = useState<Set<string>>(
     new Set([COLOR_GROUPS[0].name]),
   );
+
 
   function toggleGroup(name: string) {
     setOpenGroups((prev) => {
@@ -36,7 +38,10 @@ export function TokenEditor({ theme, onChange }: TokenEditorProps) {
     mode: "light" | "dark",
     key: keyof typeof defaultTheme.light.colors,
   ) {
-    return theme[mode]?.colors?.[key] ?? defaultTheme[mode].colors[key];
+     const value = theme[mode]?.colors?.[key] ?? defaultTheme[mode].colors[key];
+
+
+     return rgbToHex(value);
   }
 
   return (
@@ -73,7 +78,7 @@ export function TokenEditor({ theme, onChange }: TokenEditorProps) {
               className="flex w-full items-center justify-between px-3 py-2 text-left text-sm"
               aria-expanded={isOpen}
             >
-              <span className="font-medium">{group.name}</span>
+              <span className="font-medium text-text">{group.name}</span>
               <span className="font-mono text-xs text-text-muted">
                 {group.keys.length}
               </span>

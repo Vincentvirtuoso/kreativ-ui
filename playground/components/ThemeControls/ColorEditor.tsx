@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { rgbStringToHex, hexToRgbString } from "@/utils/color";
+import { hexToRgbString } from "@/utils/color";
 
 interface ColorEditorProps {
   label: string;
@@ -8,16 +8,15 @@ interface ColorEditorProps {
 }
 
 export function ColorEditor({ label, value, onChange }: ColorEditorProps) {
-  const hexFromValue = rgbStringToHex(value) ?? "#000000";
-  const [draft, setDraft] = useState(hexFromValue);
-  useEffect(() => setDraft(hexFromValue), [hexFromValue]);
+  const [draft, setDraft] = useState(value);
+  useEffect(() => setDraft(value), [value]);
 
   const isValidDraft = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(draft);
 
   function commit(hex: string) {
     const rgb = hexToRgbString(hex);
     if (rgb) onChange(rgb);
-    else setDraft(hexFromValue); // revert bad manual entry rather than propagate garbage
+    else setDraft(value);
   }
 
   return (
@@ -32,7 +31,7 @@ export function ColorEditor({ label, value, onChange }: ColorEditorProps) {
           onKeyDown={(e) => e.key === "Enter" && commit(draft)}
           spellCheck={false}
           className={
-            "w-20 rounded border bg-transparent px-1.5 py-0.5 font-mono text-xs outline-none " +
+            "w-20 rounded border bg-transparent px-1.5 py-0.5 font-mono text-text-muted text-xs outline-none " +
             (isValidDraft
               ? "border-border focus:border-brand"
               : "border-danger text-danger")
@@ -40,7 +39,7 @@ export function ColorEditor({ label, value, onChange }: ColorEditorProps) {
         />
         <input
           type="color"
-          value={isValidDraft ? draft : hexFromValue}
+          value={isValidDraft ? draft : value}
           onChange={(e) => {
             setDraft(e.target.value);
             commit(e.target.value);
