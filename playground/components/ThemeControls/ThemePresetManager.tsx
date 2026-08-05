@@ -8,10 +8,10 @@ interface Props {
 
 const PRESETS = {
   midnight: {
-    dark: { colors: { surface: "#111827", text: "#ffffff", brand: "#6366f1" } },
+    dark: { colors: { surface: "rgb(17, 24, 39)", text: "rgb(255, 255, 255)", brand: "rgb(99, 102, 241)" } },
   },
   emerald: {
-    light: { colors: { brand: "#059669" } },
+    light: { colors: { brand: "rgb(5, 150, 105)" } },
   },
 } satisfies Record<string, Partial<ThemeOverride>>;
 

@@ -145,6 +145,7 @@ export function ThemeToggler({
         onClick={handleCycle}
         aria-label={`Current theme: ${currentMode.label}`}
         {...buttonProps}
+        style={{ borderRadius: rounded ? "9999rem" : "" }}
       >
         <AnimatePresence mode="wait">
           <motion.span
@@ -172,6 +173,7 @@ export function ThemeToggler({
       leftIcon={icon}
       aria-pressed={isActive(key)}
       {...buttonProps}
+      style={{ borderRadius: rounded ? "999rem" : "" }}
     >
       {!iconOnly && label}
     </Button>

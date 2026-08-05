@@ -32,7 +32,7 @@ export const defaultSizes: SizeScale = {
     fontSize: "1rem",
     gap: "0.625rem",
     iconSize: "1.25rem",
-    radius: "1.25rem",
+    radius: "1.15rem",
   },
 };
 
