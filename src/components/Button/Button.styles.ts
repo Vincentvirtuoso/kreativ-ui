@@ -1,7 +1,7 @@
 import { Variant } from "./Button.types";
 
 export const buttonBase =
-  "inline-flex items-center justify-center rounded-[var(--kui-radius)] font-medium " +
+  "inline-flex items-center justify-center rounded-[var(--kui-button-radius,var(--kui-radius))] font-medium " +
   "transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 " +
   "focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-surface" +
   "disabled:opacity-60 disabled:pointer-events-none";

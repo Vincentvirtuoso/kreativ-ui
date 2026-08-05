@@ -8,10 +8,8 @@ import {
 import { SegmentedControl } from "./shared/SegmentedControl";
 import { Chip } from "./shared/Chip";
 import { Playground } from "./shared/Playground";
-import { Orientation, Size } from "@/types";
+import { BaseTransition, Orientation, Size } from "@/types";
 
-// Define transition types (adjust import if you have a shared type)
-type BaseTransition = "none" | "fade" | "rotate" | "slide" | "scale";
 
 const SIZES: Size[] = ["xs", "sm", "md", "lg", "xl"];
 const ORIENTATIONS: Orientation[] = ["horizontal", "vertical"] ;

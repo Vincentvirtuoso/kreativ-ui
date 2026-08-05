@@ -11,7 +11,7 @@ export function useSizeStyle(size: string, iconOnly = false): ResolvedSize {
 
   return useMemo(() => {
     const scale = theme.sizes;
-    let token =
+    const token =
       scale[size] ?? scale[fallbackSize] ?? Object.values(scale)[0] ?? {};
 
     const style: CSSProperties = {};
@@ -31,7 +31,10 @@ export function useSizeStyle(size: string, iconOnly = false): ResolvedSize {
 
     if (token.fontSize) style.fontSize = token.fontSize;
     if (token.gap) style.gap = iconOnly ? 0 : token.gap;
-    if (token.radius) style.borderRadius = token.radius;
+
+    if (token.radius) {
+      (style as any)["--kui-button-radius"] = token.radius;
+    }
 
     return {
       style,
