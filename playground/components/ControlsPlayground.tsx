@@ -44,7 +44,7 @@ export function SwitchDemo() {
   const [required, setRequired] = useState(false);
   const [label, setLabel] = useState("Email notifications");
   const [description, setDescription] = useState(
-    "Get notified when something changes."
+    "Get notified when something changes.",
   );
   const [withDescription, setWithDescription] = useState(true);
 
@@ -338,7 +338,7 @@ export function MultiSelectDemo() {
             max={10}
             value={maxChips}
             onChange={(e) => setMaxChips(Number(e.target.value))}
-            className="w-full rounded-[var(--kui-radius)] border border-border bg-bg px-2 py-1.5 text-sm text-text outline-none focus:border-brand"
+            className="w-full rounded-[var(--kui-radii-md)] border border-border bg-bg px-2 py-1.5 text-sm text-text outline-none focus:border-brand"
           />
         </div>
       )}
@@ -395,7 +395,7 @@ export function MultiSelectDemo() {
 
   const code = [
     `<MultiSelect\n  value={tags}\n  onValueChange={setTags}\n  ${attrLines.join(
-      "\n  "
+      "\n  ",
     )}\n>`,
     `  <MultiSelect.Trigger />`,
     `  <MultiSelect.Content>`,

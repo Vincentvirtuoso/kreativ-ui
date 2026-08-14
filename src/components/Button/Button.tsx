@@ -1,10 +1,17 @@
-import { forwardRef, useState, type KeyboardEvent } from "react";
+import {
+  forwardRef,
+  useState,
+  type KeyboardEvent,
+  type ReactNode,
+} from "react";
 import { motion, useReducedMotion } from "framer-motion";
+
 import { cn } from "@/utils/cn";
 import { useTheme } from "@/hooks/useTheme";
 import { useSizeStyle } from "@/hooks/useSizeStyle";
-import { buttonBase, buttonVariants } from "./Button.styles";
+
 import type { ButtonProps } from "./Button.types";
+import { resolveRecipe } from "@/theme";
 
 const ACTIVATION_KEYS = new Set(["Enter", " "]);
 
@@ -12,6 +19,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       variant = "solid",
+      color = "brand",
       size = "md",
       isLoading = false,
       leftIcon,
@@ -22,6 +30,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       style,
       iconOnly,
       children,
+      render,
       onKeyDown,
       onKeyUp,
       ...rest
@@ -29,60 +38,109 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref,
   ) => {
     const { theme } = useTheme();
-    const overrides = theme.components?.Button;
-    const { style: sizeStyle, iconSize } = useSizeStyle(size, iconOnly);
+
+    const { style: sizeStyle, iconSize } = useSizeStyle(
+      size,
+      iconOnly,
+      "button",
+    );
+
     const prefersReducedMotion = useReducedMotion();
+
     const isInteractive = !disabled && !isLoading;
 
     const [isKeyboardPressed, setIsKeyboardPressed] = useState(false);
 
     function handleKeyDown(e: KeyboardEvent<HTMLButtonElement>) {
       onKeyDown?.(e);
-      if (isInteractive && ACTIVATION_KEYS.has(e.key))
+
+      if (isInteractive && ACTIVATION_KEYS.has(e.key)) {
         setIsKeyboardPressed(true);
+      }
     }
+
     function handleKeyUp(e: KeyboardEvent<HTMLButtonElement>) {
       onKeyUp?.(e);
-      if (ACTIVATION_KEYS.has(e.key)) setIsKeyboardPressed(false);
+
+      if (ACTIVATION_KEYS.has(e.key)) {
+        setIsKeyboardPressed(false);
+      }
+    }
+
+    const recipeClasses = resolveRecipe(theme.recipes.Button, {
+      variant,
+      color,
+    });
+
+    const resolvedClassName = cn(
+      recipeClasses,
+      fullWidth && "w-full",
+      isLoading && "animate-kui-pulse",
+      className,
+    );
+
+    const resolvedStyle = {
+      ...sizeStyle,
+      ...style,
+    };
+
+    const content: ReactNode = (
+      <>
+        {isLoading && (
+          <span
+            className="animate-kui-spin rounded-full border-2 border-current border-t-transparent"
+            style={{
+              width: iconSize,
+              height: iconSize,
+            }}
+            aria-hidden="true"
+          />
+        )}
+
+        {!isLoading && leftIcon}
+
+        {iconOnly && isLoading ? null : children}
+
+        {!isLoading && rightIcon}
+      </>
+    );
+
+    if (render) {
+      return render({
+        className: resolvedClassName,
+        style: resolvedStyle,
+        disabled: disabled || isLoading,
+        "aria-busy": isLoading || undefined,
+        children: content,
+      });
     }
 
     return (
       <motion.button
         ref={ref}
         disabled={disabled || isLoading}
-        className={cn(
-          buttonBase,
-          buttonVariants[variant],
-          overrides?.variants?.[variant],
-          fullWidth && "w-full",
-          overrides?.base,
-          isLoading && "animate-kui-pulse",
-          className,
-        )}
-        style={{ ...sizeStyle, ...style }}
+        className={resolvedClassName}
+        style={resolvedStyle}
         aria-busy={isLoading || undefined}
-        animate={{ scale: isKeyboardPressed ? 0.975 : 1 }}
+        animate={{
+          scale: isKeyboardPressed ? 0.975 : 1,
+        }}
         whileHover={isInteractive ? { scale: 1.015 } : undefined}
         whileTap={isInteractive ? { scale: 0.975 } : undefined}
         transition={
           prefersReducedMotion
             ? { duration: 0 }
-            : { type: "spring", stiffness: 500, damping: 30 }
+            : {
+                type: "spring",
+                stiffness: 500,
+                damping: 30,
+              }
         }
         onKeyDown={handleKeyDown}
         onKeyUp={handleKeyUp}
         {...rest}
       >
-        {isLoading && (
-          <span
-            className="animate-kui-spin rounded-full border-2 border-current border-t-transparent"
-            style={{ width: iconSize, height: iconSize }}
-            aria-hidden="true"
-          />
-        )}
-        {!isLoading && leftIcon}
-        {children}
-        {!isLoading && rightIcon}
+        {content}
       </motion.button>
     );
   },

@@ -1,58 +1,46 @@
 import type { ButtonProps } from "@/components/Button";
-import type { BaseTransition, Orientation, SizeValue } from "@/types";
+import type { BaseColor, BaseProps, Orientation, ThemeTransition } from "@/types";
 import { ButtonVariant } from "../Button/Button.types";
 
+export type ThemeTogglerVariant =  Exclude<ButtonVariant, 'link'>;
 export type ThemeTogglerDisplay = "buttons" | "cycle";
 
-export const THEME_TOGGLER_VARIANTS: ButtonVariant[] = [
-    "ghost",
-    "outline",
-    "solid",
-    "soft",
-    "ghost-brand",
-    "outline-brand",
-    "soft-brand",
-    "solid-white",
-    "outline-white",
-    "ghost-white",
-];
+export type ThemeTogglerColor = Exclude<
+  BaseColor,
+  "destructive" | "warning" | "success" | "white"| "info"
+>;
 
-export type ThemeTogglerVariant = typeof THEME_TOGGLER_VARIANTS[number];
+export interface ThemeTogglerProps extends Omit<BaseProps, "children"> {
+  variant?: ThemeTogglerVariant;
+  activeVariant?: ThemeTogglerVariant;
 
-export interface ThemeTogglerProps {
+  color?: ButtonProps["color"];
+  activeColor?: ButtonProps["color"];
 
-    variant?: ThemeTogglerVariant;
+  size?: ButtonProps["size"];
 
-    activeVariant?: ThemeTogglerVariant;
+  iconOnly?: boolean;
+  allowSystem?: boolean;
 
-    size?: SizeValue;
+  orientation?: Orientation;
 
-    iconOnly?: boolean;
+  rounded?: boolean;
 
-    allowSystem?: boolean;
+  labels?: {
+    light?: string;
+    dark?: string;
+    system?: string;
+  };
 
-    orientation?: Orientation;
+  icons?: {
+    light?: React.ReactNode;
+    dark?: React.ReactNode;
+    system?: React.ReactNode;
+  };
 
-    rounded?: boolean;
+  buttonProps?: Omit<ButtonProps, "variant" | "color" | "size" | "children">;
 
-    unstyled?: boolean;
+  display?: ThemeTogglerDisplay;
 
-    labels?: {
-        light?: string;
-        dark?: string;
-        system?: string;
-    };
-
-    icons?: {
-        light?: React.ReactNode;
-        dark?: React.ReactNode;
-        system?: React.ReactNode;
-    };
-
-    className?: string;
-    transition?: {type: BaseTransition; duration?: number; delay?: number, easing?: string};
-
-    display?: ThemeTogglerDisplay;
-    
-    buttonProps?: Partial<ButtonProps>;
+  transition?: ThemeTransition;
 }

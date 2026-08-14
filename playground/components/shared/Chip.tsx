@@ -1,5 +1,4 @@
 import { Button } from "@/components/Button/Button";
-import { cn } from "@/utils/cn";
 
 export function Chip({
   active,
@@ -15,13 +14,12 @@ export function Chip({
   return (
     <Button
       type="button"
-      size='xs'
-      variant={active ? 'outline-brand' : 'outline'}
+      size="xs"
+      variant="outline"
+      color={active ? "brand" : "neutral"}
       disabled={disabled}
       onClick={onClick}
-      className={cn(
-        "rounded-full font-mono transition-colors",
-      )}
+      className="rounded-full font-mono transition-colors"
     >
       {children}
     </Button>
