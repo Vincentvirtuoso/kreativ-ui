@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { hexToRgbString } from "@/utils/color";
+
+import { hexToRgbString, rgbToHex } from "@/utils/color";
 
 interface ColorEditorProps {
   label: string;
@@ -9,14 +10,22 @@ interface ColorEditorProps {
 
 export function ColorEditor({ label, value, onChange }: ColorEditorProps) {
   const [draft, setDraft] = useState(value);
-  useEffect(() => setDraft(value), [value]);
+
+  useEffect(() => {
+    setDraft(rgbToHex(value));
+  }, [value]);
 
   const isValidDraft = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(draft);
 
   function commit(hex: string) {
     const rgb = hexToRgbString(hex);
-    if (rgb) onChange(rgb);
-    else setDraft(value);
+
+    if (rgb) {
+      onChange(rgb);
+    } else {
+      console.warn("[ColorEditor] Invalid color:", hex);
+      setDraft(rgbToHex(value));
+    }
   }
 
   return (
@@ -26,25 +35,34 @@ export function ColorEditor({ label, value, onChange }: ColorEditorProps) {
       <div className="flex items-center gap-2">
         <input
           value={draft}
-          onChange={(e) => setDraft(e.target.value)}
+          onChange={(event) => setDraft(event.target.value)}
           onBlur={() => commit(draft)}
-          onKeyDown={(e) => e.key === "Enter" && commit(draft)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              commit(draft);
+            }
+          }}
           spellCheck={false}
           className={
-            "w-20 rounded border bg-transparent px-1.5 py-0.5 font-mono text-text-muted text-xs outline-none " +
+            "w-20 rounded border bg-transparent px-1.5 py-0.5 " +
+            "font-mono text-xs text-text-muted outline-none " +
             (isValidDraft
               ? "border-border focus:border-brand"
               : "border-danger text-danger")
           }
         />
+
         <input
           type="color"
-          value={isValidDraft ? draft : value}
-          onChange={(e) => {
-            setDraft(e.target.value);
-            commit(e.target.value);
+          value={isValidDraft ? draft : rgbToHex(value)}
+          onChange={(event) => {
+            const hex = event.target.value;
+
+            setDraft(hex);
+            commit(hex);
           }}
-          aria-label={`${label} color picker`}
+          aria-label={`${label || "Color"} color picker`}
           className="h-7 w-7 cursor-pointer rounded border-0 bg-transparent p-0"
         />
       </div>

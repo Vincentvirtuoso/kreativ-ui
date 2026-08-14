@@ -22,24 +22,28 @@ const getIconVariants = (type: string) => {
         animate: { opacity: 1 },
         exit: { opacity: 0 },
       };
+
     case "slide":
       return {
         initial: { opacity: 0, x: -20 },
         animate: { opacity: 1, x: 0 },
         exit: { opacity: 0, x: 20 },
       };
+
     case "scale":
       return {
         initial: { opacity: 0, scale: 0.5 },
         animate: { opacity: 1, scale: 1 },
         exit: { opacity: 0, scale: 1.5 },
       };
+
     case "rotate":
       return {
         initial: { opacity: 0, rotate: -90 },
         animate: { opacity: 1, rotate: 0 },
         exit: { opacity: 0, rotate: 90 },
       };
+
     case "none":
     default:
       return {
@@ -53,16 +57,23 @@ const getIconVariants = (type: string) => {
 export function ThemeToggler({
   variant = "ghost",
   activeVariant = "solid",
+
+  color = "neutral",
+  activeColor = "brand",
+
   size = "sm",
   iconOnly = false,
   allowSystem = false,
+
   orientation = "horizontal",
   rounded = false,
   unstyled = false,
+
   labels,
   icons,
   className,
   buttonProps = {},
+
   display = "buttons",
   transition = defaultTransition,
 }: ThemeTogglerProps) {
@@ -92,7 +103,8 @@ export function ThemeToggler({
       : []),
   ];
 
-  const allowedModes = modes.map((mode) => mode.key);
+  const allowedModes = modes.map((item) => item.key);
+
   const currentMode = modes.find(({ key }) => key === activeMode) ?? modes[0];
 
   const effectiveRounded =
@@ -110,6 +122,7 @@ export function ThemeToggler({
     const index = allowedModes.indexOf(
       activeMode as (typeof allowedModes)[number],
     );
+
     setMode(allowedModes[(index + 1) % allowedModes.length]);
   };
 
@@ -118,17 +131,21 @@ export function ThemeToggler({
 
   const containerClasses = cn(
     "inline-flex gap-1",
+
     orientation === "vertical" && "flex-col",
+
     !unstyled && [
       "border border-border bg-surface p-1",
       effectiveRounded ? "rounded-full" : "rounded-lg",
     ],
+
     className,
   );
 
   const buttonRadius = effectiveRounded ? "rounded-full" : "rounded-lg";
 
   const animateIcon = display === "cycle" && transition.type !== "none";
+
   const iconVariants = getIconVariants(transition.type || "none");
 
   const motionTransition = {
@@ -142,10 +159,14 @@ export function ThemeToggler({
       <Button
         size={size}
         variant={variant}
+        color={color}
         onClick={handleCycle}
         aria-label={`Current theme: ${currentMode.label}`}
+        className={cn(
+          effectiveRounded && "rounded-full",
+          buttonProps.className,
+        )}
         {...buttonProps}
-        style={{ borderRadius: rounded ? "9999rem" : "" }}
       >
         <AnimatePresence mode="wait">
           <motion.span
@@ -158,26 +179,31 @@ export function ThemeToggler({
             {currentMode.icon}
           </motion.span>
         </AnimatePresence>
+
         {!iconOnly && currentMode.label}
       </Button>
     );
   }
 
-  const buttons = modes.map(({ key, label, icon }) => (
-    <Button
-      key={key}
-      size={size}
-      variant={isActive(key) ? activeVariant : variant}
-      onClick={() => setMode(key)}
-      className={buttonRadius}
-      leftIcon={icon}
-      aria-pressed={isActive(key)}
-      {...buttonProps}
-      style={{ borderRadius: rounded ? "999rem" : "" }}
-    >
-      {!iconOnly && label}
-    </Button>
-  ));
+  const buttons = modes.map(({ key, label, icon }) => {
+    const active = isActive(key);
+
+    return (
+      <Button
+        key={key}
+        size={size}
+        variant={active ? activeVariant : variant}
+        color={active ? activeColor : color}
+        onClick={() => setMode(key)}
+        className={cn(buttonRadius, buttonProps.className)}
+        leftIcon={icon}
+        aria-pressed={active}
+        {...buttonProps}
+      >
+        {!iconOnly && label}
+      </Button>
+    );
+  });
 
   if (unstyled) {
     return (

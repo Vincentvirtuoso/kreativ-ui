@@ -10,7 +10,7 @@ function mergeRefs<T>(...refs: Array<Ref<T> | undefined>) {
     refs.forEach((r) => {
       if (!r) return;
       if (typeof r === "function") r(node);
-      else (r as React.MutableRefObject<T | null>).current = node;
+      else (r as React.RefObject<T | null>).current = node;
     });
   };
 }

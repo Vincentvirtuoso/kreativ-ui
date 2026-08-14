@@ -1,44 +1,43 @@
 # Kreativ UI
 
-A modern, themeable React component library built with **React**, **Tailwind CSS v4**, and **CSS Variables**.
-
-Kreativ UI provides a runtime theme engine, allowing colors, typography, radius, animations, and component styles to be customized **without rebuilding CSS**.
+A modern, themeable React component library built with **React**, **TypeScript**, **Tailwind CSS v4**, and **CSS Variables**.  
+Kreativ UI provides a runtime theme engine that lets you customize colors, typography, radius, sizes, and component styles **without rebuilding CSS**.
 
 ---
 
 ## ✨ Features
 
-- 🎨 Runtime theme switching (light, dark, system)
-- 🌙 Built‑in `ThemeToggler` with optional animated icon transitions
-- ⚡ Tailwind CSS v4 integration
-- 🎯 CSS Variable powered design tokens
-- 🧩 Component‑level theme overrides
-- 🎭 Built‑in animation utilities (spin, fade, scale, slide, bounce, pulse, shimmer, and more)
-- ♿ Fully accessible (ARIA, keyboard navigation, focus management)
-- 📦 Tree‑shakable and TypeScript‑first
-- 🧩 Smart form components: `Input` with **kind** defaults, `FormField` with automatic ARIA wiring
+- Runtime theme switching (`light`, `dark`, `system`)
+- Built‑in `ThemeToggler` with optional animated transitions
+- CSS‑variable‑driven design tokens
+- Primitive + semantic token architecture
+- Component‑level theme overrides
+- Fully accessible (ARIA, keyboard navigation, focus management)
+- TypeScript‑first and tree‑shakable
 
 ---
 
 ## 📦 Installation
 
 ```bash
-npm install kreativ-ui
+npm install @splenddev/kreativ-ui
 ```
 
-Import the stylesheet **once** in your application entry.
+Import the stylesheet **once** in your application entry:
 
 ```tsx
-import "kreativ-ui/styles.css";
+import "@splenddev/kreativ-ui/styles.css";
 ```
 
 ---
 
 ## 🚀 Quick Start
 
+Wrap your app with `UIProvider` and use the `Button` component:
+
 ```tsx
-import { Button, UIProvider } from "@splenddev/kreativ-ui";
-import "kreativ-ui/styles.css";
+import { UIProvider, Button } from "@splenddev/kreativ-ui";
+import "@splenddev/kreativ-ui/styles.css";
 
 export default function App() {
   return (
@@ -51,9 +50,17 @@ export default function App() {
 
 ---
 
-# Theme Provider
+# ☀️ UIProvider
 
-Wrap your application with `UIProvider` to enable theme context.
+The `UIProvider` component provides the theme context and manages the active colour mode. It must wrap any part of your application that uses Kreativ UI components.
+
+### Modes
+
+| Mode     | Description                                    |
+| -------- | ---------------------------------------------- |
+| `light`  | Forces light mode                              |
+| `dark`   | Forces dark mode                               |
+| `system` | Follows the user’s operating system preference |
 
 ```tsx
 <UIProvider defaultMode="system">
@@ -61,13 +68,9 @@ Wrap your application with `UIProvider` to enable theme context.
 </UIProvider>
 ```
 
-### Available Modes
+### useTheme
 
-- `"light"`
-- `"dark"`
-- `"system"` (follows OS preference)
-
-Switch themes anywhere using the `useTheme` hook.
+Access and change the current mode anywhere in your app:
 
 ```tsx
 import { useTheme } from "@splenddev/kreativ-ui";
@@ -87,162 +90,104 @@ function ThemeSwitcher() {
 
 ---
 
-# Custom Themes
+# 🎨 Theming
 
-Override only the tokens you need. Pass a `theme` object to `UIProvider`.
+Kreativ UI’s theme system is built around two layers:
+
+- **Primitive tokens** – raw values (colours, spacing, radii, fonts, etc.)
+- **Semantic tokens** – role‑based values that adapt to light/dark modes
+
+The library ships with a default theme. You can override any part of it using a `ThemeOverride` object.
+
+## Overriding the Theme
+
+Pass a `theme` prop to `UIProvider`. Only the properties you provide will be merged with the default theme.
 
 ```tsx
-<UIProvider
-  theme={{
-    light: {
-      colors: {
-        brand: "16 185 129", // emerald-600
-        brandFg: "255 255 255",
+import { UIProvider } from "@splenddev/kreativ-ui";
+
+const theme = {
+  semanticTokens: {
+    colors: {
+      brand: {
+        value: {
+          light: "16 128 224", // RGB channel values
+          dark: "71 153 235",
+        },
+      },
+      surface: {
+        value: {
+          light: "255 255 255",
+          dark: "15 23 42",
+        },
+      },
+      text: {
+        value: {
+          light: "15 23 42",
+          dark: "241 245 249",
+        },
       },
     },
-    dark: {
-      colors: {
-        brand: "52 211 153", // emerald-400
-        brandFg: "0 0 0",
-      },
-    },
-    radius: "0.75rem",
-    font: "'Inter', sans-serif",
-  }}
->
+  },
+};
+
+<UIProvider theme={theme}>
   <App />
-</UIProvider>
+</UIProvider>;
 ```
 
-All CSS variables are generated automatically and applied to the `<html>` element.
+### Primitive vs Semantic Tokens
 
----
-
-# Theme Tokens
-
-## Colors
-
-| Token                                                | Description                       |
-| ---------------------------------------------------- | --------------------------------- |
-| `brand`                                              | Primary accent color (RGB values) |
-| `brandHover`                                         | Hover state of brand              |
-| `brandFg`                                            | Foreground (text/icon) on brand   |
-| `surface`                                            | Background of surfaces            |
-| `surfaceRaised`                                      | Elevated surfaces (cards, modals) |
-| `surfaceSunken`                                      | Sunken surfaces (inputs, inset)   |
-| `border`                                             | Default border color              |
-| `text`                                               | Primary text                      |
-| `textMuted`                                          | Secondary / muted text            |
-| `danger`                                             | Error/danger color                |
-| `dangerFg`                                           | Foreground on danger              |
-| `destructive` / `destructiveHover` / `destructiveFg` | Destructive actions               |
-| `success` / `successHover` / `successFg`             | Success states                    |
-| `warning` / `warningHover` / `warningFg`             | Warning states                    |
-| `info` / `infoHover` / `infoFg`                      | Informational states              |
-
-## Radius
+**Primitive tokens** are raw values:
 
 ```ts
-radius; // default: 0.375rem (6px)
+tokens.colors.blue.500  // → 59 130 246
+tokens.colors.gray.900  // → 17 24 39
+tokens.spacing.md       // → 16px
 ```
 
-## Typography
+**Semantic tokens** describe UI meaning and can reference primitive tokens or direct values:
 
 ```ts
-font; // font-family stack
+semanticTokens.colors.brand = { value: { light: "{colors.blue.500}", dark: "{colors.blue.400}" } }
+semanticTokens.colors.text = { value: { light: "{colors.gray.900}", dark: "{colors.gray.50}" } }
 ```
 
-## Motion
+The runtime engine resolves these references and applies the correct values based on the active colour mode.
 
-```ts
-durationFast; // 150ms
-durationNormal; // 300ms
-durationSlow; // 500ms
+### Custom Component Sizes
 
-easeDefault; // ease-in-out
-easeIn; // ease-in
-easeOut; // ease-out
+You can extend the size system by adding custom size definitions. For example, to add an `xl` button size:
+
+```tsx
+import { defaultTheme } from "@splenddev/kreativ-ui";
+
+const theme = {
+  ...defaultTheme,
+  sizes: {
+    xl: {
+      height: "4.5rem",
+      paddingX: "2.5rem",
+      fontSize: "1.125rem",
+      gap: "0.75rem",
+      radius: "1rem",
+      iconSize: "1.5rem",
+    },
+  },
+};
+
+<UIProvider theme={theme}>
+  <Button size="xl">Extra Large</Button>
+</UIProvider>;
 ```
 
 ---
 
-# Components
+# 🌗 ThemeToggler
 
-## Button
+A ready‑to‑use theme switcher that integrates with `UIProvider`.
 
-A versatile button with variant, size, loading, and icon support.
-
-### Basic Usage
-
-```tsx
-<Button>Click me</Button>
-```
-
-### Variants
-
-```tsx
-<Button variant="solid" />
-<Button variant="outline" />
-<Button variant="ghost" />
-<Button variant="soft" />
-<Button variant="destructive" />
-<Button variant="success" />
-<Button variant="link" />
-```
-
-### Sizes
-
-```tsx
-<Button size="xs" />
-<Button size="sm" />
-<Button size="md" />
-<Button size="lg" />
-<Button size="xl" />   {/* custom size via theme */}
-```
-
-### Loading State
-
-```tsx
-<Button isLoading>Save</Button>
-```
-
-### Disabled
-
-```tsx
-<Button disabled>Submit</Button>
-```
-
-### Icons
-
-```tsx
-<Button leftIcon={<SearchIcon />}>Search</Button>
-<Button rightIcon={<ArrowRightIcon />}>Next</Button>
-```
-
-### Full Width
-
-```tsx
-<Button fullWidth>Full width</Button>
-```
-
-### Props
-
-| Prop                     | Type        | Default   | Description                            |
-| ------------------------ | ----------- | --------- | -------------------------------------- |
-| `variant`                | `Variant`   | `"solid"` | Visual style                           |
-| `size`                   | `SizeValue` | `"md"`    | Size (supports custom sizes via theme) |
-| `isLoading`              | `boolean`   | `false`   | Shows spinner and disables             |
-| `leftIcon` / `rightIcon` | `ReactNode` | —         | Icon elements                          |
-| `fullWidth`              | `boolean`   | `false`   | Stretches to container width           |
-| `disabled`               | `boolean`   | `false`   | Disables interactions                  |
-
----
-
-## ThemeToggler
-
-A ready‑to‑use theme switcher that integrates with `UIProvider`. Supports button‑style or cycle‑style (single button with animated icon transitions).
-
-### Basic Usage
+## Basic Usage
 
 ```tsx
 import { ThemeToggler } from "@splenddev/kreativ-ui";
@@ -250,46 +195,38 @@ import { ThemeToggler } from "@splenddev/kreativ-ui";
 <ThemeToggler />;
 ```
 
-### With System Mode
+## With System Mode
 
 ```tsx
 <ThemeToggler allowSystem />
 ```
 
-### Icon Only
+## Icon Only
 
 ```tsx
 <ThemeToggler iconOnly allowSystem />
 ```
 
-### Custom Variants
+## Custom Variants
 
 ```tsx
 <ThemeToggler variant="outline" activeVariant="solid" />
 ```
 
-### Vertical Layout
+## Vertical Layout
 
 ```tsx
 <ThemeToggler orientation="vertical" allowSystem />
 ```
 
-### Custom Labels
-
-```tsx
-<ThemeToggler
-  allowSystem
-  labels={{ light: "Day", dark: "Night", system: "Auto" }}
-/>
-```
-
-### Custom Icons
+## Custom Labels & Icons
 
 ```tsx
 import { SunMedium, MoonStar, LaptopMinimal } from "lucide-react";
 
 <ThemeToggler
   allowSystem
+  labels={{ light: "Day", dark: "Night", system: "Auto" }}
   icons={{
     light: <SunMedium size={18} />,
     dark: <MoonStar size={18} />,
@@ -298,7 +235,7 @@ import { SunMedium, MoonStar, LaptopMinimal } from "lucide-react";
 />;
 ```
 
-### Cycle Mode with Animation
+## Cycle Mode with Animation
 
 ```tsx
 <ThemeToggler
@@ -308,1031 +245,131 @@ import { SunMedium, MoonStar, LaptopMinimal } from "lucide-react";
 />
 ```
 
-Supported transition types: `"none"`, `"fade"`, `"slide"`, `"scale"`, `"rotate"`.
+Supported transition types: `none`, `fade`, `slide`, `scale`, `rotate`.
 
-### Styling
+## Props
 
-```tsx
-<ThemeToggler rounded={false} unstyled />
-```
-
-### Props
-
-| Prop            | Type                                                        | Default                                                  | Description                                 |
-| --------------- | ----------------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------- |
-| `variant`       | `ThemeTogglerVariant`                                       | `"ghost"`                                                | Variant for inactive buttons                |
-| `activeVariant` | `ThemeTogglerVariant`                                       | `"solid"`                                                | Variant for active button                   |
-| `size`          | `SizeValue`                                                 | `"sm"`                                                   | Button size                                 |
-| `iconOnly`      | `boolean`                                                   | `false`                                                  | Hide labels, show icons only                |
-| `allowSystem`   | `boolean`                                                   | `false`                                                  | Show system theme option                    |
-| `orientation`   | `"horizontal" \| "vertical"`                                | `"horizontal"`                                           | Layout direction                            |
-| `rounded`       | `boolean`                                                   | `true`                                                   | Rounded container corners                   |
-| `unstyled`      | `boolean`                                                   | `false`                                                  | Remove wrapper styles                       |
-| `display`       | `"buttons" \| "cycle"`                                      | `"buttons"`                                              | Show all buttons or a single cycling button |
-| `transition`    | `ThemeTogglerTransition`                                    | `{ type: "none", duration: 300, easing: "ease-in-out" }` | Animation configuration for cycle mode      |
-| `labels`        | `Partial<Record<"light" \| "dark" \| "system", string>>`    | —                                                        | Override labels                             |
-| `icons`         | `Partial<Record<"light" \| "dark" \| "system", ReactNode>>` | —                                                        | Override icons                              |
-| `buttonProps`   | `Partial<ButtonProps>`                                      | —                                                        | Props passed to every internal button       |
-| `className`     | `string`                                                    | —                                                        | Additional wrapper class                    |
+| Prop            | Type                                                              | Default             | Description                                 |
+| --------------- | ----------------------------------------------------------------- | ------------------- | ------------------------------------------- |
+| `variant`       | `ThemeTogglerVariant`                                             | `"ghost"`           | Variant for inactive buttons                |
+| `activeVariant` | `ThemeTogglerVariant`                                             | `"solid"`           | Variant for active button                   |
+| `size`          | `"xs" \| "sm" \| "md" \| "lg" \| "xl"`                           | `"sm"`              | Button size                                 |
+| `iconOnly`      | `boolean`                                                         | `false`             | Hide labels, show only icons                |
+| `allowSystem`   | `boolean`                                                         | `false`             | Show system theme option                    |
+| `orientation`   | `"horizontal" \| "vertical"`                                      | `"horizontal"`      | Layout direction                            |
+| `rounded`       | `boolean`                                                         | `true`              | Rounded container corners                   |
+| `unstyled`      | `boolean`                                                         | `false`             | Remove wrapper styles                       |
+| `display`       | `"buttons" \| "cycle"`                                            | `"buttons"`         | Show all buttons or a single cycling button |
+| `transition`    | `{ type?: TransitionType; duration?: number; easing?: string }`   | `{ type: "none" }`  | Animation configuration for cycle mode      |
+| `labels`        | `Partial<Record<"light" \| "dark" \| "system", string>>`          | –                   | Override labels                             |
+| `icons`         | `Partial<Record<"light" \| "dark" \| "system", ReactNode>>`       | –                   | Override icons                              |
+| `buttonProps`   | `Partial<ButtonProps>`                                            | –                   | Props passed to every internal button       |
+| `className`     | `string`                                                          | –                   | Additional wrapper class                    |
 
 ---
 
-## Input
+# 🧩 Button
 
-A flexible text input with variants, sizes, validation states, adornments, and **kind‑aware defaults** for common field types. Built to work seamlessly with `FormField`.
-
-### Basic Usage
-
-```tsx
-import { Input } from "@splenddev/kreativ-ui";
-
-<Input placeholder="you@company.com" />;
-```
-
-### Variants
-
-```tsx
-<Input variant="outline" />
-<Input variant="filled" />
-<Input variant="ghost" />
-```
-
-### Sizes
-
-```tsx
-<Input inputSize="sm" />
-<Input inputSize="md" />
-<Input inputSize="lg" />
-```
-
-### Validation States
-
-```tsx
-<Input error />
-<Input success />
-```
-
-### Adornments
-
-```tsx
-<Input startAdornment={<SearchIcon />} />
-<Input endAdornment={<MailIcon />} />
-```
-
-### Loading State
-
-Shows a spinner and makes the field read‑only (not disabled) while a request is in flight.
-
-```tsx
-<Input isLoading />
-```
-
-### Clearable
-
-Adds an internal clear button that appears when the field has a value.
-
-```tsx
-<Input clearable onClear={() => console.log("cleared")} />
-```
-
-### Kind
-
-Sets sensible defaults for `type`, `inputMode`, `autoComplete`, `placeholder`, and optionally a default icon. Any explicit prop overrides the kind default.
-
-```tsx
-<Input kind="email" />
-<Input kind="tel" />
-<Input kind="url" />
-<Input kind="search" />
-<Input kind="numeric" />
-<Input kind="password-current" />   // autoComplete="current-password" + show/hide toggle
-<Input kind="password-new" />       // autoComplete="new-password" + show/hide toggle
-```
-
-To suppress the icon that comes with certain kinds (e.g., `email`, `search`):
-
-```tsx
-<Input kind="email" hideKindIcon />
-```
-
-### Rounded
-
-```tsx
-<Input rounded />
-```
-
-### Props
-
-| Prop                              | Type                               | Default     | Description                                                                  |
-| --------------------------------- | ---------------------------------- | ----------- | ---------------------------------------------------------------------------- |
-| `variant`                         | `"outline" \| "filled" \| "ghost"` | `"outline"` | Visual style                                                                 |
-| `inputSize`                       | `"sm" \| "md" \| "lg"`             | `"md"`      | Height, padding, font size                                                   |
-| `kind`                            | `InputKind`                        | `"text"`    | Sets defaults for `type`, `inputMode`, `autoComplete`, placeholder, and icon |
-| `hideKindIcon`                    | `boolean`                          | `false`     | Suppress the default icon from `kind`                                        |
-| `error`                           | `boolean`                          | `false`     | Danger styling and `aria-invalid`                                            |
-| `success`                         | `boolean`                          | `false`     | Success styling                                                              |
-| `rounded`                         | `boolean`                          | `false`     | Fully rounded wrapper                                                        |
-| `fullWidth`                       | `boolean`                          | `true`      | Stretch to container width                                                   |
-| `isLoading`                       | `boolean`                          | `false`     | Shows spinner and marks read‑only                                            |
-| `clearable`                       | `boolean`                          | `false`     | Shows clear button when value present                                        |
-| `onClear`                         | `() => void`                       | —           | Called after clear                                                           |
-| `startAdornment` / `endAdornment` | `ReactNode`                        | —           | Content before/after input                                                   |
-| `className` / `inputClassName`    | `string`                           | —           | Additional class(es)                                                         |
-
-All standard `<input>` attributes (except `size`) are forwarded.
-
----
-
-## FormField
-
-Wraps a form control (e.g., `Input`) and automatically wires `id`, `aria-describedby`, `aria-invalid`, and `aria-required` — no manual id‑juggling.
-
-### Basic Usage
-
-```tsx
-import { FormField, Input } from "@splenddev/kreativ-ui";
-
-<FormField label="Email address">
-  <Input kind="email" />
-</FormField>;
-```
-
-### With Description
-
-```tsx
-<FormField
-  label="Email address"
-  description="We'll only use this to send receipts."
->
-  <Input kind="email" />
-</FormField>
-```
-
-### With Error
-
-Error replaces description when both are provided.
-
-```tsx
-<FormField label="Email address" error="Enter a valid email address.">
-  <Input kind="email" error />
-</FormField>
-```
-
-### Required
-
-```tsx
-<FormField label="Email address" required>
-  <Input kind="email" required />
-</FormField>
-```
-
-### Props
-
-| Prop          | Type        | Default        | Description                                       |
-| ------------- | ----------- | -------------- | ------------------------------------------------- |
-| `label`       | `string`    | —              | Label text, linked to control                     |
-| `description` | `string`    | —              | Helper text (hidden when `error` set)             |
-| `error`       | `string`    | —              | Error message, linked via `aria-describedby`      |
-| `required`    | `boolean`   | `false`        | Shows required indicator and sets `aria-required` |
-| `id`          | `string`    | auto‑generated | Explicit `id` for the control                     |
-| `className`   | `string`    | —              | Additional wrapper classes                        |
-| `children`    | `ReactNode` | —              | The form control (must accept `id` prop)          |
-
----
-
-# Select
-
-A fully accessible, customizable select component with keyboard navigation, grouped options, clearable selections, and optional integration with `FormField`.
-
-## Features
-
-- ♿ Accessible (ARIA-compliant combobox)
-- ⌨️ Full keyboard navigation
-- 🎨 Multiple variants and sizes
-- 🧩 Compound component API
-- 📝 Works standalone or inside `FormField`
-- ❌ Clearable selections
-- ✅ Error and success states
-- 🔒 Disabled state
-- 🎯 Controlled and uncontrolled modes
-- 📦 Hidden input support for HTML forms
-
----
-
-## Import
-
-```tsx
-import { Select } from "@kreativ-ui/react";
-```
-
----
+A versatile button with support for variants, sizes, loading states, icons, and full‑width.
 
 ## Basic Usage
 
 ```tsx
-<Select placeholder="Select a country">
-  <Select.Trigger>
-    <Select.Value />
-  </Select.Trigger>
-
-  <Select.Content>
-    <Select.Item value="ng">Nigeria</Select.Item>
-    <Select.Item value="gh">Ghana</Select.Item>
-    <Select.Item value="za">South Africa</Select.Item>
-  </Select.Content>
-</Select>
+<Button>Click me</Button>
 ```
-
----
-
-## Controlled
-
-```tsx
-const [value, setValue] = useState("");
-
-<Select value={value} onValueChange={setValue}>
-  <Select.Trigger>
-    <Select.Value />
-  </Select.Trigger>
-
-  <Select.Content>
-    <Select.Item value="react">React</Select.Item>
-    <Select.Item value="vue">Vue</Select.Item>
-    <Select.Item value="svelte">Svelte</Select.Item>
-  </Select.Content>
-</Select>;
-```
-
----
-
-## Uncontrolled
-
-```tsx
-<Select defaultValue="react">
-  <Select.Trigger>
-    <Select.Value />
-  </Select.Trigger>
-
-  <Select.Content>
-    <Select.Item value="react">React</Select.Item>
-    <Select.Item value="vue">Vue</Select.Item>
-    <Select.Item value="angular">Angular</Select.Item>
-  </Select.Content>
-</Select>
-```
-
----
-
-## Placeholder
-
-```tsx
-<Select placeholder="Choose an option">
-  <Select.Trigger>
-    <Select.Value />
-  </Select.Trigger>
-
-  <Select.Content>...</Select.Content>
-</Select>
-```
-
----
-
-## Clearable
-
-```tsx
-<Select clearable defaultValue="react">
-  <Select.Trigger>
-    <Select.Value />
-  </Select.Trigger>
-
-  <Select.Content>...</Select.Content>
-</Select>
-```
-
----
-
-## Disabled
-
-```tsx
-<Select disabled>
-  <Select.Trigger>
-    <Select.Value />
-  </Select.Trigger>
-
-  <Select.Content>...</Select.Content>
-</Select>
-```
-
----
-
-## Validation States
-
-### Error
-
-```tsx
-<Select error>...</Select>
-```
-
-### Success
-
-```tsx
-<Select success>...</Select>
-```
-
-When used inside a `FormField`, the validation state is inherited automatically.
-
-```tsx
-<FormField invalid>
-  <Select>...</Select>
-</FormField>
-```
-
-Explicit `error` always takes precedence over inherited state.
-
----
 
 ## Variants
 
 ```tsx
-<Select variant="outline" />
-<Select variant="filled" />
-<Select variant="ghost" />
+<Button variant="solid">Solid</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="soft">Soft</Button>
+<Button variant="destructive">Delete</Button>
+<Button variant="success">Success</Button>
+<Button variant="link">Learn more</Button>
 ```
-
----
 
 ## Sizes
 
 ```tsx
-<Select size="sm" />
-<Select size="md" />
-<Select size="lg" />
+<Button size="xs">Extra Small</Button>
+<Button size="sm">Small</Button>
+<Button size="md">Medium</Button>
+<Button size="lg">Large</Button>
+<Button size="xl">Extra Large</Button>
 ```
+
+## Loading State
+
+```tsx
+<Button isLoading>Saving...</Button>
+```
+
+## Icons
+
+```tsx
+<Button leftIcon={<SearchIcon />}>Search</Button>
+<Button rightIcon={<ArrowRightIcon />}>Continue</Button>
+```
+
+## Icon Only
+
+```tsx
+<Button iconOnly aria-label="Search">
+  <SearchIcon />
+</Button>
+```
+
+## Full Width
+
+```tsx
+<Button fullWidth>Continue</Button>
+```
+
+## Custom Sizes via Theme
+
+Define additional sizes in the theme (as shown in the Theming section) and use them with `size` prop.
+
+## Props
+
+| Prop                     | Type                                                   | Default  | Description                                 |
+| ------------------------ | ------------------------------------------------------ | -------- | ------------------------------------------- |
+| `variant`                | `"solid" \| "outline" \| "ghost" \| "soft" \| "destructive" \| "success" \| "link"` | `"solid"` | Visual style                                |
+| `size`                   | `"xs" \| "sm" \| "md" \| "lg" \| "xl" \| string`      | `"md"`    | Size (theme‑driven; custom strings allowed) |
+| `isLoading`              | `boolean`                                              | `false`   | Shows spinner and disables                  |
+| `leftIcon` / `rightIcon` | `ReactNode`                                            | –         | Icon elements                               |
+| `fullWidth`              | `boolean`                                              | `false`   | Stretch to container width                  |
+| `disabled`               | `boolean`                                              | `false`   | Disables interactions                       |
+| `iconOnly`               | `boolean`                                              | `false`   | Remove padding for icon‑only layout         |
+
+All standard `<button>` props are forwarded.
 
 ---
 
-## Option Groups
+# ♿ Accessibility
 
-```tsx
-<Select>
-  <Select.Trigger>
-    <Select.Value />
-  </Select.Trigger>
+Kreativ UI components are built with accessibility in mind:
 
-  <Select.Content>
-    <Select.Group>
-      <Select.Label>Frontend</Select.Label>
-
-      <Select.Item value="react">React</Select.Item>
-
-      <Select.Item value="vue">Vue</Select.Item>
-    </Select.Group>
-
-    <Select.Group>
-      <Select.Label>Backend</Select.Label>
-
-      <Select.Item value="node">Node.js</Select.Item>
-
-      <Select.Item value="go">Go</Select.Item>
-    </Select.Group>
-  </Select.Content>
-</Select>
-```
+- All interactive elements support keyboard navigation.
+- Focus management and visible focus indicators.
+- ARIA attributes are applied automatically where needed (e.g., `aria-label`, `aria-describedby`, `aria-invalid`).
+- Colour contrast respects system‑level settings.
 
 ---
 
-## Form Integration
+# 📦 Browser Support
 
-Works with native HTML forms.
-
-```tsx
-<Select name="framework" defaultValue="react">
-  ...
-</Select>
-```
-
-A hidden input is rendered automatically.
+Kreativ UI works in all modern browsers (Chrome, Firefox, Safari, Edge).  
+Requires React 18 or later.
 
 ---
 
-## React Hook Form
+# 📄 License
 
-```tsx
-<Controller
-  control={control}
-  name="framework"
-  render={({ field }) => (
-    <Select value={field.value} onValueChange={field.onChange}>
-      <Select.Trigger>
-        <Select.Value />
-      </Select.Trigger>
-
-      <Select.Content>...</Select.Content>
-    </Select>
-  )}
-/>
-```
+MIT
 
 ---
 
-## Keyboard Support
-
-| Key       | Action                             |
-| --------- | ---------------------------------- |
-| ↑         | Previous option                    |
-| ↓         | Next option                        |
-| Enter     | Select highlighted option          |
-| Space     | Open / Select option               |
-| Home      | First option                       |
-| End       | Last option                        |
-| Esc       | Close dropdown                     |
-| Backspace | Clear selection (when `clearable`) |
-| Delete    | Clear selection (when `clearable`) |
-
----
-
-# API
-
-## Select
-
-| Prop          | Type                       | Default     | Description                   |
-| ------------- | -------------------------- | ----------- | ----------------------------- |
-| value         | string                     | —           | Controlled value              |
-| defaultValue  | string                     | —           | Initial value                 |
-| onValueChange | `(value?: string) => void` | —           | Called when value changes     |
-| placeholder   | string                     | —           | Placeholder text              |
-| clearable     | boolean                    | false       | Allows clearing the selection |
-| disabled      | boolean                    | false       | Disables the component        |
-| required      | boolean                    | false       | Marks the field as required   |
-| name          | string                     | —           | Hidden input name             |
-| variant       | Variant                    | `"outline"` | Visual style                  |
-| size          | Size                       | `"md"`      | Component size                |
-| error         | boolean                    | false       | Shows error state             |
-| success       | boolean                    | false       | Shows success state           |
-| className     | string                     | —           | Additional classes            |
-
----
-
-## Select.Trigger
-
-The interactive trigger that opens the dropdown.
-
----
-
-## Select.Value
-
-Displays the selected option or placeholder.
-
----
-
-## Select.Content
-
-Container for dropdown items.
-
----
-
-## Select.Item
-
-| Prop     | Type    | Description         |
-| -------- | ------- | ------------------- |
-| value    | string  | Item value          |
-| disabled | boolean | Disables the option |
-
----
-
-## Select.Group
-
-Groups related options.
-
----
-
-## Select.Label
-
-Heading for a group of options.
-
----
-
-## Accessibility
-
-- Uses the WAI-ARIA Combobox pattern
-- Supports screen readers
-- Keyboard accessible
-- Focus management
-- Proper ARIA attributes
-- Native form submission support
-
----
-
-## Component Structure
-
-```tsx
-<Select>
-  <Select.Trigger>
-    <Select.Value />
-  </Select.Trigger>
-
-  <Select.Content>
-    <Select.Group>
-      <Select.Label />
-      <Select.Item />
-    </Select.Group>
-  </Select.Content>
-</Select>
-```
-
----
-
-## Textarea
-
-A flexible textarea with variant, size, auto‑resize, character counter, validation, clearable, and `FormField` integration.
-
-### Basic Usage
-
-```tsx
-import { Textarea } from "@splenddev/kreativ-ui";
-
-<Textarea placeholder="Write a message..." />;
-```
-
-### Variants
-
-The `variant` prop controls the visual style of the textarea wrapper.
-
-```tsx
-<Textarea variant="outline" />
-<Textarea variant="filled" />
-<Textarea variant="ghost" />
-```
-
-### Sizes
-
-```tsx
-<Textarea size="sm" />
-<Textarea size="md" />
-<Textarea size="lg" />
-```
-
-### Resize Behavior
-
-```tsx
-<Textarea resize="both" />
-<Textarea resize="none" />
-<Textarea resize="horizontal" />
-<Textarea resize="vertical" />  // default
-```
-
-### Auto Resize
-
-```tsx
-<Textarea autoResize minRows={2} maxRows={6} />
-```
-
-### Character Counter
-
-```tsx
-<Textarea characterCounter maxLength={200} />
-```
-
-### Clearable
-
-```tsx
-<Textarea clearable onClear={() => console.log("cleared")} />
-```
-
-### Validation
-
-```tsx
-<Textarea
-  onValidate={(value) => value.length >= 3 || "Must be at least 3 characters"}
-/>
-```
-
-### Trim on Blur
-
-```tsx
-<Textarea trimOnBlur />
-```
-
-### With FormField
-
-```tsx
-<FormField label="Message" required>
-  <FormField.Control>
-    <Textarea placeholder="Your message..." characterCounter maxLength={500} />
-  </FormField.Control>
-</FormField>
-```
-
-### Props (Textarea)
-
-| Prop                     | Type                                             | Default      | Description                                                                               |
-| ------------------------ | ------------------------------------------------ | ------------ | ----------------------------------------------------------------------------------------- |
-| `variant`                | InputVariant                                     | `"outline"`  | Visual style of the wrapper                                                               |
-| `size`                   | InputSize                                        | `"md"`       | Height, padding, font size                                                                |
-| `fullWidth`              | `boolean`                                        | `true`       | Stretch to container width                                                                |
-| `resize`                 | `"none" \| "both" \| "horizontal" \| "vertical"` | `"vertical"` | CSS `resize` behavior                                                                     |
-| `autoResize`             | `boolean`                                        | `false`      | Automatically grow/shrink with content                                                    |
-| `minRows`                | `number`                                         | —            | Minimum rows (when `autoResize` is `true`)                                                |
-| `maxRows`                | `number`                                         | —            | Maximum rows (when `autoResize` is `true`)                                                |
-| `clearable`              | `boolean`                                        | `false`      | Shows a clear button when value is present                                                |
-| `onClear`                | `() => void`                                     | —            | Called after clear                                                                        |
-| `characterCounter`       | `boolean`                                        | `false`      | Shows character count and optional `maxLength`                                            |
-| `trimOnBlur`             | `boolean`                                        | `false`      | Trim whitespace on blur                                                                   |
-| `error`                  | `boolean`                                        | `false`      | Danger styling and `aria-invalid`                                                         |
-| `success`                | `boolean`                                        | `false`      | Success styling                                                                           |
-| `disabled`               | `boolean`                                        | `false`      | Disables the textarea                                                                     |
-| `required`               | `boolean`                                        | `false`      | Marks as required and sets `aria-required`                                                |
-| `onValidate`             | `(value: string) => boolean \| string`           | —            | Custom validation, returns `true` (valid), `false` (invalid), or a string (error message) |
-| `value` / `defaultValue` | `string`                                         | —            | Controlled / uncontrolled value                                                           |
-| `onChange` / `onBlur`    | `(event) => void`                                | —            | Standard event handlers                                                                   |
-
-```
-All standard `<textarea>` attributes (except `size`) are forwarded.
-
-```
-
----
-
-### Updated README (Checkbox section only – drop‑in)
-
-````markdown
-## Checkbox
-
-A customizable checkbox with label, description, validation states, and support for indeterminate state. Works seamlessly with `FormField` for automatic ARIA wiring.
-
-### Basic Usage
-
-```tsx
-import { Checkbox } from "@splenddev/kreativ-ui";
-
-<Checkbox label="Accept terms" />;
-```
-````
-
-### Sizes
-
-```tsx
-<Checkbox size="sm" />
-<Checkbox size="md" />
-<Checkbox size="lg" />
-```
-
-### Validation States
-
-```tsx
-<Checkbox error />
-<Checkbox success />
-```
-
-### Indeterminate
-
-```tsx
-<Checkbox indeterminate />
-```
-
-### With Description
-
-```tsx
-<Checkbox label="Accept terms" description="You must agree to continue." />
-```
-
-### Disabled & Required
-
-```tsx
-<Checkbox disabled required />
-```
-
-### With FormField
-
-```tsx
-<FormField error="This field is required" required>
-  <Checkbox label="I agree to the terms" />
-</FormField>
-```
-
-### Props
-
-| Prop              | Type                         | Default | Description                                          |
-| ----------------- | ---------------------------- | ------- | ---------------------------------------------------- |
-| `checked`         | `boolean`                    | —       | Controlled checked state                             |
-| `defaultChecked`  | `boolean`                    | `false` | Uncontrolled initial state                           |
-| `onCheckedChange` | `(checked: boolean) => void` | —       | Callback when checked state changes                  |
-| `indeterminate`   | `boolean`                    | `false` | Visually indeterminate state (parent checkbox)       |
-| `size`            | `"sm" \| "md" \| "lg"`       | `"md"`  | Size of the box                                      |
-| `error`           | `boolean`                    | `false` | Danger styling and `aria-invalid`                    |
-| `success`         | `boolean`                    | `false` | Success styling                                      |
-| `disabled`        | `boolean`                    | `false` | Disables the checkbox                                |
-| `required`        | `boolean`                    | `false` | Sets `aria-required`                                 |
-| `label`           | `ReactNode`                  | —       | Label text or element (wired to input via `htmlFor`) |
-| `description`     | `ReactNode`                  | —       | Help text, wired via `aria-describedby`              |
-| `className`       | `string`                     | —       | Additional wrapper class                             |
-
-All standard `<input type="checkbox">` attributes (except `type`, `size`, `checked`, `defaultChecked`) are forwarded.
-
----
-
-## RadioGroup & Radio
-
-A controlled group of radio buttons with labels, descriptions, validation states, and support for horizontal/vertical orientation. `RadioGroup` manages the selected value and shared props; `Radio` items are its children.
-
-### Basic Usage
-
-```tsx
-import { RadioGroup, Radio } from "@splenddev/kreativ-ui";
-
-function App() {
-  const [value, setValue] = useState("option1");
-
-  return (
-    <RadioGroup value={value} onValueChange={setValue}>
-      <Radio value="option1" label="Option 1" />
-      <Radio value="option2" label="Option 2" />
-      <Radio value="option3" label="Option 3" />
-    </RadioGroup>
-  );
-}
-```
-
-### With Descriptions
-
-```tsx
-<RadioGroup value={value} onValueChange={setValue}>
-  <Radio value="option1" label="Option 1" description="First choice" />
-  <Radio value="option2" label="Option 2" description="Second choice" />
-</RadioGroup>
-```
-
-### Sizes
-
-```tsx
-<RadioGroup size="sm">...</RadioGroup>
-<RadioGroup size="md">...</RadioGroup>
-<RadioGroup size="lg">...</RadioGroup>
-```
-
-### Orientation
-
-```tsx
-<RadioGroup orientation="horizontal">
-  <Radio value="opt1" label="Option 1" />
-  <Radio value="opt2" label="Option 2" />
-</RadioGroup>
-```
-
-### Validation States
-
-```tsx
-<RadioGroup error>...</RadioGroup>
-<RadioGroup success>...</RadioGroup>
-```
-
-### Disabled & Required
-
-```tsx
-<RadioGroup disabled required>
-  ...
-</RadioGroup>
-```
-
-### With FormField
-
-```tsx
-<FormField
-  label="Choose your preference"
-  error="Please select an option"
-  required
->
-  <RadioGroup value={value} onValueChange={setValue}>
-    <Radio value="opt1" label="Option 1" />
-    <Radio value="opt2" label="Option 2" />
-  </RadioGroup>
-</FormField>
-```
-
-### Individual Radio Disabling
-
-You can also disable individual radios via the `disabled` prop on `Radio`, which overrides the group’s `disabled` state for that item.
-
-```tsx
-<RadioGroup disabled={false}>
-  <Radio value="opt1" label="Enabled" />
-  <Radio value="opt2" label="Disabled" disabled />
-</RadioGroup>
-```
-
-### Props (RadioGroup)
-
-| Prop            | Type                         | Default        | Description                        |
-| --------------- | ---------------------------- | -------------- | ---------------------------------- |
-| `value`         | `string`                     | —              | Controlled selected value          |
-| `defaultValue`  | `string`                     | —              | Uncontrolled initial value         |
-| `onValueChange` | `(value: string) => void`    | —              | Callback when selection changes    |
-| `name`          | `string`                     | auto‑generated | Shared `name` for all radio inputs |
-| `disabled`      | `boolean`                    | `false`        | Disables all radios in the group   |
-| `required`      | `boolean`                    | `false`        | Sets `aria-required` on the group  |
-| `orientation`   | `"horizontal" \| "vertical"` | `"vertical"`   | Layout direction                   |
-| `size`          | `"sm" \| "md" \| "lg"`       | `"md"`         | Size of all radio bubbles          |
-| `error`         | `boolean`                    | `false`        | Danger styling and `aria-invalid`  |
-| `success`       | `boolean`                    | `false`        | Success styling                    |
-| `className`     | `string`                     | —              | Additional wrapper class           |
-| `children`      | `ReactNode`                  | —              | `Radio` components                 |
-
-### Props (Radio)
-
-| Prop          | Type        | Default      | Description                             |
-| ------------- | ----------- | ------------ | --------------------------------------- |
-| `value`       | `string`    | **required** | Unique value for this option            |
-| `disabled`    | `boolean`   | `false`      | Disables this specific radio            |
-| `label`       | `ReactNode` | —            | Label text or element                   |
-| `description` | `ReactNode` | —            | Help text, wired via `aria-describedby` |
-| `className`   | `string`    | —            | Additional wrapper class                |
-
-All standard `<input type="radio">` attributes (except `type`, `size`, `checked`, `defaultChecked`, `onChange`, `name`, `value`) are forwarded to the underlying `<input>`.
-
-````
-
----
-
-### Updated Roadmap (Form section)
-
-```markdown
-## Form
-- ✅ Input (with kind, clearable, loading, adornments)
-- ✅ Select (compound, groups, clearable)
-- ✅ Textarea (auto‑resize, counter, validation)
-- ✅ Checkbox (indeterminate, label, description)
-- ✅ RadioGroup (horizontal/vertical, validation)
-- ✅ FormField (automatic ARIA wiring)
-- ⏳ Switch
-- ⏳ Slider
-- ⏳ Combobox
-````
-
----
-
-# Built-in Animations
-
-Kreativ UI includes Tailwind‑compatible animation utilities.
-
-```tsx
-<div className="animate-kui-fade-in" />
-```
-
-### Available Animations
-
-```
-animate-kui-spin
-animate-kui-pulse
-animate-kui-ping
-animate-kui-bounce
-
-animate-kui-fade-in
-animate-kui-fade-out
-
-animate-kui-scale-in
-animate-kui-scale-out
-
-animate-kui-slide-up
-animate-kui-slide-down
-animate-kui-slide-left
-animate-kui-slide-right
-
-animate-kui-shake
-
-animate-kui-expand
-animate-kui-collapse
-
-animate-kui-shimmer
-```
-
----
-
-# Project Structure
-
-```
-src/
-│
-├── components/
-│   ├── Button/
-│   │   ├── Button.tsx
-│   │   ├── Button.styles.ts
-│   │   ├── Button.types.ts
-│   │   └── index.ts
-│   ├── Input/
-│   │   └── ...
-│   ├── FormField/
-│   │   └── ...
-│   └── ThemeToggler/
-│       └── ...
-│
-├── context/          (UIProvider, ThemeContext)
-├── hooks/            (useTheme, useSizeStyle)
-├── styles/           (base CSS, animation utilities)
-├── theme/            (default tokens, color schemas)
-├── types/            (shared types: Size, Variant, etc.)
-├── utils/            (cn, merge, etc.)
-│
-└── index.ts
-```
-
----
-
-# Creating a New Component
-
-Every component follows the same pattern:
-
-```
-Component/
-├── Component.tsx
-├── Component.styles.ts
-├── Component.types.ts
-└── index.ts
-```
-
-Guidelines:
-
-1. **Types** – Define props and style maps in `*.types.ts`.
-2. **Styles** – Define reusable `cn` style maps in `*.styles.ts`.
-3. **Component** – Use `useTheme()` to merge component overrides. Merge styles with `cn()`.
-4. **Exports** – Export the component and its types from `index.ts`.
-
----
-
-# Development
-
-```bash
-npm install        # install dependencies
-npm run dev        # start playground (Vite)
-npm run build      # build the library
-npm run typecheck  # run TypeScript type checking
-```
-
----
-
-# Publishing
-
-```bash
-npm version patch  # or minor/major
-npm run build
-npm publish
-```
-
----
-
-# Roadmap
-
-## Core
-
-- ✅ Runtime theme engine
-- ✅ CSS variable tokens
-- ✅ Light / Dark / System modes
-- ✅ Tailwind v4 integration
-- ✅ Animation utilities
-- ✅ ThemeToggler with transitions
-
-## Form
-
-- ✅ Input (with kind, clearable, loading, adornments)
-- ✅ FormField (automatic ARIA wiring)
-- ⏳ Textarea
-- ⏳ Select
-- ⏳ Checkbox
-- ⏳ Radio
-- ⏳ Switch
-- ⏳ Slider
-- ⏳ Combobox
-
-## Feedback
-
-- ⏳ Alert
-- ⏳ Toast
-- ⏳ Progress
-- ⏳ Spinner
-- ⏳ Skeleton
-
-## Data Display
-
-- ⏳ Badge
-- ⏳ Avatar
-- ⏳ Card
-- ⏳ Table
-- ⏳ Data Grid
-
-## Navigation
-
-- ⏳ Tabs
-- ⏳ Accordion
-- ⏳ Breadcrumb
-- ⏳ Pagination
-
-## Overlay
-
-- ⏳ Dialog
-- ⏳ Drawer
-- ⏳ Popover
-- ⏳ Tooltip
-- ⏳ Dropdown Menu
-
----
-
-Happy building with **Kreativ UI**! 🎨✨
+**More component documentation (Input, Select, Textarea, Checkbox, RadioGroup, etc.) coming soon.**  
+Visit the [GitHub repository](https://github.com/Vincentvirtuoso/kreativ-ui) for updates.

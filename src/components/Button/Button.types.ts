@@ -1,52 +1,51 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
-import type { SizeValue, Styleable, BaseVariant } from "@/types/common";
+import type {
+  SizeValue,
+  BaseVariant,
+  BaseProps,
+  ColorProps,
+  VariantProps,
+  DisabledProps,
+  LoadingProps,
+  FullWidthProps,
+  BaseColor,
+} from "@/types/common";
 
-
-export type Variant =
-  | BaseVariant
-  | "destructive"
-  | "success"
-  | "warning"
-  | "info"
-  | "outline-brand"
-  | "ghost-brand"
-  | "link"
-  | "solid-white"
-  | "outline-white"
-  | "outline-destructive"
-  | "ghost-destructive"
-  | "soft-destructive"
-  | "outline-success"
-  | "ghost-success"
-  | "soft-success"
-  | "outline-warning"
-  | "ghost-warning"
-  | "soft-warning"
-  | "outline-info"
-  | "ghost-info"
-  | "soft-info"
-  | "soft-brand"
-  | "ghost-white";
-
-export type ButtonVariant = Variant;
 export type ButtonSize = SizeValue | "icon";
 
+export type ButtonVariant = BaseVariant | "link";
+
+export type ButtonColor = BaseColor;
+
+export interface ButtonRenderProps {
+  className?: string;
+  style?: React.CSSProperties;
+  disabled?: boolean;
+  "aria-busy"?: boolean;
+  children?: React.ReactNode;
+}
+
 export interface ButtonProps
-  extends Omit<
-    ButtonHTMLAttributes<HTMLButtonElement>,
-    | "onDrag"
-    | "onDragStart"
-    | "onDragEnd"
-    | "onAnimationStart"
-    | "onAnimationEnd"
-    | "onAnimationIteration"
-  >,
-    Styleable {
-  variant?: Variant;
+  extends
+    Omit<
+      ButtonHTMLAttributes<HTMLButtonElement>,
+      | "onDrag"
+      | "onDragStart"
+      | "onDragEnd"
+      | "onAnimationStart"
+      | "onAnimationEnd"
+      | "onAnimationIteration"
+      | "color"
+    >,
+    BaseProps,
+    ColorProps<ButtonColor>,
+    VariantProps<ButtonVariant>,
+    DisabledProps,
+    LoadingProps,
+    FullWidthProps {
   size?: ButtonSize;
-  isLoading?: boolean;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  fullWidth?: boolean;
   iconOnly?: boolean;
+  render?: (props: ButtonRenderProps) => React.ReactElement;
 }

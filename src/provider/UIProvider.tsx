@@ -1,9 +1,16 @@
-import { useEffect, useMemo, useState, type ReactNode, type JSX } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type CSSProperties,
+  type JSX,
+  type ReactNode,
+} from "react";
 
 import { ThemeContext } from "./ThemeContext";
-import { defaultTheme, resolveTokens } from "./theme";
-import { tokensToCssVars } from "./cssVariables";
-import { mergeTheme } from "@/utils/mergeTheme";
+import { defaultTheme } from "../theme/defaults/theme";
+import { resolveTokens, tokensToCssVars } from "./cssVariables";
+import { mergeTheme } from "@/theme/mergeTheme";
 import type { ColorMode, ThemeOverride } from "@/types/theme";
 
 export interface UIProviderProps {
@@ -22,16 +29,16 @@ function useSystemPrefersDark() {
   );
 
   useEffect(() => {
-    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
-    const listener = (e: MediaQueryListEvent) => {
-      setPrefersDark(e.matches);
+    const handleChange = (event: MediaQueryListEvent) => {
+      setPrefersDark(event.matches);
     };
 
-    mql.addEventListener("change", listener);
+    mediaQuery.addEventListener("change", handleChange);
 
     return () => {
-      mql.removeEventListener("change", listener);
+      mediaQuery.removeEventListener("change", handleChange);
     };
   }, []);
 
@@ -49,49 +56,58 @@ export function UIProvider({
 
   const systemPrefersDark = useSystemPrefersDark();
 
-  const resolvedMode =
+  const resolvedMode: "light" | "dark" =
     mode === "system" ? (systemPrefersDark ? "dark" : "light") : mode;
 
-  const mergedTheme = useMemo(
+  const theme = useMemo(
     () => mergeTheme(defaultTheme, themeOverride),
     [themeOverride],
   );
 
-  const cssVars = useMemo(() => {
-    const resolvedTokens = resolveTokens(mergedTheme[resolvedMode]);
+  const resolvedTokens = useMemo(
+    () => resolveTokens(theme.tokens, theme.semanticTokens, resolvedMode),
+    [theme.tokens, theme.semanticTokens, resolvedMode],
+  );
 
-    return tokensToCssVars(resolvedTokens, mergedTheme.intensity, resolvedMode);
-  }, [mergedTheme, resolvedMode]);
+  const cssVars = useMemo(
+    () => tokensToCssVars(resolvedTokens, resolvedMode, theme.intensity),
+    [resolvedTokens, resolvedMode, theme.intensity],
+  );
 
-  if (!mergedTheme.sizes[fallbackSize]) {
-    console.error(
-      `[kreativ-ui] fallbackSize="${fallbackSize}" is not a registered size in theme.sizes.`,
-    );
-  }
+  useEffect(() => {
+    if (
+      import.meta.env.NODE_ENV !== "production" &&
+      !theme.sizes[fallbackSize]
+    ) {
+      console.error(
+        `[kreativ-ui] fallbackSize="${fallbackSize}" ` +
+          `is not a registered size in theme.sizes. ` +
+          `Components requesting an unknown size may render ` +
+          `without size styles.`,
+      );
+    }
+  }, [theme.sizes, fallbackSize]);
+
+  const contextValue = useMemo(
+    () => ({
+      theme,
+      mode,
+      resolvedMode,
+      setMode,
+      fallbackSize,
+      tokens: resolvedTokens,
+    }),
+    [theme, mode, resolvedMode, fallbackSize, resolvedTokens],
+  );
 
   const Tag = as as keyof JSX.IntrinsicElements;
 
-  useEffect(() => {
-    const root = document.documentElement;
-
-    Object.entries(cssVars).forEach(([key, value]) => {
-      root.style.setProperty(key, value);
-    });
-  }, [cssVars]);
-
   return (
-    <ThemeContext.Provider
-      value={{
-        theme: mergedTheme,
-        mode,
-        resolvedMode,
-        setMode,
-        fallbackSize,
-      }}
-    >
+    <ThemeContext.Provider value={contextValue}>
       <Tag
         data-kreativ-theme={resolvedMode}
         className={resolvedMode === "dark" ? "dark" : undefined}
+        style={cssVars as CSSProperties}
       >
         {children}
       </Tag>

@@ -2,40 +2,37 @@
 @import "./animations.css";
 @import "tailwindcss";
 
-@theme {
-  --color-brand: var(--kui-brand);
-  --color-brand-hover: var(--kui-brand-hover);
-  --color-brand-fg: var(--kui-brand-fg);
+@theme inline {
+  --color-brand: rgb(var(--kui-brand));
+  --color-brand-hover: rgb(var(--kui-brand-hover));
+  --color-brand-fg: rgb(var(--kui-brand-fg));
 
-  --color-surface: var(--kui-surface);
-  --color-surface-raised: var(--kui-surface-raised);
-  --color-surface-sunken: var(--kui-surface-sunken);
+  --color-surface: rgb(var(--kui-surface));
+  --color-surface-raised: rgb(var(--kui-surface-raised));
+  --color-surface-sunken: rgb(var(--kui-surface-sunken));
 
-  --color-border: var(--kui-border);
+  --color-border: rgb(var(--kui-border));
 
-  --color-text: var(--kui-text);
-  --color-text-muted: var(--kui-text-muted);
+  --color-text: rgb(var(--kui-text));
+  --color-text-muted: rgb(var(--kui-text-muted));
 
-  --color-danger: var(--kui-danger);
-  --color-danger-fg: var(--kui-danger-fg);
+  --color-destructive: rgb(var(--kui-destructive));
+  --color-destructive-fg: rgb(var(--kui-destructive-fg));
+  --color-destructive-hover: rgb(var(--kui-destructive-hover));
 
-  --color-destructive: var(--kui-destructive);
-  --color-destructive-fg: var(--kui-destructive-fg);
-  --color-destructive-hover: var(--kui-destructive-hover);
+  --color-success: rgb(var(--kui-success));
+  --color-success-fg: rgb(var(--kui-success-fg));
+  --color-success-hover: rgb(var(--kui-success-hover));
 
-  --color-success: var(--kui-success);
-  --color-success-fg: var(--kui-success-fg);
-  --color-success-hover: var(--kui-success-hover);
+  --color-warning: rgb(var(--kui-warning));
+  --color-warning-fg: rgb(var(--kui-warning-fg));
+  --color-warning-hover: rgb(var(--kui-warning-hover));
 
-  --color-warning: var(--kui-warning);
-  --color-warning-fg: var(--kui-warning-fg);
-  --color-warning-hover: var(--kui-warning-hover);
+  --color-info: rgb(var(--kui-info));
+  --color-info-fg: rgb(var(--kui-info-fg));
+  --color-info-hover: rgb(var(--kui-info-hover));
 
-  --color-info: var(--kui-info);
-  --color-info-fg: var(--kui-info-fg);
-  --color-info-hover: var(--kui-info-hover);
-
-  --radius: var(--kui-radius);
+  --radius: var(--kui-radii-md);
   --font-sans: var(--kui-font);
 
   --duration-fast: var(--kui-duration-fast);
@@ -78,7 +75,7 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: var(--kui-surface, rgb(255 255 255));
+  background: rgb(var(--kui-surface, 255 255 255));
   color: rgb(var(--kui-text, 0 0 0));
 }
 
@@ -88,7 +85,6 @@ body {
   background: rgb(var(--kui-surface, 255 255 255));
   min-height: 100vh;
 }
-
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
