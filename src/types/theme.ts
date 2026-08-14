@@ -1,3 +1,5 @@
+import { DeepPartial } from "./common";
+
 export type ColorToken = string;
 
 export interface ColorTokens {
@@ -12,6 +14,18 @@ export interface ColorTokens {
   textMuted: ColorToken;
   danger: ColorToken;
   dangerFg: ColorToken;
+  destructive: ColorToken;
+  destructiveFg: ColorToken;
+  destructiveHover: ColorToken;
+  success: ColorToken;
+  successFg: ColorToken;
+  successHover: ColorToken;
+  warning: ColorToken;
+  warningFg: ColorToken;
+  warningHover: ColorToken;
+  info: ColorToken;
+  infoFg: ColorToken;
+  infoHover: ColorToken;
 }
 
 export interface ThemeTokens {
@@ -28,6 +42,7 @@ export interface IntensityMap {
 
 export interface SizeToken {
   height?: string;
+  width?: string;
   paddingX?: string;
   fontSize?: string;
   gap?: string;
@@ -54,9 +69,8 @@ export interface Theme {
 }
 
 export type ThemeOverride = {
-  intensity?: number | "subtle" | "default" | "bold";
-  light?: Partial<ThemeTokens>;
-  dark?: Partial<ThemeTokens>;
+  light?: DeepPartial<ThemeTokens>;
+  dark?: DeepPartial<ThemeTokens>;
   sizes?: Record<string, Partial<SizeToken>>;
   components?: ComponentOverrides;
 };

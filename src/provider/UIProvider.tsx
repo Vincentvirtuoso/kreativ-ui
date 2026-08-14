@@ -1,13 +1,7 @@
-import {
-  useEffect,
-  useMemo,
-  useState,
-  type CSSProperties,
-  type ReactNode,
-  type JSX,
-} from "react";
+import { useEffect, useMemo, useState, type ReactNode, type JSX } from "react";
+
 import { ThemeContext } from "./ThemeContext";
-import { defaultTheme } from "./defaultTheme";
+import { defaultTheme, resolveTokens } from "./theme";
 import { tokensToCssVars } from "./cssVariables";
 import { mergeTheme } from "@/utils/mergeTheme";
 import type { ColorMode, ThemeOverride } from "@/types/theme";
@@ -29,9 +23,16 @@ function useSystemPrefersDark() {
 
   useEffect(() => {
     const mql = window.matchMedia("(prefers-color-scheme: dark)");
-    const listener = (e: MediaQueryListEvent) => setPrefersDark(e.matches);
+
+    const listener = (e: MediaQueryListEvent) => {
+      setPrefersDark(e.matches);
+    };
+
     mql.addEventListener("change", listener);
-    return () => mql.removeEventListener("change", listener);
+
+    return () => {
+      mql.removeEventListener("change", listener);
+    };
   }, []);
 
   return prefersDark;
@@ -45,45 +46,52 @@ export function UIProvider({
   fallbackSize = "md",
 }: UIProviderProps) {
   const [mode, setMode] = useState<ColorMode>(defaultMode);
+
   const systemPrefersDark = useSystemPrefersDark();
 
   const resolvedMode =
     mode === "system" ? (systemPrefersDark ? "dark" : "light") : mode;
+
   const mergedTheme = useMemo(
     () => mergeTheme(defaultTheme, themeOverride),
     [themeOverride],
   );
 
-  if (
-    import.meta.env.NODE_ENV !== "production" &&
-    !mergedTheme.sizes[fallbackSize]
-  ) {
+  const cssVars = useMemo(() => {
+    const resolvedTokens = resolveTokens(mergedTheme[resolvedMode]);
+
+    return tokensToCssVars(resolvedTokens, mergedTheme.intensity, resolvedMode);
+  }, [mergedTheme, resolvedMode]);
+
+  if (!mergedTheme.sizes[fallbackSize]) {
     console.error(
-      `[kreativ-ui] fallbackSize="${fallbackSize}" is not a registered size in theme.sizes. ` +
-        `Components requesting an unknown size will render with no size styles applied at all.`,
+      `[kreativ-ui] fallbackSize="${fallbackSize}" is not a registered size in theme.sizes.`,
     );
   }
 
-  const cssVars = useMemo(
-    () =>
-      tokensToCssVars(
-        mergedTheme[resolvedMode],
-        mergedTheme.intensity,
-        resolvedMode,
-      ),
-    [mergedTheme, resolvedMode],
-  );
+  const Tag = as as keyof JSX.IntrinsicElements;
 
-  const Tag = as as "div";
+  useEffect(() => {
+    const root = document.documentElement;
+
+    Object.entries(cssVars).forEach(([key, value]) => {
+      root.style.setProperty(key, value);
+    });
+  }, [cssVars]);
 
   return (
     <ThemeContext.Provider
-      value={{ theme: mergedTheme, mode, resolvedMode, setMode, fallbackSize }}
+      value={{
+        theme: mergedTheme,
+        mode,
+        resolvedMode,
+        setMode,
+        fallbackSize,
+      }}
     >
       <Tag
         data-kreativ-theme={resolvedMode}
         className={resolvedMode === "dark" ? "dark" : undefined}
-        style={cssVars as CSSProperties}
       >
         {children}
       </Tag>

@@ -1,17 +1,18 @@
-/** Built-in size names — shown as autocomplete suggestions. */
-export type Size = "sm" | "md" | "lg";
+export type Size = "xs" | "sm" | "md" | "lg" | "xl";
+export type Orientation = "horizontal" | "vertical";
 
-/**
- * A size prop accepts the built-ins above OR any custom name a consumer
- * registered via <UIProvider theme={{ sizes: { xl: {...} } }} />.
- * The `string & {}` trick keeps IDE autocomplete for the literals above
- * while still allowing arbitrary strings through TypeScript.
- */
 export type SizeValue = Size | (string & {});
 
-export type Variant = "solid" | "outline" | "ghost" | "soft";
+export type BaseVariant = "solid" | "outline" | "ghost" | "soft";
 
-/** Standard prop every component accepts for consumer-side class overrides. */
+export type Variant = BaseVariant;
+
 export interface Styleable {
   className?: string;
 }
+
+export type BaseTransition = "none" | "fade" | "rotate" | "slide" | "scale";
+
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};

@@ -1,9 +1,12 @@
-import { forwardRef } from "react";
+import { forwardRef, useState, type KeyboardEvent } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/utils/cn";
 import { useTheme } from "@/hooks/useTheme";
 import { useSizeStyle } from "@/hooks/useSizeStyle";
 import { buttonBase, buttonVariants } from "./Button.styles";
 import type { ButtonProps } from "./Button.types";
+
+const ACTIVATION_KEYS = new Set(["Enter", " "]);
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -17,23 +20,34 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       disabled,
       className,
       style,
+      iconOnly,
       children,
+      onKeyDown,
+      onKeyUp,
       ...rest
     },
-    ref
+    ref,
   ) => {
-    // Pulls consumer-defined per-component overrides set via
-    // <UIProvider theme={{ components: { Button: { ... } } }}>.
     const { theme } = useTheme();
     const overrides = theme.components?.Button;
+    const { style: sizeStyle, iconSize } = useSizeStyle(size, iconOnly);
+    const prefersReducedMotion = useReducedMotion();
+    const isInteractive = !disabled && !isLoading;
 
-    // Sizing (height/padding/font-size/gap) is resolved from theme.sizes —
-    // works for "sm"/"md"/"lg" out of the box and for any custom size a
-    // consumer registers, e.g. size="xl" after adding it via UIProvider.
-    const { style: sizeStyle, iconSize } = useSizeStyle(size);
+    const [isKeyboardPressed, setIsKeyboardPressed] = useState(false);
+
+    function handleKeyDown(e: KeyboardEvent<HTMLButtonElement>) {
+      onKeyDown?.(e);
+      if (isInteractive && ACTIVATION_KEYS.has(e.key))
+        setIsKeyboardPressed(true);
+    }
+    function handleKeyUp(e: KeyboardEvent<HTMLButtonElement>) {
+      onKeyUp?.(e);
+      if (ACTIVATION_KEYS.has(e.key)) setIsKeyboardPressed(false);
+    }
 
     return (
-      <button
+      <motion.button
         ref={ref}
         disabled={disabled || isLoading}
         className={cn(
@@ -42,15 +56,26 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           overrides?.variants?.[variant],
           fullWidth && "w-full",
           overrides?.base,
-          className
+          isLoading && "animate-kui-pulse",
+          className,
         )}
         style={{ ...sizeStyle, ...style }}
         aria-busy={isLoading || undefined}
+        animate={{ scale: isKeyboardPressed ? 0.975 : 1 }}
+        whileHover={isInteractive ? { scale: 1.015 } : undefined}
+        whileTap={isInteractive ? { scale: 0.975 } : undefined}
+        transition={
+          prefersReducedMotion
+            ? { duration: 0 }
+            : { type: "spring", stiffness: 500, damping: 30 }
+        }
+        onKeyDown={handleKeyDown}
+        onKeyUp={handleKeyUp}
         {...rest}
       >
         {isLoading && (
           <span
-            className="kui-animate-spin rounded-full border-2 border-current border-t-transparent"
+            className="animate-kui-spin rounded-full border-2 border-current border-t-transparent"
             style={{ width: iconSize, height: iconSize }}
             aria-hidden="true"
           />
@@ -58,9 +83,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {!isLoading && leftIcon}
         {children}
         {!isLoading && rightIcon}
-      </button>
+      </motion.button>
     );
-  }
+  },
 );
 
 Button.displayName = "Button";
