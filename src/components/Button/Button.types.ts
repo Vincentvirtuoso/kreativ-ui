@@ -1,4 +1,9 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type {
+  ButtonHTMLAttributes,
+  CSSProperties,
+  ReactElement,
+  ReactNode,
+} from "react";
 import type {
   SizeValue,
   BaseVariant,
@@ -20,10 +25,11 @@ export type ButtonColor = BaseColor;
 
 export interface ButtonRenderProps {
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   disabled?: boolean;
+  "aria-disabled"?: boolean;
   "aria-busy"?: boolean;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 export interface ButtonProps
@@ -49,5 +55,29 @@ export interface ButtonProps
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   iconOnly?: boolean;
-  render?: (props: ButtonRenderProps) => React.ReactElement;
+  /**
+   * Custom rendering escape hatch.
+   *
+   * Receives the resolved Button props and allows the consumer
+   * to render the Button using another element or component.
+   *
+   * @example
+   * ```tsx
+   * <Button
+   *   render={(props) => (
+   *     <a {...props} href="/templates">
+   *       Templates
+   *     </a>
+   *   )}
+   * >
+   *   Templates
+   * </Button>
+   * ```
+   *
+   * @remarks
+   * The render function must be created inside a Client Component
+   * when using Next.js App Router. Functions cannot be passed from
+   * Server Components to Client Components.
+   */
+  render?: (props: ButtonRenderProps) => ReactElement;
 }

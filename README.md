@@ -274,82 +274,780 @@ Supported transition types: `none`, `fade`, `slide`, `scale`, `rotate`.
 
 # Button
 
-A versatile button with support for variants, sizes, loading states, icons, and full‑width.
+A versatile, theme-aware button component with support for variants, sizes, typography, loading states, icons, full-width layouts, and custom rendering.
+
+`Button` is designed to work with Kreativ UI's recipe, sizing, and typography systems, allowing its appearance to be controlled centrally through the active theme.
+
+---
 
 ## Basic Usage
 
 ```tsx
+import { Button } from "@splenddev/kreativ-ui";
+
 <Button>Click me</Button>
 ```
 
+By default, the Button uses:
+
+* `variant="solid"`
+* `color="brand"`
+* `size="md"`
+* `typography="body"`
+* `fullWidth={false}`
+* `isLoading={false}`
+* `disabled={false}`
+
+---
+
 ## Variants
+
+Use `variant` to control the Button's visual treatment.
 
 ```tsx
 <Button variant="solid">Solid</Button>
-<Button variant="outline">Outline</Button>
-<Button variant="ghost">Ghost</Button>
-<Button variant="soft">Soft</Button>
-<Button variant="destructive">Delete</Button>
-<Button variant="success">Success</Button>
-<Button variant="link">Learn more</Button>
+
+<Button variant="outline">
+  Outline
+</Button>
+
+<Button variant="ghost">
+  Ghost
+</Button>
+
+<Button variant="soft">
+  Soft
+</Button>
+
+<Button variant="link">
+  Learn more
+</Button>
 ```
+
+Variants are defined through the Button recipe and can be customized through the theme.
+
+---
+
+## Colors
+
+The `color` prop controls the semantic color used by the Button recipe.
+
+```tsx
+
+<Button color="brand">
+  Brand
+</Button>
+
+<Button color="success">
+  Success
+</Button>
+
+<Button variant="destructive">
+  Delete
+</Button>
+
+<Button variant="success">
+  Success
+</Button>
+```
+
+Available colors depend on the configured Button recipe and theme.
+
+---
 
 ## Sizes
 
+Buttons support the standard Kreativ UI size scale:
+
 ```tsx
-<Button size="xs">Extra Small</Button>
-<Button size="sm">Small</Button>
-<Button size="md">Medium</Button>
-<Button size="lg">Large</Button>
-<Button size="xl">Extra Large</Button>
+<Button size="xs">
+  Extra Small
+</Button>
+
+<Button size="sm">
+  Small
+</Button>
+
+<Button size="md">
+  Medium
+</Button>
+
+<Button size="lg">
+  Large
+</Button>
+
+<Button size="xl">
+  Extra Large
+</Button>
 ```
+
+The size system controls layout-related properties such as:
+
+* Height
+* Horizontal padding
+* Gap
+* Icon size
+* Border radius
+
+Typography is handled independently by the `typography` prop.
+
+---
+
+## Custom Sizes
+
+Button sizes are theme-driven.
+
+You can define additional sizes through the theme and reference them by name.
+
+```tsx
+<Button size="custom">
+  Custom Size
+</Button>
+```
+
+For example:
+
+```ts
+const theme = {
+  sizes: {
+    custom: {
+      height: "3.5rem",
+      paddingX: "2rem",
+      fontSize: "1rem",
+      gap: "0.75rem",
+      iconSize: "1.25rem",
+      radius: "1.25rem",
+    },
+  },
+};
+```
+
+This allows applications to extend the Button's sizing system without modifying the component itself.
+
+---
+
+# Typography
+
+Button typography is controlled independently from its size.
+
+```tsx
+<Button typography="body">
+  Default
+</Button>
+
+<Button typography="bodySmall">
+  Small Text
+</Button>
+
+<Button typography="headingSmall">
+  Heading Style
+</Button>
+```
+
+The `typography` prop references a typography preset from the active Kreativ UI theme.
+
+For example:
+
+```tsx
+<Button
+  size="lg"
+  typography="bodySmall"
+>
+  Large Button, Small Typography
+</Button>
+```
+
+Here:
+
+* `size="lg"` controls the Button's dimensions.
+* `typography="bodySmall"` controls the text appearance.
+
+This separation makes the system predictable and themeable.
+
+See the [Typography documentation](./typography.md) for more information.
+
+---
 
 ## Loading State
 
+Use `isLoading` when an operation is in progress.
+
 ```tsx
-<Button isLoading>Saving...</Button>
+<Button isLoading>
+  Saving...
+</Button>
 ```
 
-## Icons
+When loading:
+
+* A loading indicator is displayed.
+* The Button becomes disabled.
+* The Button receives `aria-busy="true"`.
+* Normal icon rendering is suppressed while the loading indicator is displayed.
+
+You can also use loading without text:
 
 ```tsx
-<Button leftIcon={<SearchIcon />}>Search</Button>
-<Button rightIcon={<ArrowRightIcon />}>Continue</Button>
-```
-
-## Icon Only
-
-```tsx
-<Button iconOnly aria-label="Search">
+<Button
+  isLoading
+  iconOnly
+  aria-label="Loading"
+>
   <SearchIcon />
 </Button>
 ```
 
-## Full Width
+---
+
+# Icons
+
+Buttons support icons on either side of their content.
+
+### Left Icon
 
 ```tsx
-<Button fullWidth>Continue</Button>
+<Button leftIcon={<SearchIcon />}>
+  Search
+</Button>
 ```
 
-## Custom Sizes via Theme
+### Right Icon
 
-Define additional sizes in the theme (as shown in the Theming section) and use them with `size` prop.
+```tsx
+<Button rightIcon={<ArrowRightIcon />}>
+  Continue
+</Button>
+```
 
-## Props
+### Both Icons
 
-| Prop                     | Type                                                                                | Default   | Description                                 |
-| ------------------------ | ----------------------------------------------------------------------------------- | --------- | ------------------------------------------- |
-| `variant`                | `"solid" \| "outline" \| "ghost" \| "soft" \| "destructive" \| "success" \| "link"` | `"solid"` | Visual style                                |
-| `size`                   | `"xs" \| "sm" \| "md" \| "lg" \| "xl" \| string`                                    | `"md"`    | Size (theme‑driven; custom strings allowed) |
-| `isLoading`              | `boolean`                                                                           | `false`   | Shows spinner and disables                  |
-| `leftIcon` / `rightIcon` | `ReactNode`                                                                         | –         | Icon elements                               |
-| `fullWidth`              | `boolean`                                                                           | `false`   | Stretch to container width                  |
-| `disabled`               | `boolean`                                                                           | `false`   | Disables interactions                       |
-| `iconOnly`               | `boolean`                                                                           | `false`   | Remove padding for icon‑only layout         |
+```tsx
+<Button
+  leftIcon={<DownloadIcon />}
+  rightIcon={<ArrowRightIcon />}
+>
+  Download
+</Button>
+```
 
-All standard `<button>` props are forwarded.
+Icon sizing is automatically derived from the Button's active size.
+
+For example:
+
+```text
+size="sm"
+    ↓
+sm.iconSize
+    ↓
+icon dimensions
+
+size="lg"
+    ↓
+lg.iconSize
+    ↓
+larger icon dimensions
+```
 
 ---
+
+# Icon Only
+
+Use `iconOnly` for buttons containing only an icon.
+
+```tsx
+<Button
+  iconOnly
+  aria-label="Search"
+>
+  <SearchIcon />
+</Button>
+```
+
+`iconOnly` changes the Button's layout so that normal horizontal content padding is not applied.
+
+### Accessibility
+
+Always provide an accessible label when the Button contains no visible text:
+
+```tsx
+<Button
+  iconOnly
+  aria-label="Open settings"
+>
+  <SettingsIcon />
+</Button>
+```
+
+---
+
+# Full Width
+
+Use `fullWidth` to make the Button fill its available horizontal space.
+
+```tsx
+<Button fullWidth>
+  Continue
+</Button>
+```
+
+This is useful for:
+
+* Forms
+* Mobile layouts
+* Authentication screens
+* Dialog actions
+* Card actions
+
+---
+
+# Disabled
+
+Buttons can be disabled using the standard `disabled` prop.
+
+```tsx
+<Button disabled>
+  Unavailable
+</Button>
+```
+
+A disabled Button cannot be interacted with.
+
+Loading automatically disables the Button as well:
+
+```tsx
+<Button isLoading>
+  Saving...
+</Button>
+```
+
+is effectively treated as disabled while the loading state is active.
+
+---
+
+# Custom Rendering
+
+The `render` prop provides an advanced escape hatch for rendering the Button's resolved styles and content using another element or component.
+
+```tsx
+<Button
+  render={(props) => (
+    <a
+      {...props}
+      href="/templates"
+    >
+      Templates
+    </a>
+  )}
+>
+  Templates
+</Button>
+```
+
+The render function receives the resolved Button properties:
+
+```ts
+interface ButtonRenderProps {
+  className?: string;
+  style?: React.CSSProperties;
+  disabled?: boolean;
+  "aria-busy"?: boolean;
+  children?: React.ReactNode;
+}
+```
+
+This means the custom element automatically receives the Button's:
+
+* Recipe classes
+* Resolved typography
+* Resolved size styles
+* Loading state
+* Button content
+
+### Using a Custom Component
+
+The same pattern can be used with another component:
+
+```tsx
+<Button
+  render={(props) => (
+    <CustomLink
+      {...props}
+      href="/templates"
+    />
+  )}
+>
+  Templates
+</Button>
+```
+
+---
+
+## Next.js Server Component Note
+
+The `render` prop contains a function.
+
+Because functions cannot cross the Next.js Server Component → Client Component boundary, `render` should be used from a Client Component.
+
+### ❌ This can fail
+
+```tsx
+// page.tsx
+
+import { Button } from "@splenddev/kreativ-ui";
+
+export default function Page() {
+  return (
+    <Button
+      render={(props) => (
+        <a {...props} href="/templates">
+          Templates
+        </a>
+      )}
+    >
+      Templates
+    </Button>
+  );
+}
+```
+
+### ✅ Create the render function in a Client Component
+
+```tsx
+"use client";
+
+import { Button } from "@splenddev/kreativ-ui";
+
+export function TemplatesButton() {
+  return (
+    <Button
+      render={(props) => (
+        <a {...props} href="/templates">
+          Templates
+        </a>
+      )}
+    >
+      Templates
+    </Button>
+  );
+}
+```
+
+The Client Component can then be rendered from your Server Component:
+
+```tsx
+import { TemplatesButton } from "./TemplatesButton";
+
+export default function Page() {
+  return <TemplatesButton />;
+}
+```
+
+> **Note:** `render` is intentionally retained as an advanced rendering API. For ordinary Buttons, simply use `<Button>`.
+
+---
+
+# Combining Features
+
+Button features can be combined.
+
+```tsx
+<Button
+  variant="outline"
+  color="brand"
+  size="lg"
+  typography="body"
+  leftIcon={<DownloadIcon />}
+  fullWidth
+>
+  Download
+</Button>
+```
+
+Another example:
+
+```tsx
+<Button
+  variant="solid"
+  size="sm"
+  typography="bodySmall"
+  isLoading
+>
+  Processing...
+</Button>
+```
+
+---
+
+# Theming
+
+Button behavior and appearance are driven by the active Kreativ UI theme.
+
+The Button recipe controls visual variants:
+
+```ts
+const theme = {
+  recipes: {
+    Button: {
+      // recipe configuration
+    },
+  },
+};
+```
+
+The size system controls dimensions:
+
+```ts
+const theme = {
+  sizes: {
+    // ...
+  },
+};
+```
+
+Typography controls text styling:
+
+```ts
+const theme = {
+  typography: {
+    body: {
+      fontFamily: "{fonts.body}",
+      fontSize: "{fontSizes.md}",
+      fontWeight: "{fontWeights.normal}",
+      lineHeight: "{lineHeights.normal}",
+    },
+  },
+};
+```
+
+This gives the Button three independent styling layers:
+
+```text
+Button
+│
+├── Recipe
+│   └── variant + color
+│
+├── Size
+│   └── dimensions + spacing
+│
+└── Typography
+    └── font + text styling
+```
+
+---
+
+# Props
+
+| Prop         | Type                                         |   Default | Description                                              |
+| ------------ | -------------------------------------------- | --------: | -------------------------------------------------------- |
+| `variant`    | `ButtonVariant`                              | `"solid"` | Controls the Button's visual variant.                    |
+| `color`      | `ButtonColor`                                | `"brand"` | Controls the Button's semantic color.                    |
+| `size`       | `ButtonSize`                                 |    `"md"` | Controls Button dimensions and icon sizing.              |
+| `typography` | `string`                                     |  `"body"` | Name of the typography preset used for Button text.      |
+| `isLoading`  | `boolean`                                    |   `false` | Displays the loading indicator and disables interaction. |
+| `leftIcon`   | `ReactNode`                                  |         — | Icon displayed before the Button content.                |
+| `rightIcon`  | `ReactNode`                                  |         — | Icon displayed after the Button content.                 |
+| `iconOnly`   | `boolean`                                    |   `false` | Optimizes the Button layout for icon-only content.       |
+| `fullWidth`  | `boolean`                                    |   `false` | Makes the Button fill its available width.               |
+| `disabled`   | `boolean`                                    |   `false` | Disables interaction with the Button.                    |
+| `render`     | `(props: ButtonRenderProps) => ReactElement` |         — | Advanced custom rendering escape hatch.                  |
+| `className`  | `string`                                     |         — | Additional CSS classes.                                  |
+| `style`      | `React.CSSProperties`                        |         — | Inline style overrides.                                  |
+| `children`   | `ReactNode`                                  |         — | Button content.                                          |
+
+All applicable standard HTML `<button>` attributes and event handlers are also supported.
+
+---
+
+# `ButtonRenderProps`
+
+The `render` callback receives:
+
+```ts
+interface ButtonRenderProps {
+  className?: string;
+  style?: React.CSSProperties;
+  disabled?: boolean;
+  "aria-disabled"?: boolean;
+  "aria-busy"?: boolean;
+  children?: React.ReactNode;
+}
+```
+
+Example:
+
+```tsx
+<Button
+  render={(props) => (
+    <a
+      {...props}
+      href="/templates"
+    />
+  )}
+>
+  Templates
+</Button>
+```
+
+---
+
+# Styling Precedence
+
+Button styling follows a predictable order:
+
+```text
+Theme Recipe
+      ↓
+Component Size
+      ↓
+Typography
+      ↓
+className
+      ↓
+style
+```
+
+Typography controls text presentation:
+
+```text
+fontFamily
+fontSize
+fontWeight
+lineHeight
+letterSpacing
+```
+
+Size controls layout:
+
+```text
+height
+padding
+gap
+iconSize
+radius
+```
+
+This separation allows you to change typography without unexpectedly changing Button dimensions.
+
+---
+
+# Accessibility
+
+Buttons should always have an accessible name.
+
+For text Buttons:
+
+```tsx
+<Button>
+  Save changes
+</Button>
+```
+
+For icon-only Buttons:
+
+```tsx
+<Button
+  iconOnly
+  aria-label="Search"
+>
+  <SearchIcon />
+</Button>
+```
+
+When using `isLoading`, the Button communicates its busy state through:
+
+```html
+aria-busy="true"
+```
+
+Always provide meaningful labels for actions whose visible content does not describe their purpose.
+
+---
+
+# Recommended Usage
+
+### Use variants for visual intent
+
+```tsx
+<Button variant="solid" color="destructive">
+  Delete account
+</Button>
+```
+
+### Use sizes for component dimensions
+
+```tsx
+<Button size="sm">
+  Cancel
+</Button>
+```
+
+### Use typography for text presentation
+
+```tsx
+<Button typography="bodySmall">
+  Cancel
+</Button>
+```
+
+### Use `style` for exceptional one-off overrides
+
+```tsx
+<Button
+  style={{
+    letterSpacing: "0.02em",
+  }}
+>
+  Continue
+</Button>
+```
+
+For repeated styles, prefer creating a typography preset instead.
+
+---
+
+# Complete Example
+
+```tsx
+import {
+  Button,
+} from "@splenddev/kreativ-ui";
+
+function Actions() {
+  return (
+    <div className="flex gap-3">
+      <Button
+        variant="outline"
+        size="sm"
+        typography="bodySmall"
+      >
+        Cancel
+      </Button>
+
+      <Button
+        variant="solid"
+        color="brand"
+        size="sm"
+        typography="bodySmall"
+        rightIcon={<ArrowRightIcon />}
+      >
+        Continue
+      </Button>
+
+      <Button
+        variant="solid"
+        color="destructive"
+        size="sm"
+        typography="bodySmall"
+      >
+        Delete
+      </Button>
+    </div>
+  );
+}
+```
+
+The result is a Button that combines **recipe styling, theme-driven sizing, centralized typography, icons, loading behavior, accessibility, and custom rendering** without requiring those concerns to be manually managed by the consumer.
 
 # 🧩 Input & FormField
 

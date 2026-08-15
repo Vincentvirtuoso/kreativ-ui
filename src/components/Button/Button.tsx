@@ -115,6 +115,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className: resolvedClassName,
         style: resolvedStyle,
         disabled: disabled || isLoading,
+        "aria-disabled": disabled || isLoading,
         "aria-busy": isLoading || undefined,
         children: content,
       });
