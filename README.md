@@ -1129,5 +1129,5 @@ MIT
 
 ---
 
-**More component documentation (Select, Textarea, Checkbox, RadioGroup, etc.) coming soon.**  
+**More component documentation (Textarea, Checkbox, RadioGroup, etc.) coming soon.**  
 Visit the [GitHub repository](https://github.com/Vincentvirtuoso/kreativ-ui) for updates.
