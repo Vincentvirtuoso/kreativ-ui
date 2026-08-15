@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useId, useMemo, useReducer, useRef, useState } from "react";
 import { useOptionalFormField } from "../FormField/FormField.context";
 import { MultiSelectContext, type MultiSelectItemMeta } from "./MultiSelect.context";

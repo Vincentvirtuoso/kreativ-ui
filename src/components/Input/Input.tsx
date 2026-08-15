@@ -1,3 +1,5 @@
+"use client";
+
 import {
   forwardRef,
   useEffect,
@@ -172,10 +174,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const state = error ? "error" : success ? "success" : "none";
     const stateTransition = useStateTransition(state);
 
-    console.log({
-      state,
-      stateTransition,
-    });
 
     const wrapperClasses = cn(
       resolveRecipe(theme.recipes.FormControl, {

@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useContext, type RefObject } from "react";
 
 export interface ComboboxItemMeta {

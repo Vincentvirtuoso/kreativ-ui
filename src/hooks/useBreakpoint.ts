@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 
 // Mirrors Tailwind's default breakpoints so component internals can branch

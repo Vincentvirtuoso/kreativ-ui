@@ -303,7 +303,7 @@ export interface SemanticTokens {
  * };
  * ```
  */
-export interface TextStyle {
+export interface TypographyStyle {
   fontFamily?: string;
   fontSize?: string;
   fontWeight?: string | number;
@@ -317,13 +317,13 @@ export interface TextStyle {
  *
  * @example
  * ```ts
- * const textStyles: TextStyles = {
+ * const typography: Typography = {
  *   heading: { fontSize: "2rem", fontWeight: 700 },
  *   body: { fontSize: "1rem", lineHeight: "1.5" },
  * };
  * ```
  */
-export type TextStyles = Record<string, TextStyle>;
+export type Typography = Record<string, TypographyStyle>;
 
 /**
  * A set of CSS properties that define the dimensions and spacing
@@ -388,7 +388,7 @@ export interface ThemeTransition {
  *
  * @property tokens - Raw design values (colors, spacing, radii, etc.).
  * @property semanticTokens - Role‑based tokens that adapt to color mode.
- * @property textStyles - Reusable typography styles.
+ * @property typography - Reusable typography styles.
  * @property recipes - Component‑specific styles (from RecipeCollection).
  * @property intensity - A global multiplier for visual prominence (e.g., 0.8, 1, 1.2).
  * @property light - Legacy theme tokens for light mode (kept for migration).
@@ -398,7 +398,7 @@ export interface ThemeTransition {
 export interface Theme {
   tokens: DesignTokens;
   semanticTokens: SemanticTokens;
-  textStyles: TextStyles;
+  typography: Typography;
   recipes: RecipeCollection;
   intensity: number;
   sizes: SizeScale;
@@ -460,13 +460,13 @@ export interface ThemeOverride {
    *
    * @example
    * ```ts
-   * textStyles: {
+   * typography: {
    *   heading: { fontSize: "2.5rem", fontWeight: 800 },
    *   body: { fontSize: "1.125rem", lineHeight: "1.75" },
    * }
    * ```
    */
-  textStyles?: DeepPartial<TextStyles>;
+  typography?: DeepPartial<Typography>;
 
   /**
    * Override component recipes.

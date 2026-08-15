@@ -1,3 +1,5 @@
+"use client";
+
 import {
   forwardRef,
   useState,
@@ -12,6 +14,7 @@ import { useSizeStyle } from "@/hooks/useSizeStyle";
 
 import type { ButtonProps } from "./Button.types";
 import { resolveRecipe } from "@/theme";
+import { useTypography } from "@/hooks";
 
 const ACTIVATION_KEYS = new Set(["Enter", " "]);
 
@@ -26,6 +29,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       rightIcon,
       fullWidth = false,
       disabled,
+      typography: typographyName = "body",
       className,
       style,
       iconOnly,
@@ -38,7 +42,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref,
   ) => {
     const { theme } = useTheme();
-
+    const typography = useTypography(typographyName);
     const { style: sizeStyle, iconSize } = useSizeStyle(
       size,
       iconOnly,
@@ -80,6 +84,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     );
 
     const resolvedStyle = {
+      ...typography,
       ...sizeStyle,
       ...style,
     };
@@ -110,6 +115,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className: resolvedClassName,
         style: resolvedStyle,
         disabled: disabled || isLoading,
+        "aria-disabled": disabled || isLoading,
         "aria-busy": isLoading || undefined,
         children: content,
       });

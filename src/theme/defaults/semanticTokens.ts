@@ -1,137 +1,60 @@
 import { SemanticTokens } from "@/types";
+import { defineToken, defineSemanticToken } from "@/theme";
 
 export const defaultSemanticTokens: SemanticTokens = {
   colors: {
-    brand: {
-      value: {
-        light: "{colors.blue.500}",
-        dark: "{colors.blue.400}",
-      },
-    },
+    brand: defineSemanticToken("{colors.blue.500}", "{colors.blue.400}"),
 
-    brandHover: {
-      value: {
-        light: "{colors.blue.600}",
-        dark: "{colors.blue.300}",
-      },
-    },
+    brandHover: defineSemanticToken("{colors.blue.600}", "{colors.blue.300}"),
 
-    brandFg: {
-      value: "{colors.white}",
-    },
+    brandFg: defineToken("{colors.white}"),
 
-    surface: {
-      value: {
-        light: "{colors.gray.50}",
-        dark: "{colors.gray.900}",
-      },
-    },
+    surface: defineSemanticToken("{colors.gray.50}", "{colors.gray.900}"),
 
-    surfaceRaised: {
-      value: {
-        light: "{colors.white}",
-        dark: "{colors.gray.800}",
-      },
-    },
+    surfaceRaised: defineSemanticToken("{colors.white}", "{colors.gray.800}"),
 
-    surfaceSunken: {
-      value: {
-        light: "{colors.gray.100}",
-        dark: "{colors.gray.950}",
-      },
-    },
+    surfaceSunken: defineSemanticToken(
+      "{colors.gray.100}",
+      "{colors.gray.950}",
+    ),
 
-    border: {
-      value: {
-        light: "{colors.gray.200}",
-        dark: "{colors.gray.600}",
-      },
-    },
+    border: defineSemanticToken("{colors.gray.200}", "{colors.gray.600}"),
 
-    text: {
-      value: {
-        light: "{colors.gray.900}",
-        dark: "{colors.gray.50}",
-      },
-    },
+    text: defineSemanticToken("{colors.gray.900}", "{colors.gray.50}"),
 
-    textMuted: {
-      value: {
-        light: "{colors.gray.500}",
-        dark: "{colors.gray.400}",
-      },
-    },
+    textMuted: defineSemanticToken("{colors.gray.500}", "{colors.gray.400}"),
 
-    destructive: {
-      value: {
-        light: "{colors.red.500}",
-        dark: "{colors.red.400}",
-      },
-    },
+    destructive: defineSemanticToken("{colors.red.500}", "{colors.red.400}"),
 
-    destructiveFg: {
-      value: "{colors.white}",
-    },
+    destructiveFg: defineToken("{colors.white}"),
 
-    destructiveHover: {
-      value: {
-        light: "{colors.red.600}",
-        dark: "{colors.red.300}",
-      },
-    },
+    destructiveHover: defineSemanticToken(
+      "{colors.red.600}",
+      "{colors.red.300}",
+    ),
 
-    success: {
-      value: {
-        light: "{colors.green.500}",
-        dark: "{colors.green.400}",
-      },
-    },
+    success: defineSemanticToken("{colors.green.500}", "{colors.green.400}"),
 
-    successFg: {
-      value: "{colors.white}",
-    },
+    successFg: defineToken("{colors.white}"),
 
-    successHover: {
-      value: {
-        light: "{colors.green.600}",
-        dark: "{colors.green.300}",
-      },
-    },
+    successHover: defineSemanticToken(
+      "{colors.green.600}",
+      "{colors.green.300}",
+    ),
 
-    warning: {
-      value: {
-        light: "{colors.amber.500}",
-        dark: "{colors.amber.400}",
-      },
-    },
+    warning: defineSemanticToken("{colors.amber.500}", "{colors.amber.400}"),
 
-    warningFg: {
-      value: "{colors.black}",
-    },
+    warningFg: defineToken("{colors.black}"),
 
-    warningHover: {
-      value: {
-        light: "{colors.amber.600}",
-        dark: "{colors.amber.300}",
-      },
-    },
+    warningHover: defineSemanticToken(
+      "{colors.amber.600}",
+      "{colors.amber.300}",
+    ),
 
-    info: {
-      value: {
-        light: "{colors.cyan.500}",
-        dark: "{colors.cyan.400}",
-      },
-    },
+    info: defineSemanticToken("{colors.cyan.500}", "{colors.cyan.400}"),
 
-    infoFg: {
-      value: "{colors.white}",
-    },
+    infoFg: defineToken("{colors.white}"),
 
-    infoHover: {
-      value: {
-        light: "{colors.cyan.600}",
-        dark: "{colors.cyan.300}",
-      },
-    },
+    infoHover: defineSemanticToken("{colors.cyan.600}", "{colors.cyan.300}"),
   },
 };

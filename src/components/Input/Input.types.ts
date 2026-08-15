@@ -42,7 +42,6 @@ export interface InputProps
     ClearableProps,
     StateProps {
   inputClassName?: string;
-  size?: string;
   kind?: InputKind;
   rounded?: boolean;
   startIcon?: ReactNode;

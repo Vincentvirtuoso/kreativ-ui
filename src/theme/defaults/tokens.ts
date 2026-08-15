@@ -1,136 +1,108 @@
 import { DesignTokens } from "@/types";
+import { defineToken } from "@/theme";
 
 export const defaultTokens: DesignTokens = {
   colors: {
     blue: {
-      300: { value: "#5EA6ED" },
-      400: { value: "#4799EB" },
-      500: { value: "#1A80E6" },
-      600: { value: "#1773CF" },
+      300: defineToken("#5EA6ED"),
+      400: defineToken("#4799EB"),
+      500: defineToken("#1A80E6"),
+      600: defineToken("#1773CF"),
     },
-
     red: {
-      300: { value: "#EB4747" },
-      400: { value: "#E83030" },
-      500: { value: "#E61A1A" },
-      600: { value: "#CF1717" },
+      300: defineToken("#EB4747"),
+      400: defineToken("#E83030"),
+      500: defineToken("#E61A1A"),
+      600: defineToken("#CF1717"),
     },
-
     green: {
-      300: { value: "#26D997" },
-      400: { value: "#22C388" },
-      500: { value: "#16A249" },
-      600: { value: "#12875C" },
+      300: defineToken("#26D997"),
+      400: defineToken("#22C388"),
+      500: defineToken("#16A249"),
+      600: defineToken("#12875C"),
     },
-
     amber: {
-      300: { value: "#F7B23B" },
-      400: { value: "#F6A823" },
-      500: { value: "#F59F0A" },
-      600: { value: "#D38909" },
+      300: defineToken("#F7B23B"),
+      400: defineToken("#F6A823"),
+      500: defineToken("#F59F0A"),
+      600: defineToken("#D38909"),
     },
-
     cyan: {
-      300: { value: "#6CC3EF" },
-      400: { value: "#47B4EB" },
-      500: { value: "#1791CF" },
-      600: { value: "#137BAE" },
+      300: defineToken("#6CC3EF"),
+      400: defineToken("#47B4EB"),
+      500: defineToken("#1791CF"),
+      600: defineToken("#137BAE"),
     },
-
     gray: {
-      50: { value: "#FAFAFA" },
-      100: { value: "#EBEBEB" },
-      200: { value: "#D9D9D9" },
-      300: { value: "#BDBDBD" },
-      400: { value: "#999999" },
-      500: { value: "#666666" },
-      600: { value: "#4D4D4D" },
-      700: { value: "#333333" },
-      800: { value: "#2E2E2E" },
-      900: { value: "#1F1F1F" },
-      950: { value: "#141414" },
-      1000: { value: "#0A0A0A" },
+      50: defineToken("#FAFAFA"),
+      100: defineToken("#EBEBEB"),
+      200: defineToken("#D9D9D9"),
+      300: defineToken("#BDBDBD"),
+      400: defineToken("#999999"),
+      500: defineToken("#666666"),
+      600: defineToken("#4D4D4D"),
+      700: defineToken("#333333"),
+      800: defineToken("#2E2E2E"),
+      900: defineToken("#1F1F1F"),
+      950: defineToken("#141414"),
+      1000: defineToken("#0A0A0A"),
     },
-
-    white: {
-      value: "#FFFFFF",
-    },
-
-    black: {
-      value: "#000000",
-    },
+    white: defineToken("#FFFFFF"),
+    black: defineToken("#000000"),
   },
-
   spacing: {
-    1: { value: "0.25rem" },
-    2: { value: "0.5rem" },
-    3: { value: "0.75rem" },
-    4: { value: "1rem" },
-    5: { value: "1.25rem" },
-    6: { value: "1.5rem" },
-    8: { value: "2rem" },
-    10: { value: "2.5rem" },
-    12: { value: "3rem" },
-    16: { value: "4rem" },
+    1: defineToken("0.25rem"),
+    2: defineToken("0.5rem"),
+    3: defineToken("0.75rem"),
+    4: defineToken("1rem"),
+    5: defineToken("1.25rem"),
+    6: defineToken("1.5rem"),
+    8: defineToken("2rem"),
+    10: defineToken("2.5rem"),
+    12: defineToken("3rem"),
+    16: defineToken("4rem"),
   },
-
   radii: {
-    none: { value: "0" },
-    sm: { value: "0.25rem" },
-    md: { value: "0.5rem" },
-    lg: { value: "0.75rem" },
-    xl: { value: "1rem" },
-    full: { value: "9999px" },
+    none: defineToken("0"),
+    sm: defineToken("0.25rem"),
+    md: defineToken("0.5rem"),
+    lg: defineToken("0.75rem"),
+    xl: defineToken("1rem"),
+    full: defineToken("9999px"),
   },
-
   fonts: {
-    body: {
-      value: "Inter, sans-serif",
-    },
-
-    heading: {
-      value: "Inter, sans-serif",
-    },
-
-    mono: {
-      value: "ui-monospace, SFMono-Regular, Menlo, monospace",
-    },
+    body: defineToken("Inter, sans-serif"),
+    heading: defineToken("Inter, sans-serif"),
+    mono: defineToken("ui-monospace, SFMono-Regular, Menlo, monospace"),
   },
-
   fontSizes: {
-    xs: { value: "0.75rem" },
-    sm: { value: "0.875rem" },
-    md: { value: "1rem" },
-    lg: { value: "1.125rem" },
-    xl: { value: "1.25rem" },
-    "2xl": { value: "1.5rem" },
-    "3xl": { value: "1.875rem" },
-    "4xl": { value: "2.25rem" },
+    xs: defineToken("0.75rem"),
+    sm: defineToken("0.875rem"),
+    md: defineToken("1rem"),
+    lg: defineToken("1.125rem"),
+    xl: defineToken("1.25rem"),
+    "2xl": defineToken("1.5rem"),
+    "3xl": defineToken("1.875rem"),
+    "4xl": defineToken("2.25rem"),
   },
-
   fontWeights: {
-    normal: { value: "400" },
-    medium: { value: "500" },
-    semibold: { value: "600" },
-    bold: { value: "700" },
+    normal: defineToken("400"),
+    medium: defineToken("500"),
+    semibold: defineToken("600"),
+    bold: defineToken("700"),
   },
-
   lineHeights: {
-    tight: { value: "1.25" },
-    normal: { value: "1.5" },
-    relaxed: { value: "1.75" },
+    tight: defineToken("1.25"),
+    normal: defineToken("1.5"),
+    relaxed: defineToken("1.75"),
   },
-
   letterSpacings: {
-    tighter: { value: "-0.025em" },
-    tight: { value: "-0.01em" },
-    normal: { value: "0" },
-    wide: { value: "0.025em" },
+    tighter: defineToken("-0.025em"),
+    tight: defineToken("-0.01em"),
+    normal: defineToken("0"),
+    wide: defineToken("0.025em"),
   },
-
   animations: {
-    "slide-in-right": {
-      value: "slide-in-right 0.5s ease-in-out",
-    },
+    "slide-in-right": defineToken("slide-in-right 0.5s ease-in-out"),
   },
 };

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   useEffect,
   useMemo,
@@ -12,6 +14,7 @@ import { defaultTheme } from "../theme/defaults/theme";
 import { resolveTokens, tokensToCssVars } from "./cssVariables";
 import { mergeTheme } from "@/theme/mergeTheme";
 import type { ColorMode, ThemeOverride } from "@/types/theme";
+import { isDev } from "@/utils/env";
 
 export interface UIProviderProps {
   children: ReactNode;
@@ -22,14 +25,12 @@ export interface UIProviderProps {
 }
 
 function useSystemPrefersDark() {
-  const [prefersDark, setPrefersDark] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches,
-  );
+  const [prefersDark, setPrefersDark] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    setPrefersDark(mediaQuery.matches);
 
     const handleChange = (event: MediaQueryListEvent) => {
       setPrefersDark(event.matches);
@@ -75,10 +76,7 @@ export function UIProvider({
   );
 
   useEffect(() => {
-    if (
-      import.meta.env.NODE_ENV !== "production" &&
-      !theme.sizes[fallbackSize]
-    ) {
+    if (isDev() && !theme.sizes[fallbackSize]) {
       console.error(
         `[kreativ-ui] fallbackSize="${fallbackSize}" ` +
           `is not a registered size in theme.sizes. ` +

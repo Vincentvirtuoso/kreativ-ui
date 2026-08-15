@@ -1,11 +1,7 @@
-import type {
-    ReactNode,
-} from "react";
+import { BaseProps } from "@/types";
 
 
-export interface FormFieldProps {
-    children: ReactNode;
-
+export interface FormFieldProps extends Omit<BaseProps, "unstyled">  {
     id?: string;
 
     error?: string;

@@ -1,30 +1,48 @@
 import { TextareaHTMLAttributes } from "react";
-import { InputSize, InputVariant } from "../Input/Input.types";
+import {  InputVariant } from "../Input/Input.types";
+import type { MarkdownEditorProps } from "../MarkdownEditor/MarkdownEditor.types";
+import {
+  BaseProps,
+  ClearableProps,
+  FullWidthProps,
+  SizeProps,
+  StateProps,
+  ValueProps,
+  VariantProps,
+} from "@/types";
 
 export type TextareaResize = "none" | "both" | "horizontal" | "vertical";
 
-export interface TextareaProps
-    extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "size"> {
-    value?: string;
-    defaultValue?: string;
+export interface TextareaCoreProps
+  extends
+    Omit<
+      TextareaHTMLAttributes<HTMLTextAreaElement>,
+      "size" | "defaultValue" | "value"
+    >,
+    Omit<BaseProps, "unstyled" | "style">,
+    SizeProps,
+    StateProps,
+    VariantProps<InputVariant>,
+    ClearableProps,
+    ValueProps,
+    FullWidthProps {
+  resize?: TextareaResize;
 
-    className?: string;
-    size?: InputSize;
-    fullWidth?: boolean;
-    resize?: TextareaResize;
-    variant?: InputVariant;
+  autoResize?: boolean;
+  minRows?: number;
+  maxRows?: number;
+  characterCounter?: boolean;
+  debounceDelay?: number;
+  trimOnBlur?: boolean;
 
-    autoResize?: boolean;
-    minRows?: number;
-    maxRows?: number;
-    clearable?: boolean;
-    onClear?: () => void;
-    characterCounter?: boolean;
-    debounceDelay?: number;
-    trimOnBlur?: boolean;
-
-    error?: boolean;
-    success?: boolean;
-    onValidate?: (value: string) => boolean | string;
-    onValueChange?: (newValue: string) => void;
+  onValidate?: (value: string) => boolean | string;
 }
+
+// Fixed union
+export type TextareaProps =
+  | ({ allowMarkdown?: false } & TextareaCoreProps)
+  | ({ allowMarkdown: true } & Omit<
+      TextareaCoreProps,
+      "resize" 
+    > &
+      MarkdownEditorProps);

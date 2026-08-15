@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useContext } from "react";
 import type { ReactNode } from "react";
 import type { InputVariant, InputSize } from "../Input/Input.types";

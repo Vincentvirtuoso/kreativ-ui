@@ -149,8 +149,12 @@ tokens.spacing.md       // → 16px
 **Semantic tokens** describe UI meaning and can reference primitive tokens or direct values:
 
 ```ts
-semanticTokens.colors.brand = { value: { light: "{colors.blue.500}", dark: "{colors.blue.400}" } }
-semanticTokens.colors.text = { value: { light: "{colors.gray.900}", dark: "{colors.gray.50}" } }
+semanticTokens.colors.brand = {
+  value: { light: "{colors.blue.500}", dark: "{colors.blue.400}" },
+};
+semanticTokens.colors.text = {
+  value: { light: "{colors.gray.900}", dark: "{colors.gray.50}" },
+};
 ```
 
 The runtime engine resolves these references and applies the correct values based on the active colour mode.
@@ -249,103 +253,801 @@ Supported transition types: `none`, `fade`, `slide`, `scale`, `rotate`.
 
 ## Props
 
-| Prop            | Type                                                              | Default             | Description                                 |
-| --------------- | ----------------------------------------------------------------- | ------------------- | ------------------------------------------- |
-| `variant`       | `ThemeTogglerVariant`                                             | `"ghost"`           | Variant for inactive buttons                |
-| `activeVariant` | `ThemeTogglerVariant`                                             | `"solid"`           | Variant for active button                   |
-| `size`          | `"xs" \| "sm" \| "md" \| "lg" \| "xl"`                           | `"sm"`              | Button size                                 |
-| `iconOnly`      | `boolean`                                                         | `false`             | Hide labels, show only icons                |
-| `allowSystem`   | `boolean`                                                         | `false`             | Show system theme option                    |
-| `orientation`   | `"horizontal" \| "vertical"`                                      | `"horizontal"`      | Layout direction                            |
-| `rounded`       | `boolean`                                                         | `true`              | Rounded container corners                   |
-| `unstyled`      | `boolean`                                                         | `false`             | Remove wrapper styles                       |
-| `display`       | `"buttons" \| "cycle"`                                            | `"buttons"`         | Show all buttons or a single cycling button |
-| `transition`    | `{ type?: TransitionType; duration?: number; easing?: string }`   | `{ type: "none" }`  | Animation configuration for cycle mode      |
-| `labels`        | `Partial<Record<"light" \| "dark" \| "system", string>>`          | –                   | Override labels                             |
-| `icons`         | `Partial<Record<"light" \| "dark" \| "system", ReactNode>>`       | –                   | Override icons                              |
-| `buttonProps`   | `Partial<ButtonProps>`                                            | –                   | Props passed to every internal button       |
-| `className`     | `string`                                                          | –                   | Additional wrapper class                    |
+| Prop            | Type                                                            | Default            | Description                                 |
+| --------------- | --------------------------------------------------------------- | ------------------ | ------------------------------------------- |
+| `variant`       | `ThemeTogglerVariant`                                           | `"ghost"`          | Variant for inactive buttons                |
+| `activeVariant` | `ThemeTogglerVariant`                                           | `"solid"`          | Variant for active button                   |
+| `size`          | `"xs" \| "sm" \| "md" \| "lg" \| "xl"`                          | `"sm"`             | Button size                                 |
+| `iconOnly`      | `boolean`                                                       | `false`            | Hide labels, show only icons                |
+| `allowSystem`   | `boolean`                                                       | `false`            | Show system theme option                    |
+| `orientation`   | `"horizontal" \| "vertical"`                                    | `"horizontal"`     | Layout direction                            |
+| `rounded`       | `boolean`                                                       | `true`             | Rounded container corners                   |
+| `unstyled`      | `boolean`                                                       | `false`            | Remove wrapper styles                       |
+| `display`       | `"buttons" \| "cycle"`                                          | `"buttons"`        | Show all buttons or a single cycling button |
+| `transition`    | `{ type?: TransitionType; duration?: number; easing?: string }` | `{ type: "none" }` | Animation configuration for cycle mode      |
+| `labels`        | `Partial<Record<"light" \| "dark" \| "system", string>>`        | –                  | Override labels                             |
+| `icons`         | `Partial<Record<"light" \| "dark" \| "system", ReactNode>>`     | –                  | Override icons                              |
+| `buttonProps`   | `Partial<ButtonProps>`                                          | –                  | Props passed to every internal button       |
+| `className`     | `string`                                                        | –                  | Additional wrapper class                    |
 
 ---
 
-#  Button
+# Button
 
-A versatile button with support for variants, sizes, loading states, icons, and full‑width.
+A versatile, theme-aware button component with support for variants, sizes, typography, loading states, icons, full-width layouts, and custom rendering.
+
+`Button` is designed to work with Kreativ UI's recipe, sizing, and typography systems, allowing its appearance to be controlled centrally through the active theme.
+
+---
 
 ## Basic Usage
 
 ```tsx
+import { Button } from "@splenddev/kreativ-ui";
+
 <Button>Click me</Button>
 ```
 
+By default, the Button uses:
+
+* `variant="solid"`
+* `color="brand"`
+* `size="md"`
+* `typography="body"`
+* `fullWidth={false}`
+* `isLoading={false}`
+* `disabled={false}`
+
+---
+
 ## Variants
+
+Use `variant` to control the Button's visual treatment.
 
 ```tsx
 <Button variant="solid">Solid</Button>
-<Button variant="outline">Outline</Button>
-<Button variant="ghost">Ghost</Button>
-<Button variant="soft">Soft</Button>
-<Button variant="destructive">Delete</Button>
-<Button variant="success">Success</Button>
-<Button variant="link">Learn more</Button>
+
+<Button variant="outline">
+  Outline
+</Button>
+
+<Button variant="ghost">
+  Ghost
+</Button>
+
+<Button variant="soft">
+  Soft
+</Button>
+
+<Button variant="link">
+  Learn more
+</Button>
 ```
+
+Variants are defined through the Button recipe and can be customized through the theme.
+
+---
+
+## Colors
+
+The `color` prop controls the semantic color used by the Button recipe.
+
+```tsx
+
+<Button color="brand">
+  Brand
+</Button>
+
+<Button color="success">
+  Success
+</Button>
+
+<Button variant="destructive">
+  Delete
+</Button>
+
+<Button variant="success">
+  Success
+</Button>
+```
+
+Available colors depend on the configured Button recipe and theme.
+
+---
 
 ## Sizes
 
+Buttons support the standard Kreativ UI size scale:
+
 ```tsx
-<Button size="xs">Extra Small</Button>
-<Button size="sm">Small</Button>
-<Button size="md">Medium</Button>
-<Button size="lg">Large</Button>
-<Button size="xl">Extra Large</Button>
+<Button size="xs">
+  Extra Small
+</Button>
+
+<Button size="sm">
+  Small
+</Button>
+
+<Button size="md">
+  Medium
+</Button>
+
+<Button size="lg">
+  Large
+</Button>
+
+<Button size="xl">
+  Extra Large
+</Button>
 ```
+
+The size system controls layout-related properties such as:
+
+* Height
+* Horizontal padding
+* Gap
+* Icon size
+* Border radius
+
+Typography is handled independently by the `typography` prop.
+
+---
+
+## Custom Sizes
+
+Button sizes are theme-driven.
+
+You can define additional sizes through the theme and reference them by name.
+
+```tsx
+<Button size="custom">
+  Custom Size
+</Button>
+```
+
+For example:
+
+```ts
+const theme = {
+  sizes: {
+    custom: {
+      height: "3.5rem",
+      paddingX: "2rem",
+      fontSize: "1rem",
+      gap: "0.75rem",
+      iconSize: "1.25rem",
+      radius: "1.25rem",
+    },
+  },
+};
+```
+
+This allows applications to extend the Button's sizing system without modifying the component itself.
+
+---
+
+# Typography
+
+Button typography is controlled independently from its size.
+
+```tsx
+<Button typography="body">
+  Default
+</Button>
+
+<Button typography="bodySmall">
+  Small Text
+</Button>
+
+<Button typography="headingSmall">
+  Heading Style
+</Button>
+```
+
+The `typography` prop references a typography preset from the active Kreativ UI theme.
+
+For example:
+
+```tsx
+<Button
+  size="lg"
+  typography="bodySmall"
+>
+  Large Button, Small Typography
+</Button>
+```
+
+Here:
+
+* `size="lg"` controls the Button's dimensions.
+* `typography="bodySmall"` controls the text appearance.
+
+This separation makes the system predictable and themeable.
+
+See the [Typography documentation](./typography.md) for more information.
+
+---
 
 ## Loading State
 
+Use `isLoading` when an operation is in progress.
+
 ```tsx
-<Button isLoading>Saving...</Button>
+<Button isLoading>
+  Saving...
+</Button>
 ```
 
-## Icons
+When loading:
+
+* A loading indicator is displayed.
+* The Button becomes disabled.
+* The Button receives `aria-busy="true"`.
+* Normal icon rendering is suppressed while the loading indicator is displayed.
+
+You can also use loading without text:
 
 ```tsx
-<Button leftIcon={<SearchIcon />}>Search</Button>
-<Button rightIcon={<ArrowRightIcon />}>Continue</Button>
-```
-
-## Icon Only
-
-```tsx
-<Button iconOnly aria-label="Search">
+<Button
+  isLoading
+  iconOnly
+  aria-label="Loading"
+>
   <SearchIcon />
 </Button>
 ```
 
-## Full Width
+---
+
+# Icons
+
+Buttons support icons on either side of their content.
+
+### Left Icon
 
 ```tsx
-<Button fullWidth>Continue</Button>
+<Button leftIcon={<SearchIcon />}>
+  Search
+</Button>
 ```
 
-## Custom Sizes via Theme
+### Right Icon
 
-Define additional sizes in the theme (as shown in the Theming section) and use them with `size` prop.
+```tsx
+<Button rightIcon={<ArrowRightIcon />}>
+  Continue
+</Button>
+```
 
-## Props
+### Both Icons
 
-| Prop                     | Type                                                   | Default  | Description                                 |
-| ------------------------ | ------------------------------------------------------ | -------- | ------------------------------------------- |
-| `variant`                | `"solid" \| "outline" \| "ghost" \| "soft" \| "destructive" \| "success" \| "link"` | `"solid"` | Visual style                                |
-| `size`                   | `"xs" \| "sm" \| "md" \| "lg" \| "xl" \| string`      | `"md"`    | Size (theme‑driven; custom strings allowed) |
-| `isLoading`              | `boolean`                                              | `false`   | Shows spinner and disables                  |
-| `leftIcon` / `rightIcon` | `ReactNode`                                            | –         | Icon elements                               |
-| `fullWidth`              | `boolean`                                              | `false`   | Stretch to container width                  |
-| `disabled`               | `boolean`                                              | `false`   | Disables interactions                       |
-| `iconOnly`               | `boolean`                                              | `false`   | Remove padding for icon‑only layout         |
+```tsx
+<Button
+  leftIcon={<DownloadIcon />}
+  rightIcon={<ArrowRightIcon />}
+>
+  Download
+</Button>
+```
 
-All standard `<button>` props are forwarded.
+Icon sizing is automatically derived from the Button's active size.
+
+For example:
+
+```text
+size="sm"
+    ↓
+sm.iconSize
+    ↓
+icon dimensions
+
+size="lg"
+    ↓
+lg.iconSize
+    ↓
+larger icon dimensions
+```
 
 ---
+
+# Icon Only
+
+Use `iconOnly` for buttons containing only an icon.
+
+```tsx
+<Button
+  iconOnly
+  aria-label="Search"
+>
+  <SearchIcon />
+</Button>
+```
+
+`iconOnly` changes the Button's layout so that normal horizontal content padding is not applied.
+
+### Accessibility
+
+Always provide an accessible label when the Button contains no visible text:
+
+```tsx
+<Button
+  iconOnly
+  aria-label="Open settings"
+>
+  <SettingsIcon />
+</Button>
+```
+
+---
+
+# Full Width
+
+Use `fullWidth` to make the Button fill its available horizontal space.
+
+```tsx
+<Button fullWidth>
+  Continue
+</Button>
+```
+
+This is useful for:
+
+* Forms
+* Mobile layouts
+* Authentication screens
+* Dialog actions
+* Card actions
+
+---
+
+# Disabled
+
+Buttons can be disabled using the standard `disabled` prop.
+
+```tsx
+<Button disabled>
+  Unavailable
+</Button>
+```
+
+A disabled Button cannot be interacted with.
+
+Loading automatically disables the Button as well:
+
+```tsx
+<Button isLoading>
+  Saving...
+</Button>
+```
+
+is effectively treated as disabled while the loading state is active.
+
+---
+
+# Custom Rendering
+
+The `render` prop provides an advanced escape hatch for rendering the Button's resolved styles and content using another element or component.
+
+```tsx
+<Button
+  render={(props) => (
+    <a
+      {...props}
+      href="/templates"
+    >
+      Templates
+    </a>
+  )}
+>
+  Templates
+</Button>
+```
+
+The render function receives the resolved Button properties:
+
+```ts
+interface ButtonRenderProps {
+  className?: string;
+  style?: React.CSSProperties;
+  disabled?: boolean;
+  "aria-busy"?: boolean;
+  children?: React.ReactNode;
+}
+```
+
+This means the custom element automatically receives the Button's:
+
+* Recipe classes
+* Resolved typography
+* Resolved size styles
+* Loading state
+* Button content
+
+### Using a Custom Component
+
+The same pattern can be used with another component:
+
+```tsx
+<Button
+  render={(props) => (
+    <CustomLink
+      {...props}
+      href="/templates"
+    />
+  )}
+>
+  Templates
+</Button>
+```
+
+---
+
+## Next.js Server Component Note
+
+The `render` prop contains a function.
+
+Because functions cannot cross the Next.js Server Component → Client Component boundary, `render` should be used from a Client Component.
+
+### ❌ This can fail
+
+```tsx
+// page.tsx
+
+import { Button } from "@splenddev/kreativ-ui";
+
+export default function Page() {
+  return (
+    <Button
+      render={(props) => (
+        <a {...props} href="/templates">
+          Templates
+        </a>
+      )}
+    >
+      Templates
+    </Button>
+  );
+}
+```
+
+### ✅ Create the render function in a Client Component
+
+```tsx
+"use client";
+
+import { Button } from "@splenddev/kreativ-ui";
+
+export function TemplatesButton() {
+  return (
+    <Button
+      render={(props) => (
+        <a {...props} href="/templates">
+          Templates
+        </a>
+      )}
+    >
+      Templates
+    </Button>
+  );
+}
+```
+
+The Client Component can then be rendered from your Server Component:
+
+```tsx
+import { TemplatesButton } from "./TemplatesButton";
+
+export default function Page() {
+  return <TemplatesButton />;
+}
+```
+
+> **Note:** `render` is intentionally retained as an advanced rendering API. For ordinary Buttons, simply use `<Button>`.
+
+---
+
+# Combining Features
+
+Button features can be combined.
+
+```tsx
+<Button
+  variant="outline"
+  color="brand"
+  size="lg"
+  typography="body"
+  leftIcon={<DownloadIcon />}
+  fullWidth
+>
+  Download
+</Button>
+```
+
+Another example:
+
+```tsx
+<Button
+  variant="solid"
+  size="sm"
+  typography="bodySmall"
+  isLoading
+>
+  Processing...
+</Button>
+```
+
+---
+
+# Theming
+
+Button behavior and appearance are driven by the active Kreativ UI theme.
+
+The Button recipe controls visual variants:
+
+```ts
+const theme = {
+  recipes: {
+    Button: {
+      // recipe configuration
+    },
+  },
+};
+```
+
+The size system controls dimensions:
+
+```ts
+const theme = {
+  sizes: {
+    // ...
+  },
+};
+```
+
+Typography controls text styling:
+
+```ts
+const theme = {
+  typography: {
+    body: {
+      fontFamily: "{fonts.body}",
+      fontSize: "{fontSizes.md}",
+      fontWeight: "{fontWeights.normal}",
+      lineHeight: "{lineHeights.normal}",
+    },
+  },
+};
+```
+
+This gives the Button three independent styling layers:
+
+```text
+Button
+│
+├── Recipe
+│   └── variant + color
+│
+├── Size
+│   └── dimensions + spacing
+│
+└── Typography
+    └── font + text styling
+```
+
+---
+
+# Props
+
+| Prop         | Type                                         |   Default | Description                                              |
+| ------------ | -------------------------------------------- | --------: | -------------------------------------------------------- |
+| `variant`    | `ButtonVariant`                              | `"solid"` | Controls the Button's visual variant.                    |
+| `color`      | `ButtonColor`                                | `"brand"` | Controls the Button's semantic color.                    |
+| `size`       | `ButtonSize`                                 |    `"md"` | Controls Button dimensions and icon sizing.              |
+| `typography` | `string`                                     |  `"body"` | Name of the typography preset used for Button text.      |
+| `isLoading`  | `boolean`                                    |   `false` | Displays the loading indicator and disables interaction. |
+| `leftIcon`   | `ReactNode`                                  |         — | Icon displayed before the Button content.                |
+| `rightIcon`  | `ReactNode`                                  |         — | Icon displayed after the Button content.                 |
+| `iconOnly`   | `boolean`                                    |   `false` | Optimizes the Button layout for icon-only content.       |
+| `fullWidth`  | `boolean`                                    |   `false` | Makes the Button fill its available width.               |
+| `disabled`   | `boolean`                                    |   `false` | Disables interaction with the Button.                    |
+| `render`     | `(props: ButtonRenderProps) => ReactElement` |         — | Advanced custom rendering escape hatch.                  |
+| `className`  | `string`                                     |         — | Additional CSS classes.                                  |
+| `style`      | `React.CSSProperties`                        |         — | Inline style overrides.                                  |
+| `children`   | `ReactNode`                                  |         — | Button content.                                          |
+
+All applicable standard HTML `<button>` attributes and event handlers are also supported.
+
+---
+
+# `ButtonRenderProps`
+
+The `render` callback receives:
+
+```ts
+interface ButtonRenderProps {
+  className?: string;
+  style?: React.CSSProperties;
+  disabled?: boolean;
+  "aria-disabled"?: boolean;
+  "aria-busy"?: boolean;
+  children?: React.ReactNode;
+}
+```
+
+Example:
+
+```tsx
+<Button
+  render={(props) => (
+    <a
+      {...props}
+      href="/templates"
+    />
+  )}
+>
+  Templates
+</Button>
+```
+
+---
+
+# Styling Precedence
+
+Button styling follows a predictable order:
+
+```text
+Theme Recipe
+      ↓
+Component Size
+      ↓
+Typography
+      ↓
+className
+      ↓
+style
+```
+
+Typography controls text presentation:
+
+```text
+fontFamily
+fontSize
+fontWeight
+lineHeight
+letterSpacing
+```
+
+Size controls layout:
+
+```text
+height
+padding
+gap
+iconSize
+radius
+```
+
+This separation allows you to change typography without unexpectedly changing Button dimensions.
+
+---
+
+# Accessibility
+
+Buttons should always have an accessible name.
+
+For text Buttons:
+
+```tsx
+<Button>
+  Save changes
+</Button>
+```
+
+For icon-only Buttons:
+
+```tsx
+<Button
+  iconOnly
+  aria-label="Search"
+>
+  <SearchIcon />
+</Button>
+```
+
+When using `isLoading`, the Button communicates its busy state through:
+
+```html
+aria-busy="true"
+```
+
+Always provide meaningful labels for actions whose visible content does not describe their purpose.
+
+---
+
+# Recommended Usage
+
+### Use variants for visual intent
+
+```tsx
+<Button variant="solid" color="destructive">
+  Delete account
+</Button>
+```
+
+### Use sizes for component dimensions
+
+```tsx
+<Button size="sm">
+  Cancel
+</Button>
+```
+
+### Use typography for text presentation
+
+```tsx
+<Button typography="bodySmall">
+  Cancel
+</Button>
+```
+
+### Use `style` for exceptional one-off overrides
+
+```tsx
+<Button
+  style={{
+    letterSpacing: "0.02em",
+  }}
+>
+  Continue
+</Button>
+```
+
+For repeated styles, prefer creating a typography preset instead.
+
+---
+
+# Complete Example
+
+```tsx
+import {
+  Button,
+} from "@splenddev/kreativ-ui";
+
+function Actions() {
+  return (
+    <div className="flex gap-3">
+      <Button
+        variant="outline"
+        size="sm"
+        typography="bodySmall"
+      >
+        Cancel
+      </Button>
+
+      <Button
+        variant="solid"
+        color="brand"
+        size="sm"
+        typography="bodySmall"
+        rightIcon={<ArrowRightIcon />}
+      >
+        Continue
+      </Button>
+
+      <Button
+        variant="solid"
+        color="destructive"
+        size="sm"
+        typography="bodySmall"
+      >
+        Delete
+      </Button>
+    </div>
+  );
+}
+```
+
+The result is a Button that combines **recipe styling, theme-driven sizing, centralized typography, icons, loading behavior, accessibility, and custom rendering** without requiring those concerns to be manually managed by the consumer.
 
 # 🧩 Input & FormField
 
@@ -362,7 +1064,7 @@ A flexible text input with support for variants, sizes, validation states, adorn
 ```tsx
 import { Input } from "@splenddev/kreativ-ui";
 
-<Input placeholder="Enter your name" />
+<Input placeholder="Enter your name" />;
 ```
 
 ### Variants
@@ -484,30 +1186,30 @@ import { FormField, Input } from "@splenddev/kreativ-ui";
     <Input kind="email" placeholder="you@company.com" />
   </FormField.Control>
   <FormField.Message>Enter a valid email.</FormField.Message>
-</FormField>
+</FormField>;
 ```
 
 ### Subcomponents
 
-| Component            | Purpose                                                       |
-| -------------------- | ------------------------------------------------------------- |
-| `FormField`          | Provides context, manages `id` and accessibility relationships |
-| `FormField.Label`    | Renders a label associated with the control via `htmlFor`      |
-| `FormField.Description` | Renders helper text, linked via `aria-describedby`           |
-| `FormField.Control`  | Injects the field ID and accessibility props into its child    |
-| `FormField.Message`  | Displays a validation message, linked via `aria-describedby`  |
+| Component               | Purpose                                                        |
+| ----------------------- | -------------------------------------------------------------- |
+| `FormField`             | Provides context, manages `id` and accessibility relationships |
+| `FormField.Label`       | Renders a label associated with the control via `htmlFor`      |
+| `FormField.Description` | Renders helper text, linked via `aria-describedby`             |
+| `FormField.Control`     | Injects the field ID and accessibility props into its child    |
+| `FormField.Message`     | Displays a validation message, linked via `aria-describedby`   |
 
 ### Field‑Level Props
 
 `FormField` accepts:
 
-| Prop          | Type        | Default        | Description                                       |
-| ------------- | ----------- | -------------- | ------------------------------------------------- |
-| `id`          | `string`    | auto‑generated | Explicit `id` for the control                     |
-| `error`       | `string`    | –              | Validation error message (overrides description)  |
-| `required`    | `boolean`   | `false`        | Shows required indicator and sets `aria-required` |
-| `className`   | `string`    | –              | Additional wrapper classes                        |
-| `children`    | `ReactNode` | –              | The field content (typically subcomponents)       |
+| Prop        | Type        | Default        | Description                                       |
+| ----------- | ----------- | -------------- | ------------------------------------------------- |
+| `id`        | `string`    | auto‑generated | Explicit `id` for the control                     |
+| `error`     | `string`    | –              | Validation error message (overrides description)  |
+| `required`  | `boolean`   | `false`        | Shows required indicator and sets `aria-required` |
+| `className` | `string`    | –              | Additional wrapper classes                        |
+| `children`  | `ReactNode` | –              | The field content (typically subcomponents)       |
 
 ### Error Handling
 
@@ -547,13 +1249,11 @@ function EmailField() {
   return (
     <FormField id="email" required error={error}>
       <FormField.Label>Email address</FormField.Label>
-      <FormField.Description>We'll only send receipts here.</FormField.Description>
+      <FormField.Description>
+        We'll only send receipts here.
+      </FormField.Description>
       <FormField.Control>
-        <Input
-          kind="email"
-          placeholder="you@company.com"
-          onBlur={handleBlur}
-        />
+        <Input kind="email" placeholder="you@company.com" onBlur={handleBlur} />
       </FormField.Control>
       {error && <FormField.Message>{error}</FormField.Message>}
     </FormField>
@@ -633,45 +1333,45 @@ When the `error` or `success` state changes on an `Input`, the component briefly
 
 ### Input Props
 
-| Prop              | Type                                | Default     | Description                                                                 |
-| ----------------- | ----------------------------------- | ----------- | --------------------------------------------------------------------------- |
-| `variant`         | `"outline" \| "filled" \| "ghost"`  | `"outline"` | Visual style                                                                |
-| `inputSize`       | `"sm" \| "md" \| "lg"`              | `"md"`      | Height, padding, font size                                                  |
-| `kind`            | `InputKind`                         | `"text"`    | Sets defaults for `type`, `inputMode`, `autoComplete`, placeholder, and icon|
-| `hideKindIcon`    | `boolean`                           | `false`     | Suppress the default icon from `kind`                                       |
-| `error`           | `boolean`                           | `false`     | Danger styling and `aria-invalid`                                           |
-| `success`         | `boolean`                           | `false`     | Success styling                                                             |
-| `disabled`        | `boolean`                           | `false`     | Disables the input                                                          |
-| `isLoading`       | `boolean`                           | `false`     | Shows spinner and marks read‑only                                           |
-| `clearable`       | `boolean`                           | `false`     | Shows clear button when value is present                                    |
-| `onClear`         | `() => void`                        | –           | Called after clear                                                          |
-| `rounded`         | `boolean`                           | `false`     | Fully rounded wrapper                                                       |
-| `fullWidth`       | `boolean`                           | `true`      | Stretch to container width                                                  |
-| `startIcon`  | `ReactNode`                         | –           | Content before the input (e.g., icon)                                       |
-| `endIcon`    | `ReactNode`                         | –           | Content after the input (e.g., icon)                                        |
-| `className`       | `string`                            | –           | Additional wrapper class                                                    |
-| `inputClassName`  | `string`                            | –           | Additional class for the native input element                               |
+| Prop             | Type                               | Default     | Description                                                                  |
+| ---------------- | ---------------------------------- | ----------- | ---------------------------------------------------------------------------- |
+| `variant`        | `"outline" \| "filled" \| "ghost"` | `"outline"` | Visual style                                                                 |
+| `inputSize`      | `"sm" \| "md" \| "lg"`             | `"md"`      | Height, padding, font size                                                   |
+| `kind`           | `InputKind`                        | `"text"`    | Sets defaults for `type`, `inputMode`, `autoComplete`, placeholder, and icon |
+| `hideKindIcon`   | `boolean`                          | `false`     | Suppress the default icon from `kind`                                        |
+| `error`          | `boolean`                          | `false`     | Danger styling and `aria-invalid`                                            |
+| `success`        | `boolean`                          | `false`     | Success styling                                                              |
+| `disabled`       | `boolean`                          | `false`     | Disables the input                                                           |
+| `isLoading`      | `boolean`                          | `false`     | Shows spinner and marks read‑only                                            |
+| `clearable`      | `boolean`                          | `false`     | Shows clear button when value is present                                     |
+| `onClear`        | `() => void`                       | –           | Called after clear                                                           |
+| `rounded`        | `boolean`                          | `false`     | Fully rounded wrapper                                                        |
+| `fullWidth`      | `boolean`                          | `true`      | Stretch to container width                                                   |
+| `startIcon`      | `ReactNode`                        | –           | Content before the input (e.g., icon)                                        |
+| `endIcon`        | `ReactNode`                        | –           | Content after the input (e.g., icon)                                         |
+| `className`      | `string`                           | –           | Additional wrapper class                                                     |
+| `inputClassName` | `string`                           | –           | Additional class for the native input element                                |
 
 All standard `<input>` attributes (except `size`) are forwarded to the underlying `<input>`.
 
 ### FormField Props
 
-| Prop          | Type        | Default        | Description                                       |
-| ------------- | ----------- | -------------- | ------------------------------------------------- |
-| `id`          | `string`    | auto‑generated | Explicit `id` for the control                     |
-| `error`       | `string`    | –              | Validation error message (overrides description)  |
-| `required`    | `boolean`   | `false`        | Shows required indicator and sets `aria-required` |
-| `className`   | `string`    | –              | Additional wrapper classes                        |
-| `children`    | `ReactNode` | –              | The field content (typically subcomponents)       |
+| Prop        | Type        | Default        | Description                                       |
+| ----------- | ----------- | -------------- | ------------------------------------------------- |
+| `id`        | `string`    | auto‑generated | Explicit `id` for the control                     |
+| `error`     | `string`    | –              | Validation error message (overrides description)  |
+| `required`  | `boolean`   | `false`        | Shows required indicator and sets `aria-required` |
+| `className` | `string`    | –              | Additional wrapper classes                        |
+| `children`  | `ReactNode` | –              | The field content (typically subcomponents)       |
 
 ### FormField Subcomponents
 
-| Component            | Description                                                       |
-| -------------------- | ----------------------------------------------------------------- |
-| `FormField.Label`    | Renders a label associated with the control via `htmlFor`         |
-| `FormField.Description` | Renders helper text, linked via `aria-describedby`             |
-| `FormField.Control`  | Injects the field ID and accessibility props into its child       |
-| `FormField.Message`  | Displays a validation message, linked via `aria-describedby`      |
+| Component               | Description                                                  |
+| ----------------------- | ------------------------------------------------------------ |
+| `FormField.Label`       | Renders a label associated with the control via `htmlFor`    |
+| `FormField.Description` | Renders helper text, linked via `aria-describedby`           |
+| `FormField.Control`     | Injects the field ID and accessibility props into its child  |
+| `FormField.Message`     | Displays a validation message, linked via `aria-describedby` |
 
 ---
 
@@ -779,22 +1479,22 @@ Use `defaultValue` for an uncontrolled component.
 
 ## Props
 
-| Prop            | Type                                       | Default     | Description                                                      |
-| --------------- | ------------------------------------------ | ----------- | ---------------------------------------------------------------- |
-| `value`         | `string`                                   | –           | Controlled selected value                                        |
-| `defaultValue`  | `string`                                   | –           | Uncontrolled initial value                                       |
-| `onValueChange` | `(value?: string) => void`                 | –           | Called when selection changes                                    |
-| `placeholder`   | `string`                                   | –           | Text shown when no value is selected                             |
-| `required`      | `boolean`                                  | `false`     | Marks the field as required (`aria-required`)                    |
-| `name`          | `string`                                   | –           | Name for the hidden input used in form submissions               |
-| `disabled`      | `boolean`                                  | `false`     | Disables the entire select                                       |
-| `clearable`     | `boolean`                                  | `false`     | Shows a clear button (removes selection)                         |
-| `variant`       | `"outline" \| "filled" \| "ghost"`         | `"outline"` | Visual style                                                     |
-| `size`          | `"sm" \| "md" \| "lg"`                     | `"md"`      | Size of the trigger and content                                  |
-| `error`         | `boolean`                                  | `false`     | Shows error state and sets `aria-invalid="true"`                 |
-| `success`       | `boolean`                                  | `false`     | Shows success state                                              |
-| `rounded`       | `boolean`                                  | `false`     | Applies fully rounded corners to the trigger                     |
-| `className`     | `string`                                   | –           | Additional class names for the root container                    |
+| Prop            | Type                               | Default     | Description                                        |
+| --------------- | ---------------------------------- | ----------- | -------------------------------------------------- |
+| `value`         | `string`                           | –           | Controlled selected value                          |
+| `defaultValue`  | `string`                           | –           | Uncontrolled initial value                         |
+| `onValueChange` | `(value?: string) => void`         | –           | Called when selection changes                      |
+| `placeholder`   | `string`                           | –           | Text shown when no value is selected               |
+| `required`      | `boolean`                          | `false`     | Marks the field as required (`aria-required`)      |
+| `name`          | `string`                           | –           | Name for the hidden input used in form submissions |
+| `disabled`      | `boolean`                          | `false`     | Disables the entire select                         |
+| `clearable`     | `boolean`                          | `false`     | Shows a clear button (removes selection)           |
+| `variant`       | `"outline" \| "filled" \| "ghost"` | `"outline"` | Visual style                                       |
+| `size`          | `"sm" \| "md" \| "lg"`             | `"md"`      | Size of the trigger and content                    |
+| `error`         | `boolean`                          | `false`     | Shows error state and sets `aria-invalid="true"`   |
+| `success`       | `boolean`                          | `false`     | Shows success state                                |
+| `rounded`       | `boolean`                          | `false`     | Applies fully rounded corners to the trigger       |
+| `className`     | `string`                           | –           | Additional class names for the root container      |
 
 ---
 
@@ -823,23 +1523,23 @@ Renders the current selection or the placeholder. The label is derived from the 
 The dropdown container. Renders its children (items, groups, labels) inside a listbox.
 
 ```tsx
-<Select.Content>
-  {/* items */}
-</Select.Content>
+<Select.Content>{/* items */}</Select.Content>
 ```
 
 ### `Select.Item`
 
 A single selectable option.
 
-| Prop       | Type      | Default | Description                       |
-| ---------- | --------- | ------- | --------------------------------- |
-| `value`    | `string`  | required | Value of the option               |
-| `disabled` | `boolean` | `false` | Disables this option              |
-| `children` | `ReactNode` | –     | Display label                     |
+| Prop       | Type        | Default  | Description          |
+| ---------- | ----------- | -------- | -------------------- |
+| `value`    | `string`    | required | Value of the option  |
+| `disabled` | `boolean`   | `false`  | Disables this option |
+| `children` | `ReactNode` | –        | Display label        |
 
 ```tsx
-<Select.Item value="react" disabled>React</Select.Item>
+<Select.Item value="react" disabled>
+  React
+</Select.Item>
 ```
 
 ### `Select.Group`
@@ -890,17 +1590,17 @@ This ensures full ARIA support with no manual configuration.
 
 ## Keyboard Navigation
 
-| Key         | Open state | Closed state                         |
-| ----------- | ---------- | ------------------------------------ |
-| `ArrowDown` | Next item  | Opens the dropdown                    |
-| `ArrowUp`   | Previous item | Opens the dropdown (or no-op)      |
-| `Home`      | First item | Opens and selects first? (implementation) |
-| `End`       | Last item  | Opens and selects last?              |
-| `Enter`     | Select active item | Opens the dropdown             |
-| `Space`     | Select active item | Opens the dropdown             |
-| `Escape`    | Closes dropdown | –                                   |
-| `Backspace` | –          | Clears selection (if `clearable`)    |
-| `Delete`    | –          | Clears selection (if `clearable`)    |
+| Key         | Open state         | Closed state                              |
+| ----------- | ------------------ | ----------------------------------------- |
+| `ArrowDown` | Next item          | Opens the dropdown                        |
+| `ArrowUp`   | Previous item      | Opens the dropdown (or no-op)             |
+| `Home`      | First item         | Opens and selects first? (implementation) |
+| `End`       | Last item          | Opens and selects last?                   |
+| `Enter`     | Select active item | Opens the dropdown                        |
+| `Space`     | Select active item | Opens the dropdown                        |
+| `Escape`    | Closes dropdown    | –                                         |
+| `Backspace` | –                  | Clears selection (if `clearable`)         |
+| `Delete`    | –                  | Clears selection (if `clearable`)         |
 
 > When the dropdown is open, `ArrowDown`/`ArrowUp` navigate through items. `Enter`/`Space` select the active (highlighted) item and close the dropdown. `Escape` closes the dropdown without selection.
 
@@ -934,7 +1634,9 @@ When `clearable` is `true`, a clear button appears inside the trigger when a val
 Individual items can be disabled using the `disabled` prop. They are not selectable via mouse or keyboard navigation and are announced as disabled by screen readers.
 
 ```tsx
-<Select.Item value="legacy" disabled>Legacy</Select.Item>
+<Select.Item value="legacy" disabled>
+  Legacy
+</Select.Item>
 ```
 
 Disabled items are skipped when navigating with arrow keys.
@@ -973,7 +1675,9 @@ When used inside a `FormField`, the Select automatically inherits the field’s 
 ```tsx
 <FormField required error="Please select a country">
   <FormField.Label>Country</FormField.Label>
-  <FormField.Description>Select your country of residence.</FormField.Description>
+  <FormField.Description>
+    Select your country of residence.
+  </FormField.Description>
 
   <Select>
     <Select.Trigger>
@@ -1032,13 +1736,13 @@ All styling is driven by the runtime theme, so overriding the visual appearance 
 
 The Select exposes several data attributes for styling or testing:
 
-| Attribute          | Element         | Values                     | Description                              |
-| ------------------ | --------------- | -------------------------- | ---------------------------------------- |
-| `data-state`       | `Select.Trigger` | `"open"`, `"closed"`       | Current dropdown state                   |
-| `data-state`       | `Select.Item`   | `"selected"`, `"unselected"` | Selection state of the item            |
-| `data-active`      | `Select.Item`   | present when highlighted   | Keyboard‑focused item (active)           |
-| `data-disabled`    | `Select.Item`   | present when disabled      | Disabled state                           |
-| `data-invalid`     | `Select.Trigger` | present when error        | Error state                              |
+| Attribute       | Element          | Values                       | Description                    |
+| --------------- | ---------------- | ---------------------------- | ------------------------------ |
+| `data-state`    | `Select.Trigger` | `"open"`, `"closed"`         | Current dropdown state         |
+| `data-state`    | `Select.Item`    | `"selected"`, `"unselected"` | Selection state of the item    |
+| `data-active`   | `Select.Item`    | present when highlighted     | Keyboard‑focused item (active) |
+| `data-disabled` | `Select.Item`    | present when disabled        | Disabled state                 |
+| `data-invalid`  | `Select.Trigger` | present when error           | Error state                    |
 
 ---
 
@@ -1060,7 +1764,9 @@ function CountrySelect() {
   return (
     <FormField required error={error}>
       <FormField.Label>Country</FormField.Label>
-      <FormField.Description>Choose your country of residence.</FormField.Description>
+      <FormField.Description>
+        Choose your country of residence.
+      </FormField.Description>
 
       <Select
         value={country}
@@ -1088,7 +1794,9 @@ function CountrySelect() {
             <Select.Label>Europe</Select.Label>
             <Select.Item value="uk">United Kingdom</Select.Item>
             <Select.Item value="de">Germany</Select.Item>
-            <Select.Item value="fr" disabled>France (disabled)</Select.Item>
+            <Select.Item value="fr" disabled>
+              France (disabled)
+            </Select.Item>
           </Select.Group>
         </Select.Content>
       </Select>
@@ -1104,6 +1812,1454 @@ function CountrySelect() {
 For more advanced use cases (e.g., async loading, custom rendering), refer to the [GitHub repository examples](https://github.com/Vincentvirtuoso/kreativ-ui).
 
 ---
+
+# Typography System
+
+Kreativ UI provides a centralized, theme-aware typography system for controlling how text is rendered across your application and component library.
+
+Typography styles can be defined once and reused across built-in components such as `Button`, `Input`, and `Select`, as well as custom components created by your application.
+
+The system supports:
+
+* Reusable typography presets
+* Primitive design tokens
+* Semantic tokens
+* Custom font families
+* `next/font`
+* CSS custom properties
+* Local fonts
+* Runtime theme customization
+* Custom typography presets
+* Component-level typography selection
+* Custom component integration
+* Type-safe token definitions
+* Direct CSS value overrides
+
+---
+
+## How It Works
+
+Kreativ UI typography is built around four layers:
+
+```text
+Primitive Tokens
+      ↓
+Semantic Tokens
+      ↓
+Typography Presets
+      ↓
+useTypography()
+      ↓
+React.CSSProperties
+      ↓
+Component
+```
+
+### Primitive Tokens
+
+Primitive tokens contain reusable values such as:
+
+```ts
+fonts.body
+fonts.heading
+fonts.mono
+
+fontSizes.sm
+fontSizes.md
+fontSizes.lg
+
+fontWeights.normal
+fontWeights.medium
+fontWeights.bold
+
+lineHeights.tight
+lineHeights.normal
+lineHeights.relaxed
+```
+
+They are defined with `defineToken()`.
+
+```ts
+const fonts = {
+  body: defineToken("Inter, sans-serif"),
+  heading: defineToken("Poppins, sans-serif"),
+};
+```
+
+---
+
+### Semantic Tokens
+
+Semantic tokens represent values that can change depending on the active theme or color mode.
+
+They are defined with `defineSemanticToken()`.
+
+```ts
+const colors = {
+  text: defineSemanticToken(
+    "{colors.gray.900}",
+    "{colors.gray.100}",
+  ),
+};
+```
+
+Typography itself is generally not mode-dependent, but typography definitions can reference semantic tokens when appropriate.
+
+---
+
+### Typography Presets
+
+Typography presets combine tokens into meaningful styles.
+
+```ts
+const typography = {
+  body: {
+    fontFamily: "{fonts.body}",
+    fontSize: "{fontSizes.md}",
+    fontWeight: "{fontWeights.normal}",
+    lineHeight: "{lineHeights.normal}",
+  },
+
+  heading: {
+    fontFamily: "{fonts.heading}",
+    fontSize: "{fontSizes.2xl}",
+    fontWeight: "{fontWeights.bold}",
+    lineHeight: "{lineHeights.tight}",
+  },
+};
+```
+
+A preset is referenced by name:
+
+```tsx
+<Button typography="body" />
+```
+
+---
+
+### `useTypography()`
+
+The `useTypography()` hook retrieves the typography preset from the active theme and resolves all token references into CSS values.
+
+```tsx
+const styles = useTypography("heading");
+```
+
+The result is suitable for React's `style` prop:
+
+```tsx
+<h1 style={styles}>Welcome</h1>
+```
+
+---
+
+# Typography Architecture
+
+A typical Kreativ UI theme contains:
+
+```ts
+const theme = {
+  tokens: {
+    fonts: {
+      body: defineToken("Inter, sans-serif"),
+      heading: defineToken("Poppins, sans-serif"),
+      mono: defineToken("JetBrains Mono, monospace"),
+    },
+
+    fontSizes: {
+      sm: defineToken("0.875rem"),
+      md: defineToken("1rem"),
+      lg: defineToken("1.125rem"),
+    },
+
+    fontWeights: {
+      normal: defineToken(400),
+      medium: defineToken(500),
+      semibold: defineToken(600),
+      bold: defineToken(700),
+    },
+
+    lineHeights: {
+      tight: defineToken(1.2),
+      normal: defineToken(1.5),
+      relaxed: defineToken(1.75),
+    },
+  },
+
+  typography: {
+    body: {
+      fontFamily: "{fonts.body}",
+      fontSize: "{fontSizes.md}",
+      fontWeight: "{fontWeights.normal}",
+      lineHeight: "{lineHeights.normal}",
+    },
+
+    heading: {
+      fontFamily: "{fonts.heading}",
+      fontSize: "{fontSizes.lg}",
+      fontWeight: "{fontWeights.bold}",
+      lineHeight: "{lineHeights.tight}",
+    },
+  },
+};
+```
+
+This creates a clear separation between **what a value is** and **how that value is used**.
+
+For example:
+
+```text
+"Inter, sans-serif"
+        ↓
+fonts.body
+        ↓
+typography.body
+        ↓
+useTypography("body")
+        ↓
+CSSProperties
+```
+
+---
+
+# Using Typography in Components
+
+There are several ways to consume the typography system.
+
+---
+
+## 1. Using `useTypography()` Directly
+
+Use the hook when you are creating a custom component or need direct access to resolved typography styles.
+
+```tsx
+import { useTypography } from "@splenddev/kreativ-ui";
+
+function MyCustomCard() {
+  const headingStyles = useTypography("heading");
+  const bodyStyles = useTypography("body");
+
+  return (
+    <div>
+      <h2 style={headingStyles}>
+        Card Title
+      </h2>
+
+      <p style={bodyStyles}>
+        This is the card content.
+      </p>
+    </div>
+  );
+}
+```
+
+The component does not need to know what font family, size, weight, or line height is currently configured.
+
+---
+
+# 2. Creating a Reusable Component with `TypographyProps`
+
+Kreativ UI exposes `TypographyProps` so custom components can participate in the same typography system.
+
+```ts
+export interface TypographyProps {
+  /**
+   * Defines the typography style to apply to the component.
+   * The value must match a typography style registered in the theme.
+   */
+  typography?: string;
+}
+```
+
+A custom component can extend this interface:
+
+```tsx
+import {
+  TypographyProps,
+  useTypography,
+} from "@splenddev/kreativ-ui";
+
+interface MyTextProps extends TypographyProps {
+  children: React.ReactNode;
+}
+
+function MyText({
+  typography = "body",
+  children,
+}: MyTextProps) {
+  const styles = useTypography(typography);
+
+  return (
+    <p style={styles}>
+      {children}
+    </p>
+  );
+}
+```
+
+Usage:
+
+```tsx
+<MyText>
+  Default body text
+</MyText>
+
+<MyText typography="heading">
+  Heading text
+</MyText>
+
+<MyText typography="caption">
+  Caption text
+</MyText>
+```
+
+This allows custom components to behave consistently with Kreativ UI's built-in components.
+
+---
+
+# 3. Using Typography with Built-in Components
+
+Built-in components that render text can expose the `typography` prop.
+
+```tsx
+<Button typography="bodySmall">
+  Small Button
+</Button>
+
+<Input typography="body" />
+
+<Select typography="body" />
+```
+
+The typography prop controls typography-related properties while component-specific layout remains independent.
+
+For example:
+
+```text
+Typography
+├── fontFamily
+├── fontSize
+├── fontWeight
+├── lineHeight
+└── letterSpacing
+
+Component Size
+├── height
+├── padding
+├── gap
+├── iconSize
+└── radius
+```
+
+This separation prevents changing a typography preset from unexpectedly changing component dimensions.
+
+---
+
+# 4. Typography and Component Size
+
+Components such as `Button` often have their own size system:
+
+```ts
+sizes: {
+  sm: {
+    height: "2rem",
+    paddingX: "0.75rem",
+    gap: "0.375rem",
+    iconSize: "1rem",
+    radius: "0.8rem",
+  },
+
+  md: {
+    height: "2.5rem",
+    paddingX: "1rem",
+    gap: "0.5rem",
+    iconSize: "1.125rem",
+    radius: "1rem",
+  },
+}
+```
+
+Typography should remain responsible for text properties.
+
+For example:
+
+```tsx
+<Button
+  size="lg"
+  typography="bodySmall"
+>
+  Continue
+</Button>
+```
+
+The button can use the large component dimensions while using the `bodySmall` typography preset.
+
+Recommended responsibility:
+
+```text
+size
+→ dimensions and component geometry
+
+typography
+→ text presentation
+
+style
+→ final consumer override
+```
+
+---
+
+# Loading Fonts
+
+Kreativ UI does **not need to load fonts itself**.
+
+Instead, your application is responsible for loading the font.
+
+Kreativ UI only needs to know which font family should be used.
+
+This allows Kreativ UI to work with:
+
+* `next/font`
+* Google Fonts
+* local fonts
+* CSS `@font-face`
+* system fonts
+* CSS variables
+* external font providers
+
+This separation makes the library framework-agnostic.
+
+---
+
+# 5. Using Next.js `next/font`
+
+This is one of the most common setups for a Next.js application.
+
+For example:
+
+```tsx
+import { Geist, Geist_Mono } from "next/font/google";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+```
+
+Apply the generated variables to the document:
+
+```tsx
+<html
+  lang="en"
+  className={`${geistSans.variable} ${geistMono.variable}`}
+>
+```
+
+The CSS variables are now available to your application.
+
+You can register them with Kreativ UI:
+
+```tsx
+import {
+  UIProvider,
+  defineToken,
+} from "@splenddev/kreativ-ui";
+
+<UIProvider
+  theme={{
+    tokens: {
+      fonts: {
+        body: defineToken("var(--font-geist-sans)"),
+        heading: defineToken("var(--font-geist-sans)"),
+        mono: defineToken("var(--font-geist-mono)"),
+      },
+    },
+  }}
+>
+  {children}
+</UIProvider>
+```
+
+Your typography presets can continue to reference semantic font roles:
+
+```ts
+const typography = {
+  body: {
+    fontFamily: "{fonts.body}",
+    fontSize: "{fontSizes.md}",
+    fontWeight: "{fontWeights.normal}",
+    lineHeight: "{lineHeights.normal}",
+  },
+
+  code: {
+    fontFamily: "{fonts.mono}",
+    fontSize: "{fontSizes.sm}",
+    lineHeight: "{lineHeights.normal}",
+  },
+};
+```
+
+This produces the following flow:
+
+```text
+next/font
+    ↓
+--font-geist-sans
+    ↓
+fonts.body
+    ↓
+typography.body
+    ↓
+useTypography("body")
+    ↓
+fontFamily: var(--font-geist-sans)
+```
+
+### Why this approach is recommended
+
+Kreativ UI does not need to know that the font came from Next.js.
+
+It only consumes:
+
+```css
+var(--font-geist-sans)
+```
+
+This keeps the design system independent from the framework responsible for loading the font.
+
+---
+
+# 6. Using Google Fonts Without `next/font`
+
+If your application loads a font through CSS or another font provider, you can register it directly.
+
+```ts
+const theme = {
+  tokens: {
+    fonts: {
+      body: defineToken("Inter, sans-serif"),
+      heading: defineToken("Poppins, sans-serif"),
+    },
+  },
+};
+```
+
+Your typography definitions remain unchanged:
+
+```ts
+const typography = {
+  body: {
+    fontFamily: "{fonts.body}",
+    fontSize: "{fontSizes.md}",
+    lineHeight: "{lineHeights.normal}",
+  },
+};
+```
+
+The typography system does not care how the font was loaded.
+
+---
+
+# 7. Using Local Fonts
+
+If your application defines a local font using `@font-face`:
+
+```css
+@font-face {
+  font-family: "MyBrandFont";
+  src: url("/fonts/my-brand-font.woff2") format("woff2");
+}
+```
+
+Register it:
+
+```ts
+const theme = {
+  tokens: {
+    fonts: {
+      body: defineToken("MyBrandFont, sans-serif"),
+    },
+  },
+};
+```
+
+Then reference it from typography:
+
+```ts
+const typography = {
+  body: {
+    fontFamily: "{fonts.body}",
+    fontSize: "{fontSizes.md}",
+    lineHeight: "{lineHeights.normal}",
+  },
+};
+```
+
+---
+
+# 8. Using CSS Variables for Fonts
+
+CSS variables are particularly useful when the application already has a global font system.
+
+```css
+:root {
+  --app-font-body: "Inter", sans-serif;
+  --app-font-heading: "Poppins", sans-serif;
+}
+```
+
+Register them:
+
+```ts
+const theme = {
+  tokens: {
+    fonts: {
+      body: defineToken("var(--app-font-body)"),
+      heading: defineToken("var(--app-font-heading)"),
+    },
+  },
+};
+```
+
+This also allows the font to be changed without changing the typography definitions themselves.
+
+---
+
+# 9. Using a System Font Stack
+
+You do not need a custom font.
+
+```ts
+const theme = {
+  tokens: {
+    fonts: {
+      body: defineToken(
+        "ui-sans-serif, system-ui, sans-serif",
+      ),
+
+      heading: defineToken(
+        "ui-sans-serif, system-ui, sans-serif",
+      ),
+
+      mono: defineToken(
+        "ui-monospace, SFMono-Regular, Menlo, monospace",
+      ),
+    },
+  },
+};
+```
+
+---
+
+# Customising Typography
+
+## 10. Extending the Default Presets
+
+You can add custom typography presets while retaining the defaults.
+
+```tsx
+import {
+  UIProvider,
+  defaultTheme,
+} from "@splenddev/kreativ-ui";
+
+const typography = {
+  ...defaultTheme.typography,
+
+  display: {
+    fontFamily: "{fonts.heading}",
+    fontSize: "4rem",
+    fontWeight: 700,
+    lineHeight: "1",
+    letterSpacing: "-0.04em",
+  },
+
+  label: {
+    fontFamily: "{fonts.body}",
+    fontSize: "0.75rem",
+    fontWeight: 600,
+    lineHeight: "1.2",
+  },
+};
+
+const theme = {
+  ...defaultTheme,
+  typography,
+};
+
+<UIProvider theme={theme}>
+  <App />
+</UIProvider>;
+```
+
+You can now use:
+
+```tsx
+<Button typography="label">
+  Continue
+</Button>
+
+<MyText typography="display">
+  Welcome
+</MyText>
+```
+
+---
+
+# 11. Overriding an Existing Typography Preset
+
+You can also modify a built-in preset.
+
+```ts
+const typography = {
+  ...defaultTheme.typography,
+
+  body: {
+    ...defaultTheme.typography.body,
+    fontSize: "{fontSizes.lg}",
+  },
+};
+```
+
+Every component using:
+
+```tsx
+typography="body"
+```
+
+will now use the customized definition.
+
+This is useful when you want to change the application's typography globally without modifying every component.
+
+---
+
+# 12. Creating Typography with `defineTypography()`
+
+For design-system authors, Kreativ UI provides `defineTypography()`.
+
+```ts
+import {
+  defineTypography,
+} from "@splenddev/kreativ-ui";
+
+const typography = {
+  display: defineTypography({
+    fontFamily: "{fonts.heading}",
+    fontSize: "{fontSizes.4xl}",
+    fontWeight: "{fontWeights.bold}",
+    lineHeight: "{lineHeights.tight}",
+    letterSpacing: "-0.04em",
+  }),
+};
+```
+
+`defineTypography()` provides a consistent definition API and ensures the typography object conforms to the expected typography structure.
+
+It is especially useful when creating reusable theme configurations.
+
+---
+
+# 13. Defining Custom Tokens with `defineToken()`
+
+Use `defineToken()` for primitive values.
+
+```ts
+import { defineToken } from "@splenddev/kreativ-ui";
+
+const tokens = {
+  fonts: {
+    serif: defineToken("Georgia, serif"),
+  },
+
+  fontSizes: {
+    "5xl": defineToken("3rem"),
+  },
+
+  fontWeights: {
+    black: defineToken(900),
+  },
+};
+```
+
+These tokens can then be referenced by typography:
+
+```ts
+const typography = {
+  serifDisplay: defineTypography({
+    fontFamily: "{fonts.serif}",
+    fontSize: "{fontSizes.5xl}",
+    fontWeight: "{fontWeights.black}",
+    lineHeight: "{lineHeights.tight}",
+  }),
+};
+```
+
+Using `defineToken()` ensures the values follow the token structure expected by the theme engine.
+
+---
+
+# 14. Semantic Tokens
+
+Semantic tokens are useful when a value needs to change according to the active theme or color mode.
+
+```ts
+const tokens = {
+  colors: {
+    brandText: defineSemanticToken(
+      "{colors.blue.700}",
+      "{colors.blue.200}",
+    ),
+  },
+};
+```
+
+Typography itself generally does not need separate light and dark definitions.
+
+Instead, semantic tokens are most useful when typography is combined with color or other semantic styling.
+
+For example:
+
+```ts
+const semanticTokens = {
+  text: {
+    primary: defineSemanticToken(
+      "{colors.gray.900}",
+      "{colors.gray.100}",
+    ),
+  },
+};
+```
+
+A component can then combine typography with the semantic text color.
+
+---
+
+# 15. Direct CSS Values
+
+Typography values do not have to reference tokens.
+
+You can use literal CSS values:
+
+```ts
+const typography = {
+  custom: defineTypography({
+    fontFamily: "Georgia, serif",
+    fontSize: "1.125rem",
+    fontWeight: 600,
+    lineHeight: 1.6,
+    letterSpacing: "-0.01em",
+  }),
+};
+```
+
+This is useful for typography that is intentionally unique.
+
+However, reusable design-system values should generally be represented as tokens.
+
+---
+
+# 16. Combining Typography with Component Overrides
+
+Typography provides the baseline text styling, while consumers can still make one-off overrides.
+
+For example:
+
+```tsx
+<Button
+  typography="body"
+  style={{
+    fontWeight: 700,
+  }}
+>
+  Continue
+</Button>
+```
+
+The recommended precedence is:
+
+```text
+Component defaults
+       ↓
+Component size/layout
+       ↓
+Typography preset
+       ↓
+Explicit style prop
+```
+
+This means the `style` prop remains an escape hatch for application-specific cases.
+
+Avoid using it repeatedly for values that should actually become part of your theme.
+
+---
+
+# 17. Creating a Typography-Aware Custom Component
+
+A complete custom component might look like this:
+
+```tsx
+import {
+  TypographyProps,
+  useTypography,
+} from "@splenddev/kreativ-ui";
+
+interface CardTitleProps extends TypographyProps {
+  children: React.ReactNode;
+}
+
+function CardTitle({
+  typography = "headingSmall",
+  children,
+}: CardTitleProps) {
+  const typographyStyles = useTypography(typography);
+
+  return (
+    <h3 style={typographyStyles}>
+      {children}
+    </h3>
+  );
+}
+```
+
+Usage:
+
+```tsx
+<CardTitle>
+  Default title
+</CardTitle>
+
+<CardTitle typography="heading">
+  Large title
+</CardTitle>
+
+<CardTitle typography="display">
+  Custom display title
+</CardTitle>
+```
+
+The component remains completely independent of the actual font values.
+
+---
+
+# 18. Using Typography Without a Preset Name
+
+If a component needs to use typography dynamically, it can simply pass the name received from its props:
+
+```tsx
+function MyComponent({
+  typography = "body",
+}: TypographyProps) {
+  const styles = useTypography(typography);
+
+  return (
+    <div style={styles}>
+      Content
+    </div>
+  );
+}
+```
+
+The component does not need to maintain its own list of typography styles.
+
+This allows application-defined styles to work automatically.
+
+---
+
+# Runtime Theme Changes
+
+Typography is resolved against the active theme.
+
+For example, suppose the default theme contains:
+
+```ts
+fonts: {
+  body: defineToken("Inter, sans-serif"),
+}
+```
+
+and a custom theme changes it to:
+
+```ts
+fonts: {
+  body: defineToken("Poppins, sans-serif"),
+}
+```
+
+A typography preset referencing:
+
+```ts
+fontFamily: "{fonts.body}"
+```
+
+does not need to change.
+
+It automatically resolves to the active token value.
+
+```text
+Typography
+     ↓
+{fonts.body}
+     ↓
+Active theme
+     ↓
+Poppins, sans-serif
+```
+
+This is one of the primary benefits of the token-based architecture.
+
+---
+
+# Recommended Typography Structure
+
+For most applications, a semantic typography structure works well:
+
+```ts
+const typography = {
+  body: {},
+  bodySmall: {},
+
+  heading: {},
+  headingSmall: {},
+
+  caption: {},
+
+  label: {},
+
+  code: {},
+
+  display: {},
+};
+```
+
+The exact names are completely customizable.
+
+Avoid names such as:
+
+```ts
+small12
+font14
+large20
+bold16
+```
+
+Prefer semantic names:
+
+```ts
+bodySmall
+body
+heading
+caption
+label
+display
+```
+
+This makes the design system easier to maintain when the actual values change.
+
+---
+
+# Best Practices
+
+### Prefer semantic typography names
+
+Use:
+
+```tsx
+typography="heading"
+```
+
+instead of:
+
+```tsx
+typography="font24"
+```
+
+---
+
+### Use tokens for reusable values
+
+Prefer:
+
+```ts
+fontSize: "{fontSizes.md}"
+```
+
+over repeatedly writing:
+
+```ts
+fontSize: "0.875rem"
+```
+
+---
+
+### Let the application load fonts
+
+Kreativ UI should consume fonts rather than own the font-loading mechanism.
+
+This allows it to work with:
+
+* Next.js
+* Vite
+* Remix
+* CRA
+* plain React
+* CSS
+* local fonts
+* external font providers
+
+---
+
+### Use `defineToken()`
+
+Prefer:
+
+```ts
+fonts: {
+  body: defineToken("Inter, sans-serif"),
+}
+```
+
+over manually constructing:
+
+```ts
+fonts: {
+  body: {
+    value: "Inter, sans-serif",
+  },
+}
+```
+
+---
+
+### Use `defineTypography()`
+
+When creating reusable typography definitions:
+
+```ts
+heading: defineTypography({
+  fontFamily: "{fonts.heading}",
+  fontSize: "{fontSizes.2xl}",
+  fontWeight: "{fontWeights.bold}",
+  lineHeight: "{lineHeights.tight}",
+})
+```
+
+This gives the definition a clear and consistent API.
+
+---
+
+### Use `useTypography()` in custom components
+
+Avoid manually accessing:
+
+```ts
+theme.typography
+```
+
+inside every component.
+
+Prefer:
+
+```ts
+const styles = useTypography("body");
+```
+
+This keeps typography resolution centralized.
+
+---
+
+### Keep typography separate from layout
+
+Typography should control:
+
+```text
+fontFamily
+fontSize
+fontWeight
+lineHeight
+letterSpacing
+```
+
+Component size should control:
+
+```text
+height
+padding
+gap
+radius
+iconSize
+```
+
+This makes components more predictable.
+
+---
+
+# API Reference
+
+## `useTypography()`
+
+```ts
+useTypography(name?: string): React.CSSProperties
+```
+
+Resolves a typography preset from the active theme and returns React-compatible CSS properties.
+
+### Parameters
+
+| Parameter | Type     | Description                   |
+| --------- | -------- | ----------------------------- |
+| `name`    | `string` | Name of the typography preset |
+
+### Example
+
+```tsx
+const styles = useTypography("heading");
+
+return <h1 style={styles}>Hello</h1>;
+```
+
+---
+
+## `TypographyProps`
+
+```ts
+interface TypographyProps {
+  typography?: string;
+}
+```
+
+Allows a component to expose the theme's typography presets through a `typography` prop.
+
+---
+
+## `TypographyStyle`
+
+```ts
+interface TypographyStyle {
+  fontFamily?: string;
+  fontSize?: string;
+  fontWeight?: string | number;
+  lineHeight?: string | number;
+  letterSpacing?: string;
+}
+```
+
+Defines the typography properties supported by Kreativ UI.
+
+---
+
+## `Typography`
+
+```ts
+type Typography = Record<string, TypographyStyle>;
+```
+
+Represents the collection of named typography presets available in a theme.
+
+---
+
+## `defineTypography()`
+
+```ts
+defineTypography(
+  typography: TypographyStyle,
+): TypographyStyle
+```
+
+Defines and type-checks a typography preset.
+
+Example:
+
+```ts
+const heading = defineTypography({
+  fontFamily: "{fonts.heading}",
+  fontSize: "{fontSizes.2xl}",
+  fontWeight: "{fontWeights.bold}",
+  lineHeight: "{lineHeights.tight}",
+});
+```
+
+---
+
+## `defineToken()`
+
+```ts
+defineToken<T>(value: T): {
+  value: T;
+}
+```
+
+Creates a primitive design token.
+
+Example:
+
+```ts
+const bodyFont = defineToken(
+  "Inter, sans-serif",
+);
+```
+
+---
+
+## `defineSemanticToken()`
+
+```ts
+defineSemanticToken<T>(
+  light: T,
+  dark: T,
+): {
+  value: {
+    light: T;
+    dark: T;
+  };
+}
+```
+
+Creates a theme-aware semantic token.
+
+---
+
+## `resolveTokenReference()`
+
+```ts
+resolveTokenReference(
+  value: unknown,
+  tokens: DesignTokens,
+): string | number
+```
+
+Resolves a token reference such as:
+
+```ts
+"{fonts.body}"
+```
+
+against the active design-token collection.
+
+---
+
+## `resolveTypography()`
+
+```ts
+resolveTypography(
+  typography: TypographyStyle | undefined,
+  tokens: DesignTokens,
+): React.CSSProperties
+```
+
+Converts a typography definition into resolved React CSS properties.
+
+---
+
+# Complete Example
+
+The following example demonstrates a complete Next.js setup using `next/font`, Kreativ UI tokens, typography, and a custom component.
+
+```tsx
+import { Geist, Geist_Mono } from "next/font/google";
+
+import {
+  UIProvider,
+  defineToken,
+  defineTypography,
+  defaultTheme,
+} from "@splenddev/kreativ-ui";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const theme = {
+  ...defaultTheme,
+
+  tokens: {
+    ...defaultTheme.tokens,
+
+    fonts: {
+      ...defaultTheme.tokens.fonts,
+
+      body: defineToken(
+        "var(--font-geist-sans)",
+      ),
+
+      heading: defineToken(
+        "var(--font-geist-sans)",
+      ),
+
+      mono: defineToken(
+        "var(--font-geist-mono)",
+      ),
+    },
+  },
+
+  typography: {
+    ...defaultTheme.typography,
+
+    display: defineTypography({
+      fontFamily: "{fonts.heading}",
+      fontSize: "4rem",
+      fontWeight: "{fontWeights.bold}",
+      lineHeight: "1",
+      letterSpacing: "-0.04em",
+    }),
+  },
+};
+
+export default function RootLayout({
+  children,
+}: LayoutProps<"/">) {
+  return (
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable}`}
+    >
+      <body>
+        <UIProvider theme={theme}>
+          {children}
+        </UIProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+The important separation is:
+
+```text
+Next.js
+  │
+  └── Loads Geist
+        │
+        └── --font-geist-sans
+                │
+                ▼
+        Kreativ UI font token
+                │
+                └── fonts.body
+                        │
+                        ▼
+                Typography preset
+                        │
+                        └── typography.body
+                                │
+                                ▼
+                        useTypography("body")
+                                │
+                                ▼
+                        React.CSSProperties
+```
+
+This allows Kreativ UI to remain completely independent of the application's font-loading strategy while still providing a centralized, reusable, and theme-aware typography system.
 
 # ♿ Accessibility
 

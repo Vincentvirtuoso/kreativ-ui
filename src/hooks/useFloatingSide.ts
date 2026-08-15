@@ -1,3 +1,5 @@
+"use client";
+
 import { useLayoutEffect, useRef, useState, type RefObject } from "react";
 
 const VIEWPORT_PADDING = 8;

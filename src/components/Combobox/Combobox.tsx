@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useOptionalFormField } from "../FormField/FormField.context";
 import { ComboboxContext, type ComboboxItemMeta } from "./Combobox.context";
