@@ -1,14 +1,14 @@
 import { readFileSync, writeFileSync } from "fs";
 import { globSync } from "glob";
 
-const HOOK_PATTERN =
-  /\buse(State|Effect|LayoutEffect|Ref|Context|Memo|Callback|Id)\b/;
-const files = globSync("src/components/**/*.{ts,tsx}");
-const shouldFix = process.argv.includes("--fix");
+const CLIENT_PATTERN =
+  /\b(createContext|use(State|Effect|LayoutEffect|Ref|Context|Memo|Callback|Id|Reducer|ImperativeHandle|InsertionEffect|DeferredValue|Transition))\b/;
+  
+  const files = globSync("src/**/*.{ts,tsx}");const shouldFix = process.argv.includes("--fix");
 
 const missing = files.filter((file) => {
   const content = readFileSync(file, "utf-8");
-  const usesHooks = HOOK_PATTERN.test(content);
+  const usesHooks = CLIENT_PATTERN.test(content);
   const hasDirective = content.trimStart().startsWith('"use client"');
   return usesHooks && !hasDirective;
 });

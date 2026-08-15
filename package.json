@@ -62,11 +62,9 @@
   "scripts": {
     "dev": "vite",
     "test": "vitest",
-    "check:use-client": "node scripts/check-use-client.mjs",
-    "fix:use-client": "node scripts/check-use-client.mjs -- --fix",
-    "prebuild": "npm run check:use-client",
     "build": "tsup && npm run build:css",
-    "build:css": "npx @tailwindcss/cli -i ./src/styles/index.css -o ./dist/styles/index.css --minify"
+    "build:css": "npx @tailwindcss/cli -i ./src/styles/index.css -o ./dist/styles/index.css --minify",
+    "postbuild": "node scripts/add-use-client.mjs"
   },
   "peerDependencies": {
     "react": ">=18",

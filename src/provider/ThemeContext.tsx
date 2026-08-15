@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext } from "react";
 import type { ColorMode, Theme, ResolvedTokens } from "@/types/theme";
 

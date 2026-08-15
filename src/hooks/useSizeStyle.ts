@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo, type CSSProperties } from "react";
 import { useTheme } from "./useTheme";
 import { CSSPropertiesWithVars } from "@/types";
