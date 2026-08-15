@@ -1,29 +1,12 @@
-import { cloneElement, type ReactElement } from "react";
-
-import { useFormField } from "./FormField.context";
-
+import {  type ReactElement } from "react";
 
 type FormFieldControlProps<T = Record<string, unknown>> = {
-    children: ReactElement<T>;
+  children: ReactElement<T>;
 };
 
-
 export function FormFieldControl<T = Record<string, unknown>>({
-    children,
+  children,
 }: FormFieldControlProps<T>) {
-    const {
-        id,
-        invalid,
-        descriptionId,
-    } = useFormField();
 
-
-    return cloneElement(
-        children,
-        {
-            id,
-            "aria-invalid": invalid,
-            "aria-describedby": descriptionId,
-        } as unknown as Partial<T>
-    );
+  return <>{children}</>
 }

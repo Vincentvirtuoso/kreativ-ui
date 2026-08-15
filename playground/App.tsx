@@ -17,14 +17,12 @@ export function App() {
     },
   });
 
-  console.log("[App] Theme Override:", theme);
 
   return (
     <UIProvider defaultMode="system" fallbackSize="lg" theme={theme}>
       <ThemeStudio
         theme={theme}
         onChange={(nextTheme) => {
-          console.log("[ThemeEditor] RECEIVED:", nextTheme);
           setTheme(nextTheme);
         }}
       />

@@ -28,7 +28,6 @@ export function Select({
   size = "md",
   className,
   placeholder,
-  "aria-invalid": ariaInvalid,
   "aria-describedby": ariaDescribedBy,
   clearable = false,
   error,
@@ -42,6 +41,7 @@ export function Select({
   const triggerId = field?.id ?? autoId;
   const triggerRef = useRef<HTMLDivElement>(null);
   const contentId = `${triggerId}-listbox`;
+  const labelId = field?.labelId;
 
   const [internalValue, setInternalValue] = useState(defaultValue);
   const value = valueProp !== undefined ? valueProp : internalValue;
@@ -53,20 +53,14 @@ export function Select({
 
   const [open, setOpen] = useState(false);
   const [activeValue, setActiveValue] = useState<string | undefined>(value);
-  const [selectedLabel, setSelectedLabel] = useState<React.ReactNode | undefined>(() => {
-  const initial = valueProp ?? defaultValue;
-  if (initial) {
-    return undefined;
-  }
-  return undefined;
-});
+  const [selectedLabel, setSelectedLabel] = useState<React.ReactNode>();
 
-  const itemsRef = useRef<Map<string, { label: React.ReactNode; disabled?: boolean }>>(
-    new Map()
-  );
-  const [items, setItems] = useState<Map<string, { label: React.ReactNode; disabled?: boolean }>>(
-    new Map()
-  );
+  const itemsRef = useRef<
+    Map<string, { label: React.ReactNode; disabled?: boolean }>
+  >(new Map());
+  const [items, setItems] = useState<
+    Map<string, { label: React.ReactNode; disabled?: boolean }>
+  >(new Map());
 
   const registerItem = useCallback(
     (val: string, meta: { label: React.ReactNode; disabled?: boolean }) => {
@@ -77,31 +71,32 @@ export function Select({
         setItems(new Map(itemsRef.current));
       };
     },
-    []
+    [],
   );
 
   const handleValueChange = useCallback(
-  (val: string) => {
-        const label = itemsRef.current.get(val)?.label ?? val;
-        setSelectedLabel(label); 
-        if (valueProp === undefined) {
+    (val: string) => {
+      const label = itemsRef.current.get(val)?.label ?? val;
+      setSelectedLabel(label);
+      if (valueProp === undefined) {
         setInternalValue(val);
-        }
-        onValueChange?.(val);
-        setOpen(false);
+      }
+      onValueChange?.(val);
+      setOpen(false);
     },
-    [valueProp, onValueChange]
-    );
+    [valueProp, onValueChange],
+  );
 
   const handleClear = useCallback(() => {
-    if (valueProp === undefined) setInternalValue(undefined);
-    onValueChange?.(undefined);
     setActiveValue(undefined);
+    setInternalValue(undefined);
+    onValueChange?.(undefined);
+    setSelectedLabel(undefined);
   }, [valueProp, onValueChange]);
 
   const optionId = useCallback(
     (val: string) => `${contentId}-option-${val}`,
-    [contentId]
+    [contentId],
   );
 
   useEffect(() => {
@@ -110,10 +105,10 @@ export function Select({
 
   useEffect(() => {
     if (value !== undefined) {
-        const label = itemsRef.current.get(value)?.label;
-        if (label !== undefined) setSelectedLabel(label);
+      const label = itemsRef.current.get(value)?.label;
+      if (label !== undefined) setSelectedLabel(label);
     }
-    }, [value, items]);
+  }, [value, items]);
 
   // Close on outside click
   const rootRef = useRef<HTMLDivElement>(null);
@@ -140,6 +135,7 @@ export function Select({
       setOpen,
       triggerId,
       contentId,
+      labelId,
       isInvalid,
       isSuccess,
       describedBy,
@@ -154,6 +150,7 @@ export function Select({
       onClear: handleClear,
       triggerRef,
       rounded,
+      tabIndex,
     }),
     [
       value,
@@ -178,7 +175,9 @@ export function Select({
       handleClear,
       triggerRef,
       rounded,
-    ]
+      labelId,
+      tabIndex,
+    ],
   );
 
   return (
@@ -186,9 +185,6 @@ export function Select({
       <div
         ref={rootRef}
         className={cn("relative inline-block w-full", className)}
-        tabIndex={tabIndex}
-        aria-invalid={ariaInvalid}
-        aria-describedby={ariaDescribedBy}
       >
         {children}
         {name && (

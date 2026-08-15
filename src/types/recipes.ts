@@ -10,6 +10,8 @@
  */
 export type RecipeStyle = string;
 
+export type RecipeVariantValue = string | boolean | number;
+
 /**
  * A mapping of variant key to a CSS class string.
  * Each variant option maps to a specific style.
@@ -23,6 +25,7 @@ export type RecipeStyle = string;
  * };
  * ```
  */
+
 export type RecipeVariant = Record<string, RecipeStyle>;
 
 /**
@@ -44,7 +47,7 @@ export type RecipeVariant = Record<string, RecipeStyle>;
  * ```
  */
 export interface RecipeCompoundVariant {
-  conditions: Record<string, string>;
+  conditions: Record<string, RecipeVariantValue>;
   className: RecipeStyle;
 }
 
@@ -121,18 +124,18 @@ export interface RecipeDefinition {
 
   /**
    * Variants used when no explicit prop is provided.
-   * Keys must exist in `variants`.
+   *
+   * Supports string, boolean, and numeric values.
    *
    * @example
    * ```ts
    * defaultVariants: {
    *   size: "md",
-   *   color: "brand",
+   *   rounded: false,
    * }
    * ```
    */
-  defaultVariants?: Record<string, string>;
-
+  defaultVariants?: Record<string, RecipeVariantValue>;
   /**
    * Classes applied when multiple variant conditions match.
    * This is useful for special combinations that require additional styling.

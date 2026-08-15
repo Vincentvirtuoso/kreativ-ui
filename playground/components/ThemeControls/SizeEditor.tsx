@@ -218,7 +218,7 @@ export function SizeEditor({ theme, onChange }: SizeEditorProps) {
 
       <div className="flex gap-2">
         <Input
-          inputSize="sm"
+          size="sm"
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && addSize()}

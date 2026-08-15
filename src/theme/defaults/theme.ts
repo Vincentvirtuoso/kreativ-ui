@@ -6,11 +6,7 @@ import type {
 } from "@/types";
 import { defaultTokens } from "./tokens";
 import { defaultSemanticTokens } from "./semanticTokens";
-import { buttonRecipe } from "./recipes";
-
-/* ─────────────────────────────────────────────
- * Global sizes
- * ───────────────────────────────────────────── */
+import { buttonRecipe, formControlRecipe, inputRecipe } from "./recipes";
 
 export const defaultSizes: SizeScale = {
   xs: {
@@ -90,6 +86,8 @@ export const defaultTextStyles: TextStyles = {
 
 export const defaultRecipes: RecipeCollection = {
   Button: buttonRecipe,
+  FormControl: formControlRecipe,
+  Input: inputRecipe,
 };
 
 export const defaultTheme: Theme = {

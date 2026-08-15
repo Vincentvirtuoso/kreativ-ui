@@ -16,6 +16,12 @@
   "bugs": {
     "url": "https://github.com/Vincentvirtuoso/kreativ-ui/issues"
   },
+  "engines": {
+    "node": ">=18"
+  },
+  "sideEffects": [
+    "./dist/styles/index.css"
+  ],
   "keywords": [
     "react",
     "react-components",
