@@ -268,7 +268,7 @@ Supported transition types: `none`, `fade`, `slide`, `scale`, `rotate`.
 
 ---
 
-# 🧩 Button
+#  Button
 
 A versatile button with support for variants, sizes, loading states, icons, and full‑width.
 
@@ -347,6 +347,338 @@ All standard `<button>` props are forwarded.
 
 ---
 
+# 🧩 Input & FormField
+
+This section covers the `Input` component and the `FormField` composition system for building accessible, validated form controls.
+
+---
+
+## Input
+
+A flexible text input with support for variants, sizes, validation states, adornments, password visibility, clearing, and loading states.
+
+### Basic Usage
+
+```tsx
+import { Input } from "@splenddev/kreativ-ui";
+
+<Input placeholder="Enter your name" />
+```
+
+### Variants
+
+```tsx
+<Input variant="outline" />
+<Input variant="filled" />
+<Input variant="ghost" />
+```
+
+### Sizes
+
+```tsx
+<Input inputSize="sm" />
+<Input inputSize="md" />
+<Input inputSize="lg" />
+```
+
+### Input Kinds
+
+The `kind` prop sets sensible defaults for `type`, `inputMode`, `autoComplete`, and sometimes a placeholder and icon. Any explicit prop overrides the kind default.
+
+```tsx
+<Input kind="email" />
+<Input kind="tel" />
+<Input kind="url" />
+<Input kind="search" />
+<Input kind="numeric" />
+<Input kind="password-current" />   // autoComplete="current-password" + show/hide toggle
+<Input kind="password-new" />       // autoComplete="new-password" + show/hide toggle
+```
+
+To suppress the icon that comes with certain kinds (e.g., `email`, `search`):
+
+```tsx
+<Input kind="email" hideKindIcon />
+```
+
+### Validation States
+
+```tsx
+<Input error />
+<Input success />
+```
+
+The `error` state also sets `aria-invalid="true"`.
+
+### Disabled & Loading
+
+```tsx
+<Input disabled />
+<Input isLoading />  // shows a spinner, makes the field read‑only (not disabled)
+```
+
+### Adornments (Icons)
+
+```tsx
+<Input startIcon={<SearchIcon />} />
+<Input endIcon={<MailIcon />} />
+```
+
+### Clearable
+
+```tsx
+<Input clearable onClear={() => console.log("cleared")} />
+```
+
+A clear button appears when the field has a value. Clicking it clears the value and calls `onClear`.
+
+### Password Input
+
+With `kind="password-current"` or `kind="password-new"`, a toggle button is shown to reveal/hide the password.
+
+### Full Width & Rounded
+
+```tsx
+<Input fullWidth />   // default: true
+<Input rounded />     // fully rounded corners
+```
+
+### Controlled & Uncontrolled
+
+```tsx
+// Controlled
+const [value, setValue] = useState("");
+<Input value={value} onChange={(e) => setValue(e.target.value)} />
+
+// Uncontrolled
+<Input defaultValue="Initial value" />
+```
+
+### Ref Forwarding
+
+`Input` forwards refs to the underlying `<input>` element.
+
+### Native Props
+
+All standard `<input>` attributes (except `size`) are forwarded to the native input element.
+
+### Size-Aware Styling
+
+The component uses `useSizeStyle` to apply theme‑aware sizing from the `sizes` object in the theme.
+
+---
+
+## FormField
+
+`FormField` is a higher‑level component that composes a label, description, control, and validation message into an accessible form field. It automatically wires `id`, `aria-describedby`, `aria-invalid`, and `aria-required` – no manual ID juggling.
+
+### Basic Structure
+
+```tsx
+import { FormField, Input } from "@splenddev/kreativ-ui";
+
+<FormField>
+  <FormField.Label>Email address</FormField.Label>
+  <FormField.Description>We'll only send receipts here.</FormField.Description>
+  <FormField.Control>
+    <Input kind="email" placeholder="you@company.com" />
+  </FormField.Control>
+  <FormField.Message>Enter a valid email.</FormField.Message>
+</FormField>
+```
+
+### Subcomponents
+
+| Component            | Purpose                                                       |
+| -------------------- | ------------------------------------------------------------- |
+| `FormField`          | Provides context, manages `id` and accessibility relationships |
+| `FormField.Label`    | Renders a label associated with the control via `htmlFor`      |
+| `FormField.Description` | Renders helper text, linked via `aria-describedby`           |
+| `FormField.Control`  | Injects the field ID and accessibility props into its child    |
+| `FormField.Message`  | Displays a validation message, linked via `aria-describedby`  |
+
+### Field‑Level Props
+
+`FormField` accepts:
+
+| Prop          | Type        | Default        | Description                                       |
+| ------------- | ----------- | -------------- | ------------------------------------------------- |
+| `id`          | `string`    | auto‑generated | Explicit `id` for the control                     |
+| `error`       | `string`    | –              | Validation error message (overrides description)  |
+| `required`    | `boolean`   | `false`        | Shows required indicator and sets `aria-required` |
+| `className`   | `string`    | –              | Additional wrapper classes                        |
+| `children`    | `ReactNode` | –              | The field content (typically subcomponents)       |
+
+### Error Handling
+
+When `error` is provided:
+
+- The error message is displayed (replacing any `Description`).
+- The control receives `aria-invalid="true"`.
+- The error message is linked via `aria-describedby`.
+
+### Required Indicator
+
+When `required` is `true`, the label gets a `*` suffix and the control receives `aria-required="true"`.
+
+### Auto‑Generated IDs
+
+If no `id` is provided, `FormField` generates a unique ID using `useId` (React 18+) and passes it to the control via `FormField.Control`.
+
+---
+
+## FormField + Input Integration
+
+This is the recommended way to build accessible forms with Kreativ UI.
+
+```tsx
+import { FormField, Input } from "@splenddev/kreativ-ui";
+
+function EmailField() {
+  const [error, setError] = useState("");
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (!value) setError("Email is required");
+    else if (!/\S+@\S+\.\S+/.test(value)) setError("Enter a valid email");
+    else setError("");
+  };
+
+  return (
+    <FormField id="email" required error={error}>
+      <FormField.Label>Email address</FormField.Label>
+      <FormField.Description>We'll only send receipts here.</FormField.Description>
+      <FormField.Control>
+        <Input
+          kind="email"
+          placeholder="you@company.com"
+          onBlur={handleBlur}
+        />
+      </FormField.Control>
+      {error && <FormField.Message>{error}</FormField.Message>}
+    </FormField>
+  );
+}
+```
+
+**Responsibilities**:
+
+- `FormField` – owns field‑level state and accessibility relationships.
+- `FormField.Label` – provides the accessible label.
+- `FormField.Description` – provides supporting text (hidden when `error` exists).
+- `FormField.Control` – connects the actual control to the field context.
+- `Input` – handles the input behavior and presentation.
+- `FormField.Message` – displays validation feedback.
+
+---
+
+## Accessibility
+
+The library ensures the following relationships are automatically established:
+
+```
+Label
+  ↓
+for → input[id]
+
+Description
+  ↓
+aria-describedby → description id
+
+Validation message
+  ↓
+aria-describedby → message id (appended to description ids)
+
+Validation state
+  ↓
+aria-invalid="true" (when error is present)
+```
+
+When using `FormField`, consumers **should** wrap the input with `FormField.Control` to benefit from these automatic connections.
+
+---
+
+## Validation Behavior
+
+### Field‑Level vs. Input‑Level
+
+```tsx
+// Field-level validation (manages error message and aria state)
+<FormField error="Invalid email">
+  <FormField.Control>
+    <Input />
+  </FormField.Control>
+</FormField>
+
+// Input-level error (only visual style and aria-invalid)
+<Input error />
+```
+
+`FormField` manages the error message and overall accessibility, while `Input` controls its own visual presentation. Using both together gives full feedback.
+
+### State‑Transition Feedback
+
+When the `error` or `success` state changes on an `Input`, the component briefly animates the change (e.g., a subtle colour transition) rather than continuously animating the validation state. This provides a smooth user experience without being distracting.
+
+---
+
+## Standalone vs. FormField Usage
+
+- **Standalone `Input`**: Use when you need a simple input without label/description/validation relationships. Ideal for search bars, inline inputs, or custom layouts.
+- **`FormField` + `Input`**: Use for labeled, described, or validated form controls. This ensures proper accessibility and reduces manual ARIA management.
+
+---
+
+## API Reference
+
+### Input Props
+
+| Prop              | Type                                | Default     | Description                                                                 |
+| ----------------- | ----------------------------------- | ----------- | --------------------------------------------------------------------------- |
+| `variant`         | `"outline" \| "filled" \| "ghost"`  | `"outline"` | Visual style                                                                |
+| `inputSize`       | `"sm" \| "md" \| "lg"`              | `"md"`      | Height, padding, font size                                                  |
+| `kind`            | `InputKind`                         | `"text"`    | Sets defaults for `type`, `inputMode`, `autoComplete`, placeholder, and icon|
+| `hideKindIcon`    | `boolean`                           | `false`     | Suppress the default icon from `kind`                                       |
+| `error`           | `boolean`                           | `false`     | Danger styling and `aria-invalid`                                           |
+| `success`         | `boolean`                           | `false`     | Success styling                                                             |
+| `disabled`        | `boolean`                           | `false`     | Disables the input                                                          |
+| `isLoading`       | `boolean`                           | `false`     | Shows spinner and marks read‑only                                           |
+| `clearable`       | `boolean`                           | `false`     | Shows clear button when value is present                                    |
+| `onClear`         | `() => void`                        | –           | Called after clear                                                          |
+| `rounded`         | `boolean`                           | `false`     | Fully rounded wrapper                                                       |
+| `fullWidth`       | `boolean`                           | `true`      | Stretch to container width                                                  |
+| `startIcon`  | `ReactNode`                         | –           | Content before the input (e.g., icon)                                       |
+| `endIcon`    | `ReactNode`                         | –           | Content after the input (e.g., icon)                                        |
+| `className`       | `string`                            | –           | Additional wrapper class                                                    |
+| `inputClassName`  | `string`                            | –           | Additional class for the native input element                               |
+
+All standard `<input>` attributes (except `size`) are forwarded to the underlying `<input>`.
+
+### FormField Props
+
+| Prop          | Type        | Default        | Description                                       |
+| ------------- | ----------- | -------------- | ------------------------------------------------- |
+| `id`          | `string`    | auto‑generated | Explicit `id` for the control                     |
+| `error`       | `string`    | –              | Validation error message (overrides description)  |
+| `required`    | `boolean`   | `false`        | Shows required indicator and sets `aria-required` |
+| `className`   | `string`    | –              | Additional wrapper classes                        |
+| `children`    | `ReactNode` | –              | The field content (typically subcomponents)       |
+
+### FormField Subcomponents
+
+| Component            | Description                                                       |
+| -------------------- | ----------------------------------------------------------------- |
+| `FormField.Label`    | Renders a label associated with the control via `htmlFor`         |
+| `FormField.Description` | Renders helper text, linked via `aria-describedby`             |
+| `FormField.Control`  | Injects the field ID and accessibility props into its child       |
+| `FormField.Message`  | Displays a validation message, linked via `aria-describedby`      |
+
+---
+
+For more advanced usage (e.g., integrating with `react-hook-form`), see the [GitHub repository examples](https://github.com/Vincentvirtuoso/kreativ-ui).
+
+---
+
 # ♿ Accessibility
 
 Kreativ UI components are built with accessibility in mind:
@@ -371,5 +703,5 @@ MIT
 
 ---
 
-**More component documentation (Input, Select, Textarea, Checkbox, RadioGroup, etc.) coming soon.**  
+**More component documentation (Select, Textarea, Checkbox, RadioGroup, etc.) coming soon.**  
 Visit the [GitHub repository](https://github.com/Vincentvirtuoso/kreativ-ui) for updates.

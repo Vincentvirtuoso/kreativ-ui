@@ -48,7 +48,6 @@
   --animate-kui-spin: kui-spin 0.6s linear infinite;
 
   --animate-kui-fade-in: kui-fade-in 0.15s ease-out;
-  --animate-kui-fade-out: kui-fade-out 0.15s ease-in;
 
   --animate-kui-scale-in: kui-scale-in 0.15s ease-out;
   --animate-kui-scale-out: kui-scale-out 0.15s ease-in;
@@ -84,6 +83,16 @@ body {
   color: rgb(var(--kui-text, 0 0 0));
   background: rgb(var(--kui-surface, 255 255 255));
   min-height: 100vh;
+}
+
+[data-state-transition="error"] {
+  animation: kui-state-error 500ms ease-out 3;
+  animation-delay: 500ms;
+}
+
+[data-state-transition="success"] {
+  animation: kui-state-success 500ms ease-out 2;
+  animation-delay: 500ms;
 }
 
 input:-webkit-autofill,

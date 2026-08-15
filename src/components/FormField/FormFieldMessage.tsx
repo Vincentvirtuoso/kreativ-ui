@@ -1,26 +1,18 @@
-import {
-    useFormField,
-} from "./FormField.context";
+import { useFormField } from "./FormField.context";
 
+export function FormFieldMessage({ children }: { children: React.ReactNode }) {
+  const { messageId } = useFormField();
 
-export function FormFieldMessage({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
-
-    const {
-        messageId,
-    } = useFormField();
-
-
-    return (
-        <p
-            id={messageId}
-            role="alert"
-            className="text-sm text-danger"
-        >
-            {children}
-        </p>
-    );
+  return (
+    <p
+      id={messageId}
+      role="alert"
+      className="
+        animate-kui-shake [animation-delay:500ms]
+        text-sm text-destructive
+      "
+    >
+      {children}
+    </p>
+  );
 }

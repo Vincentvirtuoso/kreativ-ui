@@ -1,5 +1,14 @@
 import type { InputHTMLAttributes, ReactNode } from "react";
-import type { Styleable } from "@/types/common";
+import type {
+  BaseProps,
+  ClearableProps,
+  DisabledProps,
+  FullWidthProps,
+  LoadingProps,
+  SizeProps,
+  StateProps,
+  VariantProps,
+} from "@/types";
 
 export type InputVariant = "outline" | "filled" | "ghost";
 
@@ -22,29 +31,38 @@ export type InputKind =
   | "week";
 
 export interface InputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size">,
-  Styleable {
-  variant?: InputVariant;
+  extends
+    Omit<InputHTMLAttributes<HTMLInputElement>, "size">,
+    BaseProps,
+    SizeProps,
+    VariantProps<InputVariant>,
+    DisabledProps,
+    LoadingProps,
+    FullWidthProps,
+    ClearableProps,
+    StateProps {
   inputClassName?: string;
-  inputSize?: InputSize;
-  error?: boolean;
-  success?: boolean;
-  rounded?: boolean;
-  startAdornment?: ReactNode;
-  endAdornment?: ReactNode;
-  fullWidth?: boolean;
-  hideKindIcon?: boolean;
-  isLoading?: boolean;
-  clearable?: boolean;
-  onClear?: () => void;
+  size?: string;
   kind?: InputKind;
+  rounded?: boolean;
+  startIcon?: ReactNode;
+  endIcon?: ReactNode;
+  hideKindIcon?: boolean;
 }
 
 export type InputKindDefaults = Record<
   InputKind,
   {
     type?: string;
-    inputMode?: "none" | "text" | "decimal" | "numeric" | "tel" | "search" | "email" | "url";
+    inputMode?:
+      | "none"
+      | "text"
+      | "decimal"
+      | "numeric"
+      | "tel"
+      | "search"
+      | "email"
+      | "url";
     autoComplete?: string;
     placeholder?: string;
     pattern?: string;

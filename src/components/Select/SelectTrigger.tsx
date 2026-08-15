@@ -104,7 +104,7 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
           inputSizeVariants[ctx.size],
           "flex items-center gap-2",
           ctx.rounded && "rounded-full",
-          className
+          className,
         )}
       >
         <button
@@ -114,12 +114,14 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
           role="combobox"
           aria-haspopup="listbox"
           aria-expanded={ctx.open}
+          aria-labelledby={ctx.labelId}
           aria-controls={ctx.contentId}
           aria-activedescendant={
             ctx.open && ctx.activeValue
               ? ctx.optionId(ctx.activeValue)
               : undefined
           }
+          tabIndex={ctx.tabIndex}
           aria-invalid={ctx.isInvalid || undefined}
           aria-describedby={ctx.describedBy}
           aria-required={ctx.required || undefined}
@@ -139,7 +141,7 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
               size={14}
               className={cn(
                 "transition-transform duration-200",
-                ctx.open && "rotate-180"
+                ctx.open && "rotate-180",
               )}
             />
           </span>

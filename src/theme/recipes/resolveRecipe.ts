@@ -1,12 +1,12 @@
 import { cn } from "../../utils/cn";
-import type { RecipeDefinition } from "@/types";
+import type { RecipeDefinition, RecipeVariantValue } from "@/types";
 
 export interface RecipeProps {
-  [key: string]: string | undefined;
+  [key: string]: RecipeVariantValue | undefined;
 }
 
 function matchesConditions(
-  conditions: Record<string, string>,
+  conditions: Record<string, RecipeVariantValue>,
   props: RecipeProps,
 ) {
   return Object.entries(conditions).every(
@@ -20,7 +20,7 @@ export function resolveRecipe(
 ): string {
   if (!recipe) return "";
 
-  const resolvedProps = {
+  const resolvedProps: RecipeProps = {
     ...recipe.defaultVariants,
     ...props,
   };
@@ -37,9 +37,9 @@ export function resolveRecipe(
     )) {
       const value = resolvedProps[variantName];
 
-      if (!value) continue;
+      if (value === undefined) continue;
 
-      const variantClass = variantValues[value];
+      const variantClass = variantValues[String(value)];
 
       if (variantClass) {
         classes.push(variantClass);

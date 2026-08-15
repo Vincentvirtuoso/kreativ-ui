@@ -1,16 +1,32 @@
-import { forwardRef, useEffect, useId, useRef, useState, type Ref } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type Ref,
+} from "react";
+
 import { cn } from "@/utils/cn";
-import { inputBase, inputWrapperVariants, inputSizeVariants, } from "./Input.styles";
+import { resolveRecipe } from "@/theme";
+import { useSizeStyle } from "@/hooks";
+
+import { useTheme } from "@/hooks";
 import { inputKindIcons, Spinner, Eye, EyeOff, ClearIcon } from "./Input.icons";
-import type { InputProps } from "./Input.types";
 import { inputKindDefaults } from "./Input.constants";
+import type { InputProps } from "./Input.types";
+import { useStateTransition } from "@/hooks/useStateTransition";
 
 function mergeRefs<T>(...refs: Array<Ref<T> | undefined>) {
   return (node: T) => {
-    refs.forEach((r) => {
-      if (!r) return;
-      if (typeof r === "function") r(node);
-      else (r as React.RefObject<T | null>).current = node;
+    refs.forEach((ref) => {
+      if (!ref) return;
+
+      if (typeof ref === "function") {
+        ref(node);
+      } else {
+        (ref as React.RefObject<T | null>).current = node;
+      }
     });
   };
 }
@@ -20,70 +36,109 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     {
       className,
       inputClassName,
+
       variant = "outline",
-      inputSize = "md",
+      size = "md",
+
       error,
       success,
-      startAdornment,
-      endAdornment,
+
+      startIcon,
+      endIcon,
+
       fullWidth = true,
       disabled,
+
       rounded = false,
+
       isLoading = false,
+
       clearable = false,
       onClear,
+
       kind = "text",
       hideKindIcon = false,
+
       id: externalId,
+
       type: typeProp,
       inputMode: inputModeProp,
       autoComplete: autoCompleteProp,
       placeholder: placeholderProp,
+
       onChange: onChangeProp,
       readOnly: readOnlyProp,
+
       value,
       defaultValue,
+
+      style,
       ...props
     },
-    ref
+    ref,
   ) => {
     const autoId = useId();
+    const { theme } = useTheme();
+
     const id = externalId ?? autoId;
     const internalRef = useRef<HTMLInputElement>(null);
 
-    const [hasValue, setHasValue] = useState(() => Boolean(value ?? defaultValue ?? ""));
+    const { style: sizeStyle, iconSize } = useSizeStyle(size, false, "input");
+
+    const [hasValue, setHasValue] = useState(() =>
+      Boolean(value ?? defaultValue ?? ""),
+    );
+
+    const [visible, setVisible] = useState(false);
+
     useEffect(() => {
-      if (value !== undefined) setHasValue(Boolean(value));
+      if (value !== undefined) {
+        setHasValue(Boolean(value));
+      }
     }, [value]);
 
     const kindDefaults = inputKindDefaults[kind];
+
     const resolvedType = typeProp ?? kindDefaults.type;
     const isPasswordField = resolvedType === "password";
 
-    const [visible, setVisible] = useState(false);
-    const effectiveType = isPasswordField ? (visible ? "text" : "password") : resolvedType;
+    const effectiveType = isPasswordField
+      ? visible
+        ? "text"
+        : "password"
+      : resolvedType;
 
     const KindIcon = inputKindIcons[kind];
-    const defaultStartIcon = !hideKindIcon && KindIcon ? <KindIcon size={15} /> : undefined;
-    const startSlot = <span className="shrink-0 flex items-center justify-center">
-      {startAdornment ?? defaultStartIcon}
-    </span>;
+
+    const defaultStartIcon =
+      !hideKindIcon && KindIcon ? (
+        <KindIcon size={Number(iconSize) || 15} />
+      ) : undefined;
+
+    const startSlot =
+      startIcon || defaultStartIcon ? (
+        <span className="flex shrink-0 items-center justify-center">
+          {startIcon ?? defaultStartIcon}
+        </span>
+      ) : null;
 
     const builtInEnd: React.ReactNode[] = [];
+
     if (isPasswordField) {
       builtInEnd.push(
         <button
           key="toggle-visibility"
           type="button"
           tabIndex={-1}
-          onClick={() => setVisible((v) => !v)}
+          onClick={() => setVisible((current) => !current)}
           aria-label={visible ? "Hide password" : "Show password"}
           className="flex items-center justify-center text-text-muted transition-colors hover:text-text"
         >
           {visible ? <EyeOff size={16} /> : <Eye size={16} />}
-        </button>
+        </button>,
       );
     }
+
     if (clearable && hasValue && !disabled) {
       builtInEnd.push(
         <button
@@ -95,62 +150,113 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           className="flex items-center justify-center text-text-muted transition-colors hover:text-text"
         >
           <ClearIcon size={14} />
-        </button>
+        </button>,
       );
     }
 
     const endSlot = isLoading ? (
-      <Spinner />
-    ) : endAdornment ? (
-      endAdornment
+      <Spinner size={Number(iconSize) || 14} />
+    ) : endIcon ? (
+      endIcon
     ) : builtInEnd.length ? (
-      <div className="flex items-center gap-1.5 shrink-0">{builtInEnd}</div>
-    ) : undefined;
+      <div className="flex shrink-0 items-center gap-1.5">{builtInEnd}</div>
+    ) : null;
 
-    const hasIcon = !!startSlot || !!endSlot;
+    const hasIcon = Boolean(startSlot || endSlot);
+
     const state = error ? "error" : success ? "success" : "none";
+    const stateTransition = useStateTransition(state);
+
+    console.log({
+      state,
+      stateTransition,
+    });
 
     const wrapperClasses = cn(
-      inputWrapperVariants({ variant, state, rounded, fullWidth, hasIcon, disabled: !!disabled }),
-      className
+      resolveRecipe(theme.recipes.FormControl, {
+        variant,
+        state,
+        rounded,
+        fullWidth,
+        disabled: Boolean(disabled || isLoading),
+        hasIcon,
+      }),
+      className,
     );
 
     const inputClasses = cn(
-      inputBase,
-      "border-0 bg-transparent outline-none",
-      inputSizeVariants[inputSize],
-      fullWidth && "w-full",
-      inputClassName
+      resolveRecipe(theme.recipes.Input, {
+        variant,
+      }),
+      inputClassName,
     );
 
-    const ariaInvalid = error ? true : undefined;
-    const messageId = (error || success) ? `${id}-message` : undefined;
+    const resolvedStyle = {
+      ...sizeStyle,
+      ...style,
+    };
 
-    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-      setHasValue(Boolean(e.target.value));
-      onChangeProp?.(e);
+    function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+      setHasValue(Boolean(event.target.value));
+      onChangeProp?.(event);
     }
 
     function handleClear() {
-      const el = internalRef.current;
-      if (!el) return;
-      const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value")?.set;
-      setter?.call(el, "");
-      el.dispatchEvent(new Event("input", { bubbles: true }));
-      el.focus();
+      const element = internalRef.current;
+
+      if (!element) return;
+
+      const setter = Object.getOwnPropertyDescriptor(
+        window.HTMLInputElement.prototype,
+        "value",
+      )?.set;
+
+      setter?.call(element, "");
+
+      element.dispatchEvent(
+        new Event("input", {
+          bubbles: true,
+        }),
+      );
+
+      element.focus();
+
       setHasValue(false);
       onClear?.();
     }
 
+    useEffect(() => {
+      if (!error) return;
+
+      const element = internalRef.current;
+
+      if (!element) return;
+
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }, [error]);
+
     return (
-      <div className={wrapperClasses}>
+      <div
+        key={stateTransition ?? "idle"}
+        className={wrapperClasses}
+        style={resolvedStyle}
+        data-state={state}
+        data-state-transition={stateTransition}
+      >
         {startSlot}
 
         <input
+          {...props}
           ref={mergeRefs(internalRef, ref)}
           id={id}
           type={effectiveType}
-          inputMode={(inputModeProp ?? kindDefaults.inputMode) as React.HTMLAttributes<HTMLInputElement>["inputMode"]}
+          inputMode={
+            (inputModeProp ??
+              kindDefaults.inputMode) as React.HTMLAttributes<HTMLInputElement>["inputMode"]
+          }
           autoComplete={autoCompleteProp ?? kindDefaults.autoComplete}
           placeholder={placeholderProp ?? kindDefaults.placeholder}
           value={value}
@@ -158,24 +264,20 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           onChange={handleChange}
           readOnly={isLoading || readOnlyProp}
           disabled={isLoading || disabled}
-          aria-invalid={ariaInvalid}
-          aria-describedby={messageId}
           aria-required={props.required}
           aria-busy={isLoading || undefined}
           className={inputClasses}
           data-variant={variant}
-          data-size={inputSize}
-          data-invalid={ariaInvalid}
+          data-size={size}
           data-success={success || undefined}
           data-disabled={disabled || undefined}
           data-loading={isLoading || undefined}
-          {...props}
         />
 
         {endSlot}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = "Input";
