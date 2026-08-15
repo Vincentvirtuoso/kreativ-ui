@@ -1,12 +1,8 @@
-import type {
-  SizeScale,
-  Theme,
-  TextStyles,
-  RecipeCollection,
-} from "@/types";
+import type { SizeScale, Theme, RecipeCollection } from "@/types";
 import { defaultTokens } from "./tokens";
 import { defaultSemanticTokens } from "./semanticTokens";
 import { buttonRecipe, formControlRecipe, inputRecipe } from "./recipes";
+import { defaultTypography } from "./typography";
 
 export const defaultSizes: SizeScale = {
   xs: {
@@ -46,44 +42,6 @@ export const defaultSizes: SizeScale = {
   },
 };
 
-export const defaultTextStyles: TextStyles = {
-  body: {
-    fontFamily: "{fonts.body}",
-    fontSize: "{fontSizes.md}",
-    fontWeight: "{fontWeights.normal}",
-    lineHeight: "{lineHeights.normal}",
-  },
-
-  bodySmall: {
-    fontFamily: "{fonts.body}",
-    fontSize: "{fontSizes.sm}",
-    fontWeight: "{fontWeights.normal}",
-    lineHeight: "{lineHeights.normal}",
-  },
-
-  heading: {
-    fontFamily: "{fonts.heading}",
-    fontSize: "{fontSizes.2xl}",
-    fontWeight: "{fontWeights.bold}",
-    lineHeight: "{lineHeights.tight}",
-  },
-
-  headingSmall: {
-    fontFamily: "{fonts.heading}",
-    fontSize: "{fontSizes.xl}",
-    fontWeight: "{fontWeights.semibold}",
-    lineHeight: "{lineHeights.tight}",
-  },
-
-  caption: {
-    fontFamily: "{fonts.body}",
-    fontSize: "{fontSizes.xs}",
-    fontWeight: "{fontWeights.normal}",
-    lineHeight: "{lineHeights.normal}",
-  },
-};
-
-
 export const defaultRecipes: RecipeCollection = {
   Button: buttonRecipe,
   FormControl: formControlRecipe,
@@ -93,7 +51,7 @@ export const defaultRecipes: RecipeCollection = {
 export const defaultTheme: Theme = {
   tokens: defaultTokens,
   semanticTokens: defaultSemanticTokens,
-  textStyles: defaultTextStyles,
+  typography: defaultTypography,
   recipes: defaultRecipes,
 
   intensity: 50,

@@ -3,9 +3,9 @@ import type { DesignTokens } from "@/types";
 export function resolveTokenReference(
   value: unknown,
   tokens: DesignTokens,
-): string {
+): string | number {
   if (typeof value !== "string") {
-    return "";
+    return typeof value === "number" ? value : "";
   }
 
   const match = value.match(/^\{(.+)\}$/);
@@ -29,8 +29,14 @@ export function resolveTokenReference(
   if (typeof current === "object" && current !== null && "value" in current) {
     const tokenValue = (current as { value: unknown }).value;
 
-    return typeof tokenValue === "string" ? tokenValue : "";
+    if (typeof tokenValue === "string" || typeof tokenValue === "number") {
+      return tokenValue;
+    }
+
+    return "";
   }
 
-  return typeof current === "string" ? current : "";
+  return typeof current === "string" || typeof current === "number"
+    ? current
+    : "";
 }

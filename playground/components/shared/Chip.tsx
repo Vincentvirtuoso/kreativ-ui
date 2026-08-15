@@ -15,6 +15,7 @@ export function Chip({
     <Button
       type="button"
       size="xs"
+      typography="mono"
       variant="outline"
       color={active ? "brand" : "neutral"}
       disabled={disabled}

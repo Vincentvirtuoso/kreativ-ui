@@ -4,7 +4,7 @@ import type {
   SizeToken,
   Theme,
   ThemeOverride,
-  TextStyles,
+  Typography,
   SemanticTokens,
 } from "@/types";
 import { mergeRecipes } from "./recipes/mergeRecipes";
@@ -153,10 +153,10 @@ function mergeSemanticTokens(
   return deepMerge(base, override);
 }
 
-function mergeTextStyles(
-  base: TextStyles,
-  override?: ThemeOverride["textStyles"],
-): TextStyles {
+function mergeTypography(
+  base: Typography,
+  override?: ThemeOverride["typography"],
+): Typography {
   return deepMerge(base, override);
 }
 
@@ -199,7 +199,7 @@ export function mergeTheme(base: Theme, override?: ThemeOverride): Theme {
       override.semanticTokens,
     ),
 
-    textStyles: mergeTextStyles(base.textStyles, override.textStyles),
+    typography: mergeTypography(base.typography, override.typography),
 
     recipes: mergeRecipes(base.recipes, override.recipes),
 

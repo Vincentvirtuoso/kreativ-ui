@@ -9,6 +9,7 @@ import type {
   LoadingProps,
   FullWidthProps,
   BaseColor,
+  TypographyProps,
 } from "@/types/common";
 
 export type ButtonSize = SizeValue | "icon";
@@ -42,7 +43,8 @@ export interface ButtonProps
     VariantProps<ButtonVariant>,
     DisabledProps,
     LoadingProps,
-    FullWidthProps {
+    FullWidthProps,
+    TypographyProps {
   size?: ButtonSize;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;

@@ -80,6 +80,14 @@ export interface VariantProps<Variant extends string = string> {
   variant?: Variant;
 }
 
+export interface TypographyProps {
+  /**
+   * Defines the typography style to apply to the component.
+   * The value must match a typography style registered in the theme.
+   */
+  typography?: string;
+}
+
 export interface DisabledProps {
   /**
    * Disables the component.
@@ -135,14 +143,14 @@ export interface ValueProps {
    * For uncontrolled form control
    */
 
-  defaultValue?:string
+  defaultValue?: string;
 
   /**
    * Called when value is changed
-   * 
-   * @param newValue 
+   *
+   * @param newValue
    * @returns void
    */
 
-  onValueChange?: (newValue:string) => void
+  onValueChange?: (newValue: string) => void;
 }
