@@ -16,6 +16,7 @@ import { inputKindIcons, Spinner, Eye, EyeOff, ClearIcon } from "./Input.icons";
 import { inputKindDefaults } from "./Input.constants";
 import type { InputProps } from "./Input.types";
 import { useStateTransition } from "@/hooks/useStateTransition";
+import { useOptionalFormField } from "../FormField/FormField.context";
 
 function mergeRefs<T>(...refs: Array<Ref<T> | undefined>) {
   return (node: T) => {
@@ -79,8 +80,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const autoId = useId();
     const { theme } = useTheme();
+    const field = useOptionalFormField();
 
-    const id = externalId ?? autoId;
+    const id = externalId ?? field?.id ?? autoId;
+    const isInvalid = error || field?.invalid || false;
+    const describedBy = field?.describedBy ?? undefined;
+    const isRequired = field?.required ?? props.required;
     const internalRef = useRef<HTMLInputElement>(null);
 
     const { style: sizeStyle, iconSize } = useSizeStyle(size, false, "input");
@@ -264,8 +269,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           onChange={handleChange}
           readOnly={isLoading || readOnlyProp}
           disabled={isLoading || disabled}
-          aria-required={props.required}
           aria-busy={isLoading || undefined}
+          aria-invalid={isInvalid || undefined}
+          aria-describedby={describedBy}
+          aria-required={isRequired || undefined}
           className={inputClasses}
           data-variant={variant}
           data-size={size}

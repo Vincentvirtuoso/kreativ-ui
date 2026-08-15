@@ -88,9 +88,10 @@ export function Select({
   );
 
   const handleClear = useCallback(() => {
-    if (valueProp === undefined) setInternalValue(undefined);
-    onValueChange?.(undefined);
     setActiveValue(undefined);
+    setInternalValue(undefined);
+    onValueChange?.(undefined);
+    setSelectedLabel(undefined);
   }, [valueProp, onValueChange]);
 
   const optionId = useCallback(

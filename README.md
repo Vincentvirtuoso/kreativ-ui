@@ -679,6 +679,432 @@ For more advanced usage (e.g., integrating with `react-hook-form`), see the [Git
 
 ---
 
+# 🧩 Select
+
+A fully accessible, customizable select component with keyboard navigation, grouped options, clearable selections, and optional integration with `FormField`. Built as a compound component for maximum flexibility.
+
+---
+
+## Overview
+
+`Select` is a headless‑style compound component that implements the WAI‑ARIA combobox pattern. It consists of:
+
+- `Select` – root container, manages state and context
+- `Select.Trigger` – interactive button that opens/closes the dropdown
+- `Select.Value` – displays the selected option or a placeholder
+- `Select.Content` – dropdown container for options
+- `Select.Item` – an individual selectable option
+- `Select.Group` – groups related options
+- `Select.Label` – heading for a group
+
+Supports both **controlled** (`value`/`onValueChange`) and **uncontrolled** (`defaultValue`) usage.
+
+---
+
+## Import
+
+```tsx
+import { Select } from "@splenddev/kreativ-ui";
+```
+
+---
+
+## Basic Usage
+
+```tsx
+<Select placeholder="Select a country">
+  <Select.Trigger>
+    <Select.Value />
+  </Select.Trigger>
+
+  <Select.Content>
+    <Select.Item value="us">United States</Select.Item>
+    <Select.Item value="ca">Canada</Select.Item>
+    <Select.Item value="mx">Mexico</Select.Item>
+  </Select.Content>
+</Select>
+```
+
+---
+
+## Controlled Select
+
+Use `value` and `onValueChange` to control the selection from a parent component.
+
+```tsx
+import { useState } from "react";
+
+function ControlledSelect() {
+  const [value, setValue] = useState<string | undefined>("");
+
+  return (
+    <Select value={value} onValueChange={setValue}>
+      <Select.Trigger>
+        <Select.Value placeholder="Choose a framework" />
+      </Select.Trigger>
+
+      <Select.Content>
+        <Select.Item value="react">React</Select.Item>
+        <Select.Item value="vue">Vue</Select.Item>
+        <Select.Item value="svelte">Svelte</Select.Item>
+      </Select.Content>
+    </Select>
+  );
+}
+```
+
+> When `clearable` is enabled, clearing the value will call `onValueChange(undefined)`. The parent must handle this state change accordingly.
+
+---
+
+## Uncontrolled Select
+
+Use `defaultValue` for an uncontrolled component.
+
+```tsx
+<Select defaultValue="react">
+  <Select.Trigger>
+    <Select.Value placeholder="Choose a framework" />
+  </Select.Trigger>
+
+  <Select.Content>
+    <Select.Item value="react">React</Select.Item>
+    <Select.Item value="vue">Vue</Select.Item>
+    <Select.Item value="angular">Angular</Select.Item>
+  </Select.Content>
+</Select>
+```
+
+---
+
+## Props
+
+| Prop            | Type                                       | Default     | Description                                                      |
+| --------------- | ------------------------------------------ | ----------- | ---------------------------------------------------------------- |
+| `value`         | `string`                                   | –           | Controlled selected value                                        |
+| `defaultValue`  | `string`                                   | –           | Uncontrolled initial value                                       |
+| `onValueChange` | `(value?: string) => void`                 | –           | Called when selection changes                                    |
+| `placeholder`   | `string`                                   | –           | Text shown when no value is selected                             |
+| `required`      | `boolean`                                  | `false`     | Marks the field as required (`aria-required`)                    |
+| `name`          | `string`                                   | –           | Name for the hidden input used in form submissions               |
+| `disabled`      | `boolean`                                  | `false`     | Disables the entire select                                       |
+| `clearable`     | `boolean`                                  | `false`     | Shows a clear button (removes selection)                         |
+| `variant`       | `"outline" \| "filled" \| "ghost"`         | `"outline"` | Visual style                                                     |
+| `size`          | `"sm" \| "md" \| "lg"`                     | `"md"`      | Size of the trigger and content                                  |
+| `error`         | `boolean`                                  | `false`     | Shows error state and sets `aria-invalid="true"`                 |
+| `success`       | `boolean`                                  | `false`     | Shows success state                                              |
+| `rounded`       | `boolean`                                  | `false`     | Applies fully rounded corners to the trigger                     |
+| `className`     | `string`                                   | –           | Additional class names for the root container                    |
+
+---
+
+## Compound Components
+
+### `Select.Trigger`
+
+The interactive button that toggles the dropdown. It receives all necessary ARIA attributes from the root `Select`.
+
+```tsx
+<Select.Trigger>
+  <Select.Value />
+</Select.Trigger>
+```
+
+### `Select.Value`
+
+Renders the current selection or the placeholder. The label is derived from the matching `Select.Item`’s children.
+
+```tsx
+<Select.Value placeholder="Choose an option" />
+```
+
+### `Select.Content`
+
+The dropdown container. Renders its children (items, groups, labels) inside a listbox.
+
+```tsx
+<Select.Content>
+  {/* items */}
+</Select.Content>
+```
+
+### `Select.Item`
+
+A single selectable option.
+
+| Prop       | Type      | Default | Description                       |
+| ---------- | --------- | ------- | --------------------------------- |
+| `value`    | `string`  | required | Value of the option               |
+| `disabled` | `boolean` | `false` | Disables this option              |
+| `children` | `ReactNode` | –     | Display label                     |
+
+```tsx
+<Select.Item value="react" disabled>React</Select.Item>
+```
+
+### `Select.Group`
+
+Groups related options, typically used with `Select.Label`.
+
+```tsx
+<Select.Group>
+  <Select.Label>Frontend</Select.Label>
+  <Select.Item value="react">React</Select.Item>
+  <Select.Item value="vue">Vue</Select.Item>
+</Select.Group>
+```
+
+### `Select.Label`
+
+A heading for a group of options. It is rendered as a non‑interactive label inside the listbox.
+
+```tsx
+<Select.Label>Backend</Select.Label>
+```
+
+---
+
+## Accessibility
+
+`Select` implements the WAI‑ARIA combobox pattern and manages all necessary relationships automatically.
+
+**Roles & Attributes**:
+
+- Trigger: `role="combobox"`, `aria-haspopup="listbox"`, `aria-expanded`, `aria-controls`, `aria-activedescendant`
+- Content: `role="listbox"`
+- Items: `role="option"`, `aria-selected`, `aria-disabled`
+
+**Automatic IDs**: The root generates unique IDs for the trigger, content, and each option. These are used to connect the trigger to the listbox and to manage `aria-activedescendant`.
+
+**FormField integration**: When placed inside a `FormField`, the Select consumes the following context:
+
+- `id` – becomes the trigger’s `id`
+- `labelId` – linked via `aria-labelledby`
+- `descriptionId` / `messageId` – linked via `aria-describedby`
+- `invalid` – sets `aria-invalid`
+- `required` – sets `aria-required`
+
+This ensures full ARIA support with no manual configuration.
+
+---
+
+## Keyboard Navigation
+
+| Key         | Open state | Closed state                         |
+| ----------- | ---------- | ------------------------------------ |
+| `ArrowDown` | Next item  | Opens the dropdown                    |
+| `ArrowUp`   | Previous item | Opens the dropdown (or no-op)      |
+| `Home`      | First item | Opens and selects first? (implementation) |
+| `End`       | Last item  | Opens and selects last?              |
+| `Enter`     | Select active item | Opens the dropdown             |
+| `Space`     | Select active item | Opens the dropdown             |
+| `Escape`    | Closes dropdown | –                                   |
+| `Backspace` | –          | Clears selection (if `clearable`)    |
+| `Delete`    | –          | Clears selection (if `clearable`)    |
+
+> When the dropdown is open, `ArrowDown`/`ArrowUp` navigate through items. `Enter`/`Space` select the active (highlighted) item and close the dropdown. `Escape` closes the dropdown without selection.
+
+---
+
+## Clearable Select
+
+When `clearable` is `true`, a clear button appears inside the trigger when a value is selected. Clicking it resets the selection to `undefined`.
+
+```tsx
+<Select clearable defaultValue="react">
+  <Select.Trigger>
+    <Select.Value placeholder="Pick a framework" />
+  </Select.Trigger>
+
+  <Select.Content>
+    <Select.Item value="react">React</Select.Item>
+    <Select.Item value="vue">Vue</Select.Item>
+  </Select.Content>
+</Select>
+```
+
+**Controlled behavior**: The parent must handle `onValueChange(undefined)` to update its own state.
+
+**Uncontrolled behavior**: The internal state is cleared automatically.
+
+---
+
+## Disabled Options
+
+Individual items can be disabled using the `disabled` prop. They are not selectable via mouse or keyboard navigation and are announced as disabled by screen readers.
+
+```tsx
+<Select.Item value="legacy" disabled>Legacy</Select.Item>
+```
+
+Disabled items are skipped when navigating with arrow keys.
+
+---
+
+## Validation States
+
+### Error
+
+```tsx
+<Select error>
+  <Select.Trigger>
+    <Select.Value placeholder="Choose" />
+  </Select.Trigger>
+  <Select.Content>...</Select.Content>
+</Select>
+```
+
+Visually styles the trigger with error colours and sets `aria-invalid="true"`.
+
+### Success
+
+```tsx
+<Select success>...</Select>
+```
+
+Applies success styling.
+
+---
+
+## FormField Integration
+
+When used inside a `FormField`, the Select automatically inherits the field’s `id`, `required`, and validation state.
+
+```tsx
+<FormField required error="Please select a country">
+  <FormField.Label>Country</FormField.Label>
+  <FormField.Description>Select your country of residence.</FormField.Description>
+
+  <Select>
+    <Select.Trigger>
+      <Select.Value placeholder="Select a country" />
+    </Select.Trigger>
+    <Select.Content>
+      <Select.Item value="us">United States</Select.Item>
+      <Select.Item value="ca">Canada</Select.Item>
+    </Select.Content>
+  </Select>
+
+  <FormField.Message />
+</FormField>
+```
+
+> No extra props are needed – the Select picks up the context automatically.
+
+---
+
+## Native Form Submission
+
+The `name` prop renders a hidden `<input>` that is included in form submissions. The value submitted is the currently selected `value`.
+
+```tsx
+<form onSubmit={handleSubmit}>
+  <Select name="country" defaultValue="us">
+    <Select.Trigger>
+      <Select.Value placeholder="Select a country" />
+    </Select.Trigger>
+    <Select.Content>
+      <Select.Item value="us">United States</Select.Item>
+      <Select.Item value="ca">Canada</Select.Item>
+    </Select.Content>
+  </Select>
+
+  <button type="submit">Submit</button>
+</form>
+```
+
+---
+
+## Styling and Theming
+
+Select uses the same theming infrastructure as other Kreativ UI form controls:
+
+- `theme.recipes.FormControl` defines base, variant, and size styles.
+- `useSizeStyle` applies height, padding, and font size from the `sizes` token.
+- Variants (`outline`, `filled`, `ghost`) are resolved via `resolveRecipe`.
+- Validation states (`error`, `success`) are applied through CSS variables and class names.
+
+All styling is driven by the runtime theme, so overriding the visual appearance can be done by providing a custom `FormControl` recipe in the theme.
+
+---
+
+## Data Attributes
+
+The Select exposes several data attributes for styling or testing:
+
+| Attribute          | Element         | Values                     | Description                              |
+| ------------------ | --------------- | -------------------------- | ---------------------------------------- |
+| `data-state`       | `Select.Trigger` | `"open"`, `"closed"`       | Current dropdown state                   |
+| `data-state`       | `Select.Item`   | `"selected"`, `"unselected"` | Selection state of the item            |
+| `data-active`      | `Select.Item`   | present when highlighted   | Keyboard‑focused item (active)           |
+| `data-disabled`    | `Select.Item`   | present when disabled      | Disabled state                           |
+| `data-invalid`     | `Select.Trigger` | present when error        | Error state                              |
+
+---
+
+## Complete Example
+
+```tsx
+import { useState } from "react";
+import { FormField, Select } from "@splenddev/kreativ-ui";
+
+function CountrySelect() {
+  const [country, setCountry] = useState<string | undefined>("");
+  const [error, setError] = useState("");
+
+  const validate = (value?: string) => {
+    if (!value) setError("Please select a country");
+    else setError("");
+  };
+
+  return (
+    <FormField required error={error}>
+      <FormField.Label>Country</FormField.Label>
+      <FormField.Description>Choose your country of residence.</FormField.Description>
+
+      <Select
+        value={country}
+        onValueChange={(val) => {
+          setCountry(val);
+          validate(val);
+        }}
+        clearable
+        name="country"
+        error={!!error}
+      >
+        <Select.Trigger>
+          <Select.Value placeholder="Select a country" />
+        </Select.Trigger>
+
+        <Select.Content>
+          <Select.Group>
+            <Select.Label>North America</Select.Label>
+            <Select.Item value="us">United States</Select.Item>
+            <Select.Item value="ca">Canada</Select.Item>
+            <Select.Item value="mx">Mexico</Select.Item>
+          </Select.Group>
+
+          <Select.Group>
+            <Select.Label>Europe</Select.Label>
+            <Select.Item value="uk">United Kingdom</Select.Item>
+            <Select.Item value="de">Germany</Select.Item>
+            <Select.Item value="fr" disabled>France (disabled)</Select.Item>
+          </Select.Group>
+        </Select.Content>
+      </Select>
+
+      {error && <FormField.Message>{error}</FormField.Message>}
+    </FormField>
+  );
+}
+```
+
+---
+
+For more advanced use cases (e.g., async loading, custom rendering), refer to the [GitHub repository examples](https://github.com/Vincentvirtuoso/kreativ-ui).
+
+---
+
 # ♿ Accessibility
 
 Kreativ UI components are built with accessibility in mind:

@@ -1,12 +1,15 @@
 import { forwardRef, useCallback } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/utils/cn";
-import { inputWrapperVariants, inputSizeVariants } from "../Input/Input.styles";
 import { ClearIcon } from "../Input/Input.icons";
 import { useSelectContext } from "./Select.context";
 import type { SelectTriggerProps } from "./Select.types";
+import { useSizeStyle, useTheme } from "@/hooks";
+import { resolveRecipe } from "@/theme";
 
-function orderedEnabledValues(items: Map<string, { label: React.ReactNode; disabled?: boolean }>) {
+function orderedEnabledValues(
+  items: Map<string, { label: React.ReactNode; disabled?: boolean }>,
+) {
   return [...items.entries()]
     .filter(([, meta]) => !meta.disabled)
     .map(([value]) => value);
@@ -16,14 +19,35 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
   ({ className, children, onKeyDown, ...props }, ref) => {
     const ctx = useSelectContext("SelectTrigger");
 
+    const { theme } = useTheme();
+    const { style: sizeStyle, iconSize } = useSizeStyle(
+      ctx.size,
+      false,
+      "select",
+    );
+
     const state = ctx.isInvalid ? "error" : ctx.isSuccess ? "success" : "none";
+
+    const wrapperClasses = cn(
+      resolveRecipe(theme.recipes.FormControl, {
+        variant: ctx.variant,
+        state,
+        rounded: Boolean(ctx.rounded),
+        fullWidth: true,
+        disabled: ctx.disabled,
+        hasAdornment: true,
+      }),
+      className,
+    );
     const showClear = ctx.clearable && ctx.value !== undefined && !ctx.disabled;
 
     const move = useCallback(
       (delta: 1 | -1) => {
         const values = orderedEnabledValues(ctx.items);
         if (!values.length) return;
-        const currentIndex = ctx.activeValue ? values.indexOf(ctx.activeValue) : -1;
+        const currentIndex = ctx.activeValue
+          ? values.indexOf(ctx.activeValue)
+          : -1;
         const nextIndex =
           currentIndex === -1
             ? delta === 1
@@ -32,7 +56,7 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
             : (currentIndex + delta + values.length) % values.length;
         ctx.setActiveValue(values[nextIndex]);
       },
-      [ctx]
+      [ctx],
     );
 
     const handleKeyDown = useCallback(
@@ -69,7 +93,8 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
           case " ":
             e.preventDefault();
             if (!ctx.open) ctx.setOpen(true);
-            else if (ctx.activeValue !== undefined) ctx.onValueChange(ctx.activeValue);
+            else if (ctx.activeValue !== undefined)
+              ctx.onValueChange(ctx.activeValue);
             break;
           case "Escape":
             if (ctx.open) {
@@ -88,25 +113,11 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
             break;
         }
       },
-      [ctx, move, onKeyDown]
+      [ctx, move, onKeyDown],
     );
 
     return (
-      <div
-        ref={ctx.triggerRef}
-        className={cn(
-          inputWrapperVariants({
-            variant: ctx.variant,
-            state,
-            fullWidth: true,
-            disabled: ctx.disabled,
-          }),
-          inputSizeVariants[ctx.size],
-          "flex items-center gap-2",
-          ctx.rounded && "rounded-full",
-          className,
-        )}
-      >
+      <div ref={ctx.triggerRef} className={wrapperClasses} style={sizeStyle}>
         <button
           ref={ref}
           type="button"
@@ -129,7 +140,7 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
           data-state={ctx.open ? "open" : "closed"}
           onClick={() => !ctx.disabled && ctx.setOpen(!ctx.open)}
           onKeyDown={handleKeyDown}
-          className="min-w-0 flex-1 bg-transparent cursor-pointer text-left outline-none disabled:cursor-not-allowed h-full"
+          className="relative min-w-0 flex-1 bg-transparent cursor-pointer text-left outline-none disabled:cursor-not-allowed h-full"
           {...props}
         >
           {children}
@@ -157,14 +168,18 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
               e.stopPropagation();
               ctx.onClear();
             }}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
             className="flex h-4 w-4 items-center justify-center text-text-muted transition-colors hover:text-text"
           >
-            <ClearIcon size={14} />
+            <ClearIcon size={Number(iconSize) || 14} />
           </button>
         )}
       </div>
     );
-  }
+  },
 );
 
 SelectTrigger.displayName = "SelectTrigger";
