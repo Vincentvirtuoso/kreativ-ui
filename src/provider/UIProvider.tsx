@@ -25,14 +25,12 @@ export interface UIProviderProps {
 }
 
 function useSystemPrefersDark() {
-  const [prefersDark, setPrefersDark] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches,
-  );
+  const [prefersDark, setPrefersDark] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    setPrefersDark(mediaQuery.matches);
 
     const handleChange = (event: MediaQueryListEvent) => {
       setPrefersDark(event.matches);
