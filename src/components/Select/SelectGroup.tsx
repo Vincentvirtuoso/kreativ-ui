@@ -1,3 +1,5 @@
+"use client";
+
 import { useId, useState } from "react";
 import { cn } from "@/utils/cn";
 import { SelectGroupContext } from "./Select.context";

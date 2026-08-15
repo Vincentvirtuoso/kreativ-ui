@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useId, useState } from "react";
 import { FormFieldContext } from "./FormField.context";
 import type { FormFieldProps } from "./FormField.types";
@@ -7,11 +9,13 @@ import {
   FormFieldMessage,
   FormFieldControl,
 } from "./";
+import { cn } from "@/utils";
 
 export function FormField({
   id: externalId,
   error,
   required = false,
+  className,
   children,
 }: FormFieldProps) {
   const generatedId = useId();
@@ -60,7 +64,7 @@ export function FormField({
         hasExternalLabel,
       }}
     >
-      <div className="flex flex-col gap-2">
+      <div className={cn("flex flex-col gap-2", className)}>
         {children}
 
         {displayedMessage && (

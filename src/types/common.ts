@@ -124,3 +124,25 @@ export interface StateProps {
    */
   success?: boolean;
 }
+
+export interface ValueProps {
+  /**
+   * Passed value
+   */
+  value?: string;
+
+  /**
+   * For uncontrolled form control
+   */
+
+  defaultValue?:string
+
+  /**
+   * Called when value is changed
+   * 
+   * @param newValue 
+   * @returns void
+   */
+
+  onValueChange?: (newValue:string) => void
+}

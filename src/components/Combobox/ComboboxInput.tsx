@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, useEffect } from "react";
 import { cn } from "@/utils/cn";
 import { inputBase, inputWrapperVariants, inputSizeVariants } from "../Input/Input.styles";

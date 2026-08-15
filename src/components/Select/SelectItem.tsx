@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { cn } from "@/utils/cn";
 import { useSelectContext } from "./Select.context";

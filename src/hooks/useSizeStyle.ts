@@ -7,7 +7,17 @@ export interface ResolvedSize {
   iconSize?: string;
 }
 
-export function useSizeStyle(size: string, iconOnly = false, component: string = "size"): ResolvedSize {
+export interface UseSizeStyleOptions {
+  includeHeight?: boolean;
+}
+
+export function useSizeStyle(
+  size: string,
+  iconOnly = false,
+  component: string = "button",
+  options: UseSizeStyleOptions = {},
+): ResolvedSize {
+  const { includeHeight = true } = options;
   const { theme, fallbackSize } = useTheme();
 
   return useMemo(() => {
@@ -18,13 +28,13 @@ export function useSizeStyle(size: string, iconOnly = false, component: string =
 
     const style: CSSPropertiesWithVars = {};
 
-    if (token.height) {
+    if (includeHeight && token.height) {
       style.height = token.height;
     }
 
     if (token.width) {
       style.width = token.width;
-    } else if (iconOnly && token.height) {
+    } else if (iconOnly && includeHeight && token.height) {
       style.width = token.height;
     }
 
@@ -55,5 +65,5 @@ export function useSizeStyle(size: string, iconOnly = false, component: string =
       style,
       iconSize: token.iconSize,
     };
-  }, [theme.sizes, size, fallbackSize, iconOnly]);
+  }, [theme.sizes, size, fallbackSize, iconOnly, includeHeight, component]);
 }

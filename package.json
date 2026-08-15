@@ -11,7 +11,7 @@
   "homepage": "https://github.com/Vincentvirtuoso/kreativ-ui#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Vincentvirtuoso/kreativ-ui.git"
+    "url": "git+https://github.com/Vincentvirtuoso/kreativ-ui.git"
   },
   "bugs": {
     "url": "https://github.com/Vincentvirtuoso/kreativ-ui/issues"
@@ -62,6 +62,9 @@
   "scripts": {
     "dev": "vite",
     "test": "vitest",
+    "check:use-client": "node scripts/check-use-client.mjs",
+    "fix:use-client": "node scripts/check-use-client.mjs -- --fix",
+    "prebuild": "npm run check:use-client",
     "build": "tsup && npm run build:css",
     "build:css": "npx @tailwindcss/cli -i ./src/styles/index.css -o ./dist/styles/index.css --minify"
   },
@@ -89,6 +92,7 @@
     "eslint": "^10.6.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
+    "glob": "^13.0.6",
     "globals": "^17.7.0",
     "tailwindcss": "^4.3.3",
     "tsup": "^8.5.1",
