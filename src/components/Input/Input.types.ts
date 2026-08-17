@@ -7,12 +7,14 @@ import type {
   LoadingProps,
   SizeProps,
   StateProps,
+  TrimProps,
+  ValueProps,
   VariantProps,
 } from "@/types";
 
 export type InputVariant = "outline" | "filled" | "ghost";
 
-export type InputSize = "sm" | "md" | "lg";
+export type InputSize = "xs" | "sm" | "md" | "lg";
 
 export type InputKind =
   | "text"
@@ -32,7 +34,10 @@ export type InputKind =
 
 export interface InputProps
   extends
-    Omit<InputHTMLAttributes<HTMLInputElement>, "size">,
+    Omit<
+      InputHTMLAttributes<HTMLInputElement>,
+      "size" | "value" | "defaultValue"
+    >,
     BaseProps,
     SizeProps,
     VariantProps<InputVariant>,
@@ -40,7 +45,9 @@ export interface InputProps
     LoadingProps,
     FullWidthProps,
     ClearableProps,
-    StateProps {
+    ValueProps<string | number | undefined>,
+    StateProps,
+    TrimProps {
   inputClassName?: string;
   kind?: InputKind;
   rounded?: boolean;

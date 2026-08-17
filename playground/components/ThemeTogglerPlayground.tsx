@@ -207,20 +207,6 @@ export function ThemeTogglerPlayground() {
     "/>",
   ].join("\n");
 
-  const getAttributes = (el: HTMLElement | null) => {
-    const button = el?.querySelector("button");
-
-    return {
-      disabled: button?.getAttribute("disabled") ?? null,
-
-      "aria-pressed": button?.getAttribute("aria-pressed") ?? null,
-
-      "aria-busy": button?.getAttribute("aria-busy") ?? null,
-
-      type: button?.getAttribute("type") ?? null,
-    };
-  };
-
   return (
     <Playground
       title="ThemeToggler"
@@ -228,7 +214,6 @@ export function ThemeTogglerPlayground() {
       controls={controls}
       preview={preview}
       code={code}
-      getAttributes={getAttributes}
     />
   );
 }

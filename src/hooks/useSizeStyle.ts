@@ -16,7 +16,7 @@ export interface UseSizeStyleOptions {
 export function useSizeStyle(
   size: string,
   iconOnly = false,
-  component: string = "button",
+  componentName: string = "componentName",
   options: UseSizeStyleOptions = {},
 ): ResolvedSize {
   const { includeHeight = true } = options;
@@ -59,7 +59,7 @@ export function useSizeStyle(
     }
 
     if (token.radius) {
-      const varName = `--kui-${component}-radius` as `--kui-${string}`;
+      const varName = `--kui-${componentName}-radius` as `--kui-${string}`;
       style[varName] = token.radius;
     }
 
@@ -67,5 +67,5 @@ export function useSizeStyle(
       style,
       iconSize: token.iconSize,
     };
-  }, [theme.sizes, size, fallbackSize, iconOnly, includeHeight, component]);
+  }, [theme.sizes, size, fallbackSize, iconOnly, includeHeight, componentName]);
 }

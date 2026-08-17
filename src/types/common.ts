@@ -33,6 +33,11 @@ export type CSSPropertiesWithVars = CSSProperties & {
   [key: `--${string}`]: string | number | undefined;
 };
 
+export type ReportedValidity = {
+  invalid: boolean;
+  message?: string;
+};
+
 /* -------------------------------------------------------------------------- */
 /* Base component props                                                       */
 /* -------------------------------------------------------------------------- */
@@ -131,26 +136,67 @@ export interface StateProps {
    * Displays a success state.
    */
   success?: boolean;
+
+  /**
+   * Displays a warning state.
+   */
+  warning?: boolean;
 }
 
-export interface ValueProps {
+export interface ValueProps<T = string> {
   /**
-   * Passed value
+   * Controlled value.
    */
-  value?: string;
+  value?: T;
 
   /**
-   * For uncontrolled form control
+   * Initial value for uncontrolled usage.
    */
-
-  defaultValue?: string;
+  defaultValue?: T;
 
   /**
-   * Called when value is changed
+   * Called when the value changes.
+   */
+  onValueChange?: (value: T) => void;
+}
+
+export interface TrimProps {
+  /**
+   * Removes leading and trailing whitespace from the value
+   * when the value is committed.
    *
-   * @param newValue
-   * @returns void
+   * @default false
    */
+  trim?: boolean;
+}
 
-  onValueChange?: (newValue: string) => void;
+export interface EmbeddedProps {
+  /**
+   * Renders the component as part of a parent component's visual container.
+   *
+   * Removes standalone container styling such as borders, radius,
+   * and focus ring.
+   */
+  embedded?: boolean;
+}
+
+export type ValidationResult = boolean | string;
+
+export type ValidateOn = "change" | "blur" | "both";
+
+export interface ValidateProps<T = string> {
+  /**
+   * Validates the current value.
+   *
+   * Return `true` when valid, or `false`/a string when invalid.
+   * A returned string is used as the validation message.
+   */
+  validate?: (value: T) => ValidationResult;
+
+  /**
+   * Determines when validation runs.
+   *
+   * @default "blur"
+   */
+  validateOn?: ValidateOn;
 }

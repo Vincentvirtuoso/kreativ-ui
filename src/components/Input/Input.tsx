@@ -4,35 +4,27 @@ import {
   forwardRef,
   useEffect,
   useId,
+  useMemo,
   useRef,
   useState,
-  type Ref,
+  type ReactNode,
 } from "react";
 
-import { cn } from "@/utils/cn";
-import { resolveRecipe } from "@/theme";
-import { useSizeStyle } from "@/hooks";
+import { cn } from "@/utils";
+import { resolveRecipe } from "@/theme/recipes/resolveRecipe";
+import {
+  useClearableField,
+  useSizeStyle,
+  useStatusTransition,
+  useTheme,
+} from "@/hooks";
 
-import { useTheme } from "@/hooks";
-import { inputKindIcons, Spinner, Eye, EyeOff, ClearIcon } from "./Input.icons";
+import { ClearIcon, Eye, EyeOff, inputKindIcons, Spinner } from "./Input.icons";
+
 import { inputKindDefaults } from "./Input.constants";
 import type { InputProps } from "./Input.types";
-import { useStateTransition } from "@/hooks/useStateTransition";
 import { useOptionalFormField } from "../FormField/FormField.context";
-
-function mergeRefs<T>(...refs: Array<Ref<T> | undefined>) {
-  return (node: T) => {
-    refs.forEach((ref) => {
-      if (!ref) return;
-
-      if (typeof ref === "function") {
-        ref(node);
-      } else {
-        (ref as React.RefObject<T | null>).current = node;
-      }
-    });
-  };
-}
+import { mergeRefs } from "@/utils/mergeRef";
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
@@ -45,13 +37,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
       error,
       success,
+      warning,
 
       startIcon,
       endIcon,
 
       fullWidth = true,
-      disabled,
-
+      disabled = false,
       rounded = false,
 
       isLoading = false,
@@ -64,49 +56,70 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
       id: externalId,
 
+      trim = false,
+
       type: typeProp,
       inputMode: inputModeProp,
       autoComplete: autoCompleteProp,
       placeholder: placeholderProp,
 
       onChange: onChangeProp,
-      readOnly: readOnlyProp,
+      onValueChange: onValueChangeProp,
+      onBlur: onBlurProp,
 
       value,
       defaultValue,
 
       style,
+
       ...props
     },
     ref,
   ) => {
     const autoId = useId();
+    const internalRef = useRef<HTMLInputElement>(null);
+
     const { theme } = useTheme();
     const field = useOptionalFormField();
 
     const id = externalId ?? field?.id ?? autoId;
-    const isInvalid = error || field?.invalid || false;
-    const describedBy = field?.describedBy ?? undefined;
+
     const isRequired = field?.required ?? props.required;
-    const internalRef = useRef<HTMLInputElement>(null);
+
+    const describedBy = field?.describedBy;
+
+    const state = error
+      ? "error"
+      : success
+        ? "success"
+        : warning
+          ? "warning"
+          : (field?.status ?? "none");
+
+    const isInvalid = state === "error";
+
+    const statusTransition = useStatusTransition(state);
 
     const { style: sizeStyle, iconSize } = useSizeStyle(size, false, "input");
 
-    const [hasValue, setHasValue] = useState(() =>
-      Boolean(value ?? defaultValue ?? ""),
-    );
-
     const [visible, setVisible] = useState(false);
+
+    const { hasValue, setHasValue, clear } = useClearableField(
+      internalRef,
+      value ?? defaultValue,
+      onClear,
+    );
 
     useEffect(() => {
       if (value !== undefined) {
         setHasValue(Boolean(value));
       }
-    }, [value]);
+    }, [value, setHasValue]);
 
     const kindDefaults = inputKindDefaults[kind];
 
     const resolvedType = typeProp ?? kindDefaults.type;
+
     const isPasswordField = resolvedType === "password";
 
     const effectiveType = isPasswordField
@@ -118,30 +131,59 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const KindIcon = inputKindIcons[kind];
 
     const defaultStartIcon =
-      !hideKindIcon && KindIcon ? (
-        <KindIcon size={Number(iconSize) || 15} />
-      ) : undefined;
+      !hideKindIcon && KindIcon ? <KindIcon /> : undefined;
 
-    const startSlot =
-      startIcon || defaultStartIcon ? (
-        <span className="flex shrink-0 items-center justify-center">
-          {startIcon ?? defaultStartIcon}
+    const startAdornment = useMemo(() => {
+      const icon = startIcon ?? defaultStartIcon;
+      if (!icon) return null;
+      return (
+        <span
+          className="flex shrink-0 items-center justify-center"
+          style={{
+            width: iconSize,
+            height: iconSize,
+          }}
+        >
+          {icon}
         </span>
-      ) : null;
+      );
+    }, [startIcon, defaultStartIcon, iconSize]);
 
-    const builtInEnd: React.ReactNode[] = [];
+    const builtInEnd: ReactNode[] = [];
 
     if (isPasswordField) {
       builtInEnd.push(
         <button
           key="toggle-visibility"
           type="button"
-          tabIndex={-1}
           onClick={() => setVisible((current) => !current)}
           aria-label={visible ? "Hide password" : "Show password"}
-          className="flex items-center justify-center text-text-muted transition-colors hover:text-text"
+          aria-pressed={visible}
+          className="
+            flex items-center justify-center
+            text-text-muted
+            transition-colors
+            hover:text-text
+            focus-visible:outline
+            focus-visible:outline-2
+            focus-visible:outline-offset-2
+          "
         >
-          {visible ? <EyeOff size={16} /> : <Eye size={16} />}
+          {visible ? (
+            <EyeOff
+              style={{
+                width: iconSize,
+                height: iconSize,
+              }}
+            />
+          ) : (
+            <Eye
+              style={{
+                width: iconSize,
+                height: iconSize,
+              }}
+            />
+          )}
         </button>,
       );
     }
@@ -151,29 +193,49 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         <button
           key="clear"
           type="button"
-          tabIndex={-1}
-          onClick={handleClear}
+          onClick={clear}
           aria-label="Clear input"
-          className="flex items-center justify-center text-text-muted transition-colors hover:text-text"
+          className="
+            flex items-center justify-center
+            text-text-muted
+            transition-colors
+            hover:text-text
+            focus-visible:outline
+            focus-visible:outline-2
+            focus-visible:outline-offset-2
+          "
         >
-          <ClearIcon size={14} />
+          <ClearIcon
+            style={{
+              width: iconSize,
+              height: iconSize,
+            }}
+          />
         </button>,
       );
     }
 
-    const endSlot = isLoading ? (
-      <Spinner size={Number(iconSize) || 14} />
-    ) : endIcon ? (
-      endIcon
-    ) : builtInEnd.length ? (
-      <div className="flex shrink-0 items-center gap-1.5">{builtInEnd}</div>
+    const endAdornment: ReactNode = isLoading ? (
+      <Spinner size={iconSize || 14} />
+    ) : endIcon || builtInEnd.length > 0 ? (
+      <div className="flex shrink-0 items-center gap-1.5">
+        {endIcon && (
+          <span
+            className="flex items-center justify-center"
+            style={{
+              width: iconSize,
+              height: iconSize,
+            }}
+          >
+            {endIcon}
+          </span>
+        )}
+
+        {builtInEnd}
+      </div>
     ) : null;
 
-    const hasIcon = Boolean(startSlot || endSlot);
-
-    const state = error ? "error" : success ? "success" : "none";
-    const stateTransition = useStateTransition(state);
-
+    const hasAdornment = Boolean(startAdornment) || Boolean(endAdornment);
 
     const wrapperClasses = cn(
       resolveRecipe(theme.recipes.FormControl, {
@@ -181,8 +243,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         state,
         rounded,
         fullWidth,
-        disabled: Boolean(disabled || isLoading),
-        hasIcon,
+        disabled: disabled || isLoading,
+        hasAdornment,
       }),
       className,
     );
@@ -202,54 +264,48 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
       setHasValue(Boolean(event.target.value));
       onChangeProp?.(event);
+      onValueChangeProp?.(event.target.value);
     }
 
-    function handleClear() {
-      const element = internalRef.current;
+    function handleBlur(event: React.FocusEvent<HTMLInputElement>) {
+      if (trim && !disabled && !isLoading) {
+        const trimmedValue = event.currentTarget.value.trim();
+        if (trimmedValue !== event.currentTarget.value) {
+          event.currentTarget.value = trimmedValue;
 
-      if (!element) return;
+          setHasValue(Boolean(trimmedValue));
+          onValueChangeProp?.(trimmedValue);
+        }
+      }
 
-      const setter = Object.getOwnPropertyDescriptor(
-        window.HTMLInputElement.prototype,
-        "value",
-      )?.set;
-
-      setter?.call(element, "");
-
-      element.dispatchEvent(
-        new Event("input", {
-          bubbles: true,
-        }),
-      );
-
-      element.focus();
-
-      setHasValue(false);
-      onClear?.();
+      onBlurProp?.(event);
     }
+
+    const wasInvalidRef = useRef(isInvalid);
 
     useEffect(() => {
-      if (!error) return;
+      const justBecameInvalid = isInvalid && !wasInvalidRef.current;
 
-      const element = internalRef.current;
+      wasInvalidRef.current = isInvalid;
 
-      if (!element) return;
+      if (!justBecameInvalid) {
+        return;
+      }
 
-      element.scrollIntoView({
+      internalRef.current?.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
-    }, [error]);
+    }, [isInvalid]);
 
     return (
       <div
-        key={stateTransition ?? "idle"}
         className={wrapperClasses}
         style={resolvedStyle}
         data-state={state}
-        data-state-transition={stateTransition}
+        data-state-transition={statusTransition}
       >
-        {startSlot}
+        {startAdornment}
 
         <input
           {...props}
@@ -265,21 +321,21 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           value={value}
           defaultValue={defaultValue}
           onChange={handleChange}
-          readOnly={isLoading || readOnlyProp}
-          disabled={isLoading || disabled}
+          onBlur={handleBlur}
+          disabled={disabled || isLoading}
           aria-busy={isLoading || undefined}
           aria-invalid={isInvalid || undefined}
           aria-describedby={describedBy}
           aria-required={isRequired || undefined}
           className={inputClasses}
-          data-variant={variant}
-          data-size={size}
-          data-success={success || undefined}
           data-disabled={disabled || undefined}
           data-loading={isLoading || undefined}
+          data-size={size}
+          data-state={state}
+          data-variant={variant}
         />
 
-        {endSlot}
+        {endAdornment}
       </div>
     );
   },

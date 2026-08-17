@@ -6,7 +6,8 @@ import { Chip } from "./shared/Chip";
 import { Playground } from "./shared/Playground";
 import { useTheme } from "@/hooks";
 import { ButtonColor, ButtonVariant } from "@/components/Button/Button.types";
-import { buttonColors, buttonVariants } from "@/theme";
+import { getAttrs } from "./shared/getAttributes";
+import { buttonColors, buttonVariants } from "@/theme/defaults/recipes/button";
 
 type Size = "sm" | "md" | "lg";
 
@@ -138,14 +139,16 @@ export function ButtonPlayground() {
     .filter(Boolean)
     .join("\n");
 
-  const getAttributes = (el: HTMLElement | null) => ({
-    tag: el?.tagName.toLowerCase() ?? null,
-    disabled: el?.getAttribute("disabled") ?? null,
-    "aria-busy": el?.getAttribute("aria-busy") ?? null,
-    "aria-disabled": el?.getAttribute("aria-disabled") ?? null,
-    type: el?.getAttribute("type") ?? null,
-    href: el?.getAttribute("href") ?? null,
-  });
+  const extraAttributes = [
+    "tag",
+    "aria-disabled",
+    "aria-busy",
+
+    "aria-pressed",
+    "type",
+  ];
+
+  const excludeAttributes = ['aria-invalid','aria-describedby']
 
   return (
     <Playground
@@ -154,7 +157,7 @@ export function ButtonPlayground() {
       controls={controls}
       preview={preview}
       code={code}
-      getAttributes={getAttributes}
+      getAttributes={(el) => getAttrs(el, extraAttributes, excludeAttributes)}
     />
   );
 }

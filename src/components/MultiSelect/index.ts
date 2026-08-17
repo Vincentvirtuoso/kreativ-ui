@@ -4,6 +4,4 @@ export { MultiSelectTrigger } from "./MultiSelectTrigger";
 export { MultiSelectItem } from "./MultiSelectItem";
 export { MultiSelectContent } from "./MultiSelectContent";
 
-export * from "./MultiSelect.context";
-
 export * from "./MultiSelect.types";

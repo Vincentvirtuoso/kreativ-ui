@@ -7,7 +7,7 @@ import { ClearIcon } from "../Input/Input.icons";
 import { useSelectContext } from "./Select.context";
 import type { SelectTriggerProps } from "./Select.types";
 import { useSizeStyle, useTheme } from "@/hooks";
-import { resolveRecipe } from "@/theme";
+import { resolveRecipe } from "@/theme/recipes/resolveRecipe";
 
 function orderedEnabledValues(
   items: Map<string, { label: React.ReactNode; disabled?: boolean }>,

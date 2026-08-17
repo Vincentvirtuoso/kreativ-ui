@@ -12,7 +12,7 @@ export const radioBubbleVariants = cva(
       },
       state: {
         none: "",
-        error: "border-danger",
+        error: "border-destructive",
         success: "border-success",
       },
       checked: {
@@ -24,12 +24,17 @@ export const radioBubbleVariants = cva(
         false: "cursor-pointer",
       },
     },
-    defaultVariants: { size: "md", state: "none", checked: false, disabled: false },
+    defaultVariants: {
+      size: "md",
+      state: "none",
+      checked: false,
+      disabled: false,
+    },
     compoundVariants: [
-      { checked: false, state: "error", class: "border-danger" },
+      { checked: false, state: "error", class: "border-destructive" },
       { checked: false, state: "success", class: "border-success" },
     ],
-  }
+  },
 );
 
 export const radioDotSizes: Record<RadioSize, string> = {

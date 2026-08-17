@@ -6,6 +6,4 @@ export { SelectItem } from "./SelectItem";
 export { SelectValue } from "./SelectValue";
 export { SelectGroup } from "./SelectGroup";
 
-export * from "./Select.context";
-
 export * from "./Select.types";

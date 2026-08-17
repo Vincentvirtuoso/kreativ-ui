@@ -29,9 +29,6 @@ const REAL_UNITS = [
   "fr",
 ] as const;
 
-// Leading-dot decimals (".5") and trailing-dot ("2.") are both real,
-// valid CSS lengths — the old /^([\d.]+)(.*)$/ split accepted either
-// but never validated them; this is stricter on purpose.
 const NUMERIC_RE = /^-?(\d+\.?\d*|\.\d+)$/;
 
 function parseSizeValue(raw: string): {
@@ -71,7 +68,7 @@ function SizeValueField({
 
   function commit() {
     if (isValid) onCommitValue(draft);
-    else setDraft(parsed.value); // revert a bad manual entry rather than write garbage into the theme
+    else setDraft(parsed.value);
   }
 
   return (
@@ -97,7 +94,7 @@ function SizeValueField({
           "w-full flex-1 rounded border bg-transparent px-2 py-1 text-sm outline-none disabled:opacity-50",
           isValid
             ? "border-border focus:border-brand"
-            : "border-danger text-danger",
+            : "border-destructive text-destructive",
         )}
       />
 
@@ -144,9 +141,6 @@ export function SizeEditor({ theme, onChange }: SizeEditorProps) {
     onChange({ ...theme, sizes: { ...sizes, [sizeName]: nextToken } });
   }
 
-  // Keyword and numeric+unit are mutually exclusive representations of
-  // the same token — picking a keyword replaces the value outright
-  // rather than concatenating with whatever number was there before.
   function commitUnit(
     sizeName: string,
     key: keyof SizeToken,
@@ -157,7 +151,7 @@ export function SizeEditor({ theme, onChange }: SizeEditorProps) {
     if ((KEYWORDS as readonly string[]).includes(nextUnit)) {
       nextToken[key] = nextUnit;
     } else if (currentValue.trim() === "") {
-      delete nextToken[key]; // no number to attach a unit to yet
+      delete nextToken[key];
     } else {
       nextToken[key] = `${currentValue}${nextUnit}`;
     }
@@ -193,7 +187,7 @@ export function SizeEditor({ theme, onChange }: SizeEditorProps) {
             <button
               type="button"
               onClick={() => removeSize(name)}
-              className="font-mono text-xs text-text-muted hover:text-danger"
+              className="font-mono text-xs text-text-muted hover:text-destructive"
             >
               remove
             </button>

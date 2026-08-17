@@ -1,4 +1,4 @@
-import { UIProvider, type ThemeOverride } from "../src";
+import {  UIProvider, type ThemeOverride } from "../src";
 import ComponentsPlayground from "./components/ComponentsPlayground";
 import { useState } from "react";
 import { ThemeStudio } from "./components/ThemeStudio";
@@ -13,6 +13,13 @@ export function App() {
         gap: "0.75rem",
         radius: "1rem",
         iconSize: "1.5rem",
+      },
+    },
+    recipes: {
+      Button: {
+        compoundVariants: [
+          { conditions: { color: "neutral" }, className: "text-text-muted" },
+        ],
       },
     },
   });

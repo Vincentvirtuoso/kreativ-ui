@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import type { ReactNode } from "react";
-import { cn } from "@/utils/cn";
 import { useFormField } from "./FormField.context";
+import { cn } from "@/utils";
 
 export function FormFieldLabel({
   children,
@@ -22,7 +22,7 @@ export function FormFieldLabel({
     <label
       id={field.labelId}
       htmlFor={field.id}
-      className={cn("text-sm font-medium text-text", className)}
+      className={cn("font-medium text-text text-sm", className)}
     >
       {children}
       {field.required && (

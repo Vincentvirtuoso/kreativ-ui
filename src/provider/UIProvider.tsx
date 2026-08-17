@@ -10,11 +10,10 @@ import {
 } from "react";
 
 import { ThemeContext } from "./ThemeContext";
-import { defaultTheme } from "../theme/defaults/theme";
 import { resolveTokens, tokensToCssVars } from "./cssVariables";
-import { mergeTheme } from "@/theme/mergeTheme";
 import type { ColorMode, ThemeOverride } from "@/types/theme";
 import { isDev } from "@/utils/env";
+import { extendTheme } from "@/theme";
 
 export interface UIProviderProps {
   children: ReactNode;
@@ -60,10 +59,7 @@ export function UIProvider({
   const resolvedMode: "light" | "dark" =
     mode === "system" ? (systemPrefersDark ? "dark" : "light") : mode;
 
-  const theme = useMemo(
-    () => mergeTheme(defaultTheme, themeOverride),
-    [themeOverride],
-  );
+  const theme = useMemo(() => extendTheme(themeOverride), [themeOverride]);
 
   const resolvedTokens = useMemo(
     () => resolveTokens(theme.tokens, theme.semanticTokens, resolvedMode),

@@ -4,9 +4,8 @@ import type { ThemeOverride } from "@/types/theme";
 import { ColorEditor } from "./ColorEditor";
 import { COLOR_GROUPS } from "./theme.constants";
 
-import { defaultTheme } from "@/provider";
-import { mergeTheme } from "@/theme/mergeTheme";
 import { resolveSemanticTokenReferences } from "@/provider/cssVariables";
+import { extendTheme } from "@/theme";
 
 interface TokenEditorProps {
   theme: ThemeOverride;
@@ -18,7 +17,7 @@ export function TokenEditor({ theme, onChange }: TokenEditorProps) {
     new Set([COLOR_GROUPS[0].name]),
   );
 
-  const resolvedTheme = useMemo(() => mergeTheme(defaultTheme, theme), [theme]);
+  const resolvedTheme = useMemo(() => extendTheme(theme), [theme]);
 
   const resolvedSemanticTokens = resolveSemanticTokenReferences(
     resolvedTheme.tokens,

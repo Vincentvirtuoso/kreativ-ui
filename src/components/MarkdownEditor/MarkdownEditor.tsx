@@ -20,8 +20,11 @@ import {
   Code as CodeIcon,
   Link as LinkIcon,
 } from "lucide-react";
-import { TextareaCore } from "../Textarea";
 import { isDev } from "@/utils/env";
+import { useTheme } from "@/hooks";
+import { resolveRecipe } from "@/theme/recipes/resolveRecipe";
+import { useOptionalFormField } from "../FormField/FormField.context";
+import { TextareaCore } from "../Textarea/Textarea.core";
 
 type Action = (value: string, start: number, end: number) => TextEdit;
 
@@ -71,6 +74,13 @@ export const MarkdownEditor = forwardRef<
       defaultValue,
       onValueChange,
       className,
+      fullWidth,
+      variant,
+      success,
+      error,
+      warning,
+      disabled,
+      maxLength,
       ...textareaProps
     },
     ref,
@@ -82,9 +92,34 @@ export const MarkdownEditor = forwardRef<
       defaultTab,
     );
     const tab = tabProp ?? uncontrolledTab;
+    const { theme } = useTheme();
+    const field = useOptionalFormField();
+
+    const footerMessage = hint;
 
     const [draft, setDraft] = useState(() => valueProp ?? defaultValue ?? "");
     const value = valueProp ?? draft;
+    const maxLengthReached =
+      typeof maxLength === "number" && value.length >= maxLength;
+
+    const state =
+      error || maxLengthReached
+        ? "error"
+        : success
+          ? "success"
+          : warning
+            ? "warning"
+            : (field?.status ?? "none");
+
+    const editorClasses = cn(
+      resolveRecipe(theme.recipes.MarkdownEditor, {
+        variant,
+        state,
+        fullWidth,
+        disabled: !!disabled,
+      }),
+      className,
+    );
 
     function setTab(next: "write" | "preview") {
       if (tabProp === undefined) setUncontrolledTab(next);
@@ -97,6 +132,8 @@ export const MarkdownEditor = forwardRef<
     }
 
     function runAction(action: Action) {
+      if (disabled) return;
+
       const el = textareaRef.current;
       if (!el) return;
 
@@ -137,12 +174,7 @@ export const MarkdownEditor = forwardRef<
     }, [renderMarkdown]);
 
     return (
-      <div
-        className={cn(
-          "rounded-(--kui-radii-md) border border-border",
-          className,
-        )}
-      >
+      <div className={editorClasses}>
         <div
           role="tablist"
           aria-label="Markdown editor mode"
@@ -158,8 +190,10 @@ export const MarkdownEditor = forwardRef<
               aria-selected={tab === t}
               aria-controls={t === "write" ? writePanelId : previewPanelId}
               onClick={() => setTab(t)}
+              disabled={disabled}
               className={cn(
                 "border-b-2 py-2.5 text-sm capitalize transition-colors",
+                "disabled:pointer-events-none disabled:cursor-not-allowed",
                 tab === t
                   ? "border-brand text-text"
                   : "border-transparent text-text-muted hover:text-text",
@@ -177,7 +211,8 @@ export const MarkdownEditor = forwardRef<
                   type="button"
                   aria-label={label}
                   onClick={() => runAction(action)}
-                  className="rounded-(--kui-radii-sm) p-1.5 text-text-muted transition-colors hover:bg-surface-raised hover:text-text"
+                  disabled={disabled}
+                  className="rounded-(--kui-radii-sm) p-1.5 text-text-muted transition-colors hover:bg-surface-raised hover:text-text disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <Icon size={15} />
                 </button>
@@ -195,15 +230,19 @@ export const MarkdownEditor = forwardRef<
           <TextareaCore
             ref={(node) => {
               textareaRef.current = node;
-              if (typeof ref === "function") ref(node);
-              else if (ref)
+
+              if (typeof ref === "function") {
+                ref(node);
+              } else if (ref) {
                 (ref as { current: HTMLTextAreaElement | null }).current = node;
+              }
             }}
             value={value}
             onValueChange={commit}
+            embedded
             resize="vertical"
-            variant="ghost"
-            className="rounded-none border-0"
+            disabled={disabled}
+            maxLength={maxLength}
             {...textareaProps}
           />
         </div>
@@ -224,8 +263,8 @@ export const MarkdownEditor = forwardRef<
           )}
         </div>
 
-        <div className="flex items-center gap-2 border-t border-border px-3 py-2 text-xs text-text-muted">
-          {hint}
+        <div className="flex items-center gap-2 border-t border-border px-3 py-2 text-xs z-1">
+          {footerMessage}
         </div>
       </div>
     );

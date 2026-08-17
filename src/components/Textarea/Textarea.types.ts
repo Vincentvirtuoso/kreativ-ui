@@ -1,12 +1,15 @@
 import { TextareaHTMLAttributes } from "react";
-import {  InputVariant } from "../Input/Input.types";
+import { InputVariant } from "../Input/Input.types";
 import type { MarkdownEditorProps } from "../MarkdownEditor/MarkdownEditor.types";
 import {
   BaseProps,
   ClearableProps,
+  EmbeddedProps,
   FullWidthProps,
   SizeProps,
   StateProps,
+  TrimProps,
+  ValidateProps,
   ValueProps,
   VariantProps,
 } from "@/types";
@@ -25,7 +28,11 @@ export interface TextareaCoreProps
     VariantProps<InputVariant>,
     ClearableProps,
     ValueProps,
-    FullWidthProps {
+    FullWidthProps,
+    EmbeddedProps,
+    StateProps,
+    TrimProps,
+    ValidateProps<string> {
   resize?: TextareaResize;
 
   autoResize?: boolean;
@@ -33,16 +40,10 @@ export interface TextareaCoreProps
   maxRows?: number;
   characterCounter?: boolean;
   debounceDelay?: number;
-  trimOnBlur?: boolean;
-
-  onValidate?: (value: string) => boolean | string;
 }
 
 // Fixed union
 export type TextareaProps =
   | ({ allowMarkdown?: false } & TextareaCoreProps)
-  | ({ allowMarkdown: true } & Omit<
-      TextareaCoreProps,
-      "resize" 
-    > &
+  | ({ allowMarkdown: true } & Omit<TextareaCoreProps, "resize"> &
       MarkdownEditorProps);

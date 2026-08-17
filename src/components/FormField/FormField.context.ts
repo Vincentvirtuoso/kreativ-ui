@@ -1,8 +1,8 @@
 "use client";
 
-import { createContext, useContext } from "react";
-
-export type FormFieldState = "none" | "error" | "success";
+import { createContext, ReactNode, useContext } from "react";
+import { FormFieldStatus } from "./FormField.types";
+import { ReportedValidity } from "@/types";
 
 export interface FormFieldContextValue {
   id: string;
@@ -11,14 +11,13 @@ export interface FormFieldContextValue {
   describedBy?: string;
   messageId?: string;
 
-  state: FormFieldState;
+  status: FormFieldStatus;
+  message?: ReactNode;
 
   invalid: boolean;
   required: boolean;
 
-  reportValidity: (
-    result: { invalid: boolean; message?: string } | null,
-  ) => void;
+  reportValidity: (result: ReportedValidity | null) => void;
   registerLabel: () => () => void;
   hasExternalLabel: boolean;
 }

@@ -49,7 +49,7 @@ export function ColorEditor({ label, value, onChange }: ColorEditorProps) {
             "font-mono text-xs text-text-muted outline-none " +
             (isValidDraft
               ? "border-border focus:border-brand"
-              : "border-danger text-danger")
+              : "border-destructive text-destructive")
           }
         />
 

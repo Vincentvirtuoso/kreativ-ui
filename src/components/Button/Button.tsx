@@ -13,8 +13,8 @@ import { useTheme } from "@/hooks/useTheme";
 import { useSizeStyle } from "@/hooks/useSizeStyle";
 
 import type { ButtonProps } from "./Button.types";
-import { resolveRecipe } from "@/theme";
 import { useTypography } from "@/hooks";
+import { resolveRecipe } from "@/theme/recipes/resolveRecipe";
 
 const ACTIVATION_KEYS = new Set(["Enter", " "]);
 
@@ -128,9 +128,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={resolvedClassName}
         style={resolvedStyle}
         aria-busy={isLoading || undefined}
+        aria-disabled={disabled}
         animate={{
           scale: isKeyboardPressed ? 0.975 : 1,
         }}
+        type="button"
         whileHover={isInteractive ? { scale: 1.015 } : undefined}
         whileTap={isInteractive ? { scale: 0.975 } : undefined}
         transition={
