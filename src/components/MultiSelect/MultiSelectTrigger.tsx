@@ -53,7 +53,7 @@ export const MultiSelectTrigger = forwardRef<HTMLButtonElement, { className?: st
         ref={ctx.triggerRef}
         className={cn(
           inputWrapperVariants({ variant: ctx.variant, state, fullWidth: true, disabled: ctx.disabled, rounded: ctx.rounded }),
-          multiSelectSizeVariants({ size: ctx.size }),
+          multiSelectSizeVariants({  }),
           "flex flex-wrap items-center gap-1",
           className
         )}
@@ -83,7 +83,7 @@ export const MultiSelectTrigger = forwardRef<HTMLButtonElement, { className?: st
               <span
                 key={v}
                 className={cn(
-                  chipSizeVariants({ size: ctx.size }),
+                  chipSizeVariants({  }),
                   "bg-brand/15 text-brand"
                 )}
               >

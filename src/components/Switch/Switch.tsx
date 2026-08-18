@@ -53,7 +53,7 @@ export function Switch({
                 <div
                     aria-hidden="true"
                     className={cn(
-                        switchTrackVariants({ size, checked, disabled: !!disabled }),
+                        switchTrackVariants({  checked, disabled: !!disabled }),
                         "peer-focus-visible:ring-2 peer-focus-visible:ring-brand peer-focus-visible:ring-offset-1"
                     )}
                 >
