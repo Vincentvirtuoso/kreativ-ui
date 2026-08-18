@@ -2,6 +2,7 @@ export function getAttrs(
   el: HTMLElement | null,
   extra: string[] = [],
   exclude: string[] = [],
+  extraAttrs?: Record<string, string | null>,
 ) {
   const target =
     (el?.querySelector("input, textarea, [role='combobox']") as HTMLElement) ??
@@ -18,7 +19,7 @@ export function getAttrs(
     extra.map((k) => [k, target?.getAttribute(k) ?? null]),
   );
 
-  const result = { ...base, ...extras };
+  const result = { ...base, ...extras, ...extraAttrs };
 
   const excludeSet = new Set(exclude);
   return Object.fromEntries(

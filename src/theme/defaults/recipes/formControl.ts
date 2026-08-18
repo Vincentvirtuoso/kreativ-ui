@@ -14,7 +14,6 @@ export const formControlVariants = {
   ghost: "border border-transparent bg-transparent text-text",
 } as const;
 
-// Non-embedded states: normal bordered field with a focus ring.
 const standaloneStates = {
   none: "hover:border-brand focus-within:ring-2 focus-within:ring-brand/20",
 

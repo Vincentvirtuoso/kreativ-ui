@@ -17,6 +17,7 @@ export function TextField({
       value={value}
       placeholder=""
       size="sm"
+      clearable
       labelClassName="text-text-muted font-normal text-xs font-mono"
     />
   );

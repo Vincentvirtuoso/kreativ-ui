@@ -6,24 +6,16 @@ import {
   useId,
   useRef,
   useState,
-  type Ref,
+  type ChangeEvent,
 } from "react";
+import { Check, Minus } from "lucide-react";
 import { cn } from "@/utils/cn";
+import { mergeRefs } from "@/utils/mergeRef";
 import { useOptionalFormField } from "../FormField/FormField.context";
-import { checkboxBoxVariants, checkboxIconSizes } from "./Checkbox.styles";
 import type { CheckboxProps } from "./Checkbox.types";
-import { Check } from "lucide-react";
-import { DashIcon } from "./Checkbox.icon";
-
-function mergeRefs<T>(...refs: Array<Ref<T> | undefined>) {
-  return (node: T) => {
-    refs.forEach((r) => {
-      if (!r) return;
-      if (typeof r === "function") r(node);
-      else (r as React.RefObject<T | null>).current = node;
-    });
-  };
-}
+import { useSizeStyle, useStatusTransition, useTheme } from "@/hooks";
+import { resolveRecipe } from "@/theme/recipes/resolveRecipe";
+import { isDev } from "@/utils/env";
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   (
@@ -33,9 +25,10 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       defaultChecked,
       onCheckedChange,
       indeterminate = false,
-      size = "md",
+      size = "sm",
       error,
       success,
+      status,
       disabled,
       label,
       description,
@@ -48,110 +41,174 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   ) => {
     const autoId = useId();
     const field = useOptionalFormField();
+    const { theme } = useTheme();
+
     const id = field?.id ?? externalId ?? autoId;
 
-    const internalRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+
     const [internalChecked, setInternalChecked] = useState(
       defaultChecked ?? false,
     );
-    const checked = checkedProp !== undefined ? checkedProp : internalChecked;
+
+    const isControlled = checkedProp !== undefined;
+    const checked = isControlled ? checkedProp : internalChecked;
+
     const hasWarned = useRef(false);
+
     useEffect(() => {
-      if (process.env?.NODE_ENV === "production") return;
-      if (hasWarned.current) return;
+      if (!isDev() || hasWarned.current) return;
+
       if (label && field?.hasExternalLabel) {
         console.warn(
-          "[kreativ-ui/Checkbox] This checkbox has both a `label` prop and a <FormField.Label> " +
-            "ancestor. That renders two <label> elements pointing at the same input, " +
-            "which double-announces in screen readers. Use Checkbox's `label` prop " +
-            "instead of <FormField.Label> when the control is a checkbox.",
+          "[kreativ-ui/Checkbox] This checkbox has both a `label` prop and a <FormField.Label> ancestor. " +
+            "Checkbox owns its label. Use the Checkbox `label` prop instead of <FormField.Label>.",
         );
+
         hasWarned.current = true;
       }
     }, [label, field?.hasExternalLabel]);
 
     useEffect(() => {
-      if (internalRef.current)
-        internalRef.current.indeterminate = indeterminate;
+      if (inputRef.current) {
+        inputRef.current.indeterminate = indeterminate;
+      }
     }, [indeterminate]);
 
     const isInvalid = error ?? field?.invalid ?? false;
     const isSuccess = success ?? false;
-    const state = isInvalid ? "error" : isSuccess ? "success" : "none";
 
-    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-      const next = e.target.checked;
-      if (checkedProp === undefined) setInternalChecked(next);
-      onCheckedChange?.(next);
-      onChangeProp?.(e);
-    }
+    const state = status
+      ? status
+      : isInvalid
+        ? "error"
+        : isSuccess
+          ? "success"
+          : "none";
+
+    const hasLabels = label || description;
+
+    const {
+      style: sizeStyle,
+      iconSize,
+      fontSize,
+    } = useSizeStyle(size, !hasLabels, "checkbox", {
+      widthFromHeight: true,
+      sizeOffset: "7px",
+    });
+
+    const checkboxClasses = resolveRecipe(theme.recipes.Checkbox, {
+      state,
+      checked: checked || indeterminate,
+      disabled: !!disabled,
+    });
+
+    const statusTransition = useStatusTransition(state);
 
     const descriptionId = description ? `${id}-description` : undefined;
-    const describedBy = field?.describedBy ?? descriptionId;
+
+    const describedBy =
+      [field?.describedBy, descriptionId].filter(Boolean).join(" ") ||
+      undefined;
+
+    function handleChange(event: ChangeEvent<HTMLInputElement>) {
+      const nextChecked = event.target.checked;
+
+      if (!isControlled) {
+        setInternalChecked(nextChecked);
+      }
+
+      onCheckedChange?.(nextChecked);
+      onChangeProp?.(event);
+    }
+
+    const wasInvalidRef = useRef(isInvalid);
+
+    useEffect(() => {
+      const justBecameInvalid = isInvalid && !wasInvalidRef.current;
+
+      wasInvalidRef.current = isInvalid;
+
+      if (!justBecameInvalid) {
+        return;
+      }
+
+      inputRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }, [isInvalid]);
 
     return (
       <div
         className={cn(
-          "flex gap-2.5",
+          "inline-flex items-start gap-2",
           disabled && "cursor-not-allowed opacity-50",
           className,
         )}
       >
-        <div className="relative mt-0.5 inline-flex">
+        <div className="relative inline-flex shrink-0">
           <input
-            ref={mergeRefs(internalRef, ref)}
-            type="checkbox"
+            {...props}
+            ref={mergeRefs(inputRef, ref)}
             id={id}
+            type="checkbox"
             checked={checked}
             disabled={disabled}
             required={required ?? field?.required}
             onChange={handleChange}
             aria-invalid={isInvalid || undefined}
             aria-describedby={describedBy}
-            className="peer absolute inset-0 z-10 m-0 h-full w-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
             data-invalid={isInvalid || undefined}
-            {...props}
+            className={cn(
+              "peer absolute inset-0 z-10 m-0 h-full w-full",
+              "cursor-pointer opacity-0",
+              "disabled:cursor-not-allowed",
+            )}
           />
 
-          <div
+          <span
             aria-hidden="true"
-            className={cn(
-              checkboxBoxVariants({
-                size,
-                state,
-                checked: checked || indeterminate,
-                disabled: !!disabled,
-              }),
-              "peer-focus-visible:ring-2 peer-focus-visible:ring-brand peer-focus-visible:ring-offset-1",
-            )}
+            className={checkboxClasses}
+            style={sizeStyle}
+            data-state-transition={statusTransition}
           >
-            {indeterminate ? (
-              <DashIcon size={checkboxIconSizes[size]} />
-            ) : checked ? (
-              <Check size={checkboxIconSizes[size]} />
-            ) : null}
-          </div>
+            <span className="absolute inset-0 flex items-center justify-center shrink-0">
+              {indeterminate ? (
+                <Minus strokeWidth={3} size={iconSize} />
+              ) : checked ? (
+                <Check strokeWidth={3} size={iconSize} />
+              ) : null}
+            </span>
+          </span>
         </div>
 
-        {(label || description) && (
-          <div className="flex flex-col gap-0.5">
+        {hasLabels && (
+          <label
+            htmlFor={id}
+            className={cn(
+              "flex flex-col gap-px",
+              !disabled && "cursor-pointer",
+            )}
+          >
             {label && (
-              <label
-                htmlFor={id}
-                className={cn(
-                  "text-sm text-text",
-                  !disabled && "cursor-pointer",
-                )}
-              >
+              <span className="text-text" style={{ fontSize }}>
                 {label}
-              </label>
+              </span>
             )}
+
             {description && (
-              <p id={descriptionId} className="text-xs text-text-muted">
+              <span
+                id={descriptionId}
+                className="text-text-muted"
+                style={{
+                  fontSize: fontSize ? `calc(${fontSize} - 1px)` : undefined,
+                }}
+              >
                 {description}
-              </p>
+              </span>
             )}
-          </div>
+          </label>
         )}
       </div>
     );

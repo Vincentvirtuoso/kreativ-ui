@@ -1,3 +1,4 @@
+import { FormFieldStatus } from "@/components";
 import type { CSSProperties, ReactNode } from "react";
 
 export type Size = "xs" | "sm" | "md" | "lg" | "xl";
@@ -143,22 +144,44 @@ export interface StateProps {
   warning?: boolean;
 }
 
-export interface ValueProps<T = string> {
+export interface StatusProps {
+  /**
+   * Can be `'success'` or `'error'` or `'warning'` or `'none'`
+   */
+
+  status?: FormFieldStatus;
+}
+
+/**
+ * Generic controlled/uncontrolled props with custom property names.
+ */
+export type ControlledProps<
+  T,
+  TValueProp extends string = "value",
+  TDefaultProp extends string = "defaultValue",
+  TOnChangeProp extends string = "onValueChange",
+> = {
   /**
    * Controlled value.
-   */
-  value?: T;
+   * */
+  [K in TValueProp]?: T;
+} & {
+  /** Initial value for uncontrolled usage. */
+  [K in TDefaultProp]?: T;
+} & {
+  /** Called when the value changes. */
+  [K in TOnChangeProp]?: (value: T) => void;
+};
 
-  /**
-   * Initial value for uncontrolled usage.
-   */
-  defaultValue?: T;
-
-  /**
-   * Called when the value changes.
-   */
-  onValueChange?: (value: T) => void;
-}
+/**
+ * Props for a string‑based value (e.g. input, select).
+ */
+export type ValueProps<T = string> = ControlledProps<
+  T,
+  'value',
+  'defaultValue',
+  'onValueChange'
+>;
 
 export interface TrimProps {
   /**

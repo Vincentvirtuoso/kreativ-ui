@@ -29,7 +29,7 @@ export const defaultSizes = defineSizes({
   },
 
   lg: {
-    height: "3rem",
+    height: "3.5rem",
     paddingX: "1.5rem",
     fontSize: "1rem",
     gap: "0.625rem",

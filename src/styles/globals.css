@@ -70,14 +70,6 @@
   --animate-kui-ping: kui-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  background: rgb(var(--kui-surface, 255 255 255));
-  color: rgb(var(--kui-text, 0 0 0));
-}
-
 [data-kreativ-theme] {
   font-family: var(--kui-font, system-ui, -apple-system, sans-serif);
   color: rgb(var(--kui-text, 0 0 0));
@@ -92,6 +84,10 @@ body {
 
 [data-state-transition="success"] {
   animation: kui-state-success 500ms ease-out 2;
+  animation-delay: 500ms;
+}
+[data-state-transition="warning"] {
+  animation: kui-state-warning 500ms ease-out 2;
   animation-delay: 500ms;
 }
 
@@ -119,7 +115,7 @@ body {
 }
 
 .kui-scrollbar:hover {
-  scrollbar-color:rgb(var(--kui-text-muted) / 0.65)  transparent;
+  scrollbar-color: rgb(var(--kui-text-muted) / 0.65) transparent;
 }
 
 input:-webkit-autofill,
