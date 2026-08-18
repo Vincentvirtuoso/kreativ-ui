@@ -27,7 +27,6 @@ const standaloneStates = {
     "border-warning hover:border-warning focus-within:ring-2 focus-within:ring-warning/20",
 } as const;
 
-
 export const formControlRecipe = defineRecipe({
   base: formControlBase,
 
@@ -62,6 +61,11 @@ export const formControlRecipe = defineRecipe({
         "hover:border-border " +
         "focus-within:ring-0",
 
+      false: "",
+    },
+
+    attached: {
+      true: "rounded-r-none",
       false: "",
     },
 
@@ -131,5 +135,6 @@ export const formControlRecipe = defineRecipe({
     fullWidth: true,
     disabled: false,
     hasAdornment: false,
+    attached:false,
   },
 });

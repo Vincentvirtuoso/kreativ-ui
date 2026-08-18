@@ -2,17 +2,11 @@
 
 import { useMemo, type CSSProperties } from "react";
 import { useTheme } from "./useTheme";
-import { CSSPropertiesWithVars } from "@/types";
-
-export interface ResolvedSize {
-  style: CSSProperties;
-  iconSize?: CSSProperties["width"];
-  fontSize?: CSSProperties["fontSize"];
-  gap?: CSSProperties["gap"];
-}
+import type { CSSPropertiesWithVars } from "@/types";
 
 export interface UseSizeStyleOptions {
   includeHeight?: boolean;
+  includeWidth?: boolean;
   widthFromHeight?: boolean;
   sizeOffset?: string;
   fontSizeOffset?: string;
@@ -28,13 +22,27 @@ const applySizeOffset = (
   return `calc(${value} - ${offset})`;
 };
 
+export interface ResolvedSize {
+  style: CSSProperties;
+  iconSize?: CSSProperties["width"];
+  fontSize?: CSSProperties["fontSize"];
+  gap?: CSSProperties["gap"];
+}
+
 export function useSizeStyle(
   size: string,
   iconOnly = false,
-  componentName: string = "componentName",
+  componentName = "component",
   options: UseSizeStyleOptions = {},
 ): ResolvedSize {
-  const { widthFromHeight = false, includeHeight = true, sizeOffset,fontSizeOffset } = options;
+  const {
+    widthFromHeight = false,
+    includeHeight = true,
+    includeWidth = false,
+    sizeOffset,
+    fontSizeOffset,
+  } = options;
+
   const { theme, fallbackSize } = useTheme();
 
   return useMemo(() => {
@@ -49,10 +57,16 @@ export function useSizeStyle(
       style.height = applySizeOffset(token.height, sizeOffset);
     }
 
-    if (token.width) {
-      style.width = applySizeOffset(token.width, sizeOffset);
-    } else if ((iconOnly || widthFromHeight) && includeHeight && token.height) {
-      style.width = applySizeOffset(token.height, sizeOffset);
+    if (includeWidth) {
+      if (iconOnly && token.width) {
+        style.width = applySizeOffset(token.width, sizeOffset);
+      } else if (
+        (iconOnly || widthFromHeight) &&
+        includeHeight &&
+        token.height
+      ) {
+        style.width = applySizeOffset(token.height, sizeOffset);
+      }
     }
 
     if (!iconOnly && token.paddingX) {
@@ -66,7 +80,7 @@ export function useSizeStyle(
     }
 
     if (token.fontSize) {
-      style.fontSize = applySizeOffset(token.fontSize,fontSizeOffset);
+      style.fontSize = applySizeOffset(token.fontSize, fontSizeOffset);
     }
 
     if (token.gap) {
@@ -75,6 +89,7 @@ export function useSizeStyle(
 
     if (token.radius) {
       const varName = `--kui-${componentName}-radius` as `--kui-${string}`;
+
       style[varName] = token.radius;
     }
 
@@ -90,7 +105,10 @@ export function useSizeStyle(
     fallbackSize,
     iconOnly,
     includeHeight,
-    componentName,
+    includeWidth,
     widthFromHeight,
+    componentName,
+    sizeOffset,
+    fontSizeOffset,
   ]);
 }

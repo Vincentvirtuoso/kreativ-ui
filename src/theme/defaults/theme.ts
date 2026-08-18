@@ -9,6 +9,7 @@ import { textareaRecipe } from "./recipes/textarea";
 import { markdownEditorRecipe } from "./recipes/markdownEditor";
 import { defaultSizes } from "./sizes";
 import { checkboxRecipe } from "./recipes/checkbox";
+import { buttonGroupRecipe } from "./recipes/buttonGroup";
 
 export const defaultRecipes: RecipeCollection = {
   Button: buttonRecipe,
@@ -16,7 +17,8 @@ export const defaultRecipes: RecipeCollection = {
   Input: inputRecipe,
   Textarea: textareaRecipe,
   MarkdownEditor: markdownEditorRecipe,
-  Checkbox: checkboxRecipe
+  Checkbox: checkboxRecipe,
+  ButtonGroup: buttonGroupRecipe,
 };
 
 export const defaultTheme: Theme = {

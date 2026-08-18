@@ -8,18 +8,32 @@ import { CheckboxDemo } from "./CheckboxDemo";
 import { ThemeTogglerPlayground as ThemeToggleDemo } from "./ThemeTogglerPlayground";
 import { ButtonPlayground } from "./ButtonPlayground";
 import { Chip } from "./shared/Chip";
+import { ButtonGroupDemo } from "./ButtonGroupDemo";
 
 const SECTIONS = [
-    { key: "theme-toggle", label: "Theme Toggle", render: () => <ThemeToggleDemo /> },
-    { key: "button", label: "Button", render: () => <ButtonPlayground /> },
-    { key: "input", label: "Input", render: () => <InputDemo /> },
-    { key: "textarea", label: "Textarea", render: () => <TextareaPlayground /> },
-    { key: "select", label: "Select", render: () => <SelectDemo /> },
-    { key: "checkbox", label: "Checkbox", render: () => <CheckboxDemo /> },
-    { key: "radio", label: "Radio", render: () => <RadioDemo /> },
-    { key: "switch", label: "Switch", render: () => <SwitchDemo /> },
-    { key: "combobox", label: "Combobox", render: () => <ComboboxDemo /> },
-    { key: "multiselect", label: "MultiSelect", render: () => <MultiSelectDemo /> },
+  {
+    key: "theme-toggle",
+    label: "Theme Toggle",
+    render: () => <ThemeToggleDemo />,
+  },
+  { key: "button", label: "Button", render: () => <ButtonPlayground /> },
+  {
+    key: "button-group",
+    label: "Button Group",
+    render: () => <ButtonGroupDemo />,
+  },
+  { key: "input", label: "Input", render: () => <InputDemo /> },
+  { key: "textarea", label: "Textarea", render: () => <TextareaPlayground /> },
+  { key: "select", label: "Select", render: () => <SelectDemo /> },
+  { key: "checkbox", label: "Checkbox", render: () => <CheckboxDemo /> },
+  { key: "radio", label: "Radio", render: () => <RadioDemo /> },
+  { key: "switch", label: "Switch", render: () => <SwitchDemo /> },
+  { key: "combobox", label: "Combobox", render: () => <ComboboxDemo /> },
+  {
+    key: "multiselect",
+    label: "MultiSelect",
+    render: () => <MultiSelectDemo />,
+  },
 ] as const;
 
 type SectionKey = (typeof SECTIONS)[number]["key"];
@@ -29,7 +43,7 @@ export function ComponentsPlayground() {
     const activeSection = SECTIONS.find((s) => s.key === active)!;
 
     return (
-        <div className="min-h-screen bg-surface p-5 space-y-8 text-text">
+        <div className="min-h-screen p-5 space-y-8 text-text">
             <header className="mb-6">
                 <p className="mb-1 font-mono text-xs text-brand">kui / playground</p>
                 <h1 className="text-xl font-medium">Component Explorer</h1>

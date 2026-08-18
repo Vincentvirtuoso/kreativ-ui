@@ -9,7 +9,9 @@ export const defaultSemanticTokens: SemanticTokens = {
 
     brandFg: defineToken("{colors.white}"),
 
-    surface: defineSemanticToken("{colors.gray.50}", "{colors.gray.900}"),
+    background: defineSemanticToken("{colors.gray.50}", "{colors.gray.950}"),
+
+    surface: defineSemanticToken("{colors.white}", "{colors.gray.900}"),
 
     surfaceRaised: defineSemanticToken("{colors.white}", "{colors.gray.800}"),
 

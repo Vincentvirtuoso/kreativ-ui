@@ -1,4 +1,4 @@
-import {  UIProvider, type ThemeOverride } from "../src";
+import { UIProvider, type ThemeOverride } from "../src";
 import ComponentsPlayground from "./components/ComponentsPlayground";
 import { useState } from "react";
 import { ThemeStudio } from "./components/ThemeStudio";
@@ -24,19 +24,29 @@ export function App() {
     },
   });
 
-  
-
-
   return (
-    <UIProvider defaultMode="system" fallbackSize="lg" theme={theme}>
-      <ThemeStudio
-        theme={theme}
-        onChange={(nextTheme) => {
-          setTheme(nextTheme);
+    <UIProvider
+      defaultMode="system"
+      fallbackSize="lg"
+      theme={theme}
+      themeTransition
+      themeTransitionDuration={100000}
+    >
+      <div
+        style={{
+          color: "rgb(var(--kui-text, 0 0 0))",
+          background: "rgb(var(--kui-background, 255 255 255))",
         }}
-      />
+      >
+        <ThemeStudio
+          theme={theme}
+          onChange={(nextTheme) => {
+            setTheme(nextTheme);
+          }}
+        />
 
-      <ComponentsPlayground />
+        <ComponentsPlayground />
+      </div>
     </UIProvider>
   );
 }

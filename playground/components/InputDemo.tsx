@@ -283,6 +283,7 @@ export function InputDemo() {
       controls={controls}
       preview={preview}
       code={code}
+      attributeSelector="input"
       getAttributes={(el) => getAttrs(el, ["aria-required", "aria-busy"])}
     />
   );

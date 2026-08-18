@@ -1,75 +1,49 @@
 "use client";
 
-import {
-  forwardRef,
-  useState,
-  type KeyboardEvent,
-  type ReactNode,
-} from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { forwardRef, type ReactNode } from "react";
 
 import { cn } from "@/utils/cn";
 import { useTheme } from "@/hooks/useTheme";
 import { useSizeStyle } from "@/hooks/useSizeStyle";
-
-import type { ButtonProps } from "./Button.types";
-import { useTypography } from "@/hooks";
+import { useSizeToken, useTypography } from "@/hooks";
 import { resolveRecipe } from "@/theme/recipes/resolveRecipe";
 
-const ACTIVATION_KEYS = new Set(["Enter", " "]);
+import type { ButtonProps } from "./Button.types";
+import { useButtonGroupContext } from "../ButtonGroup/ButtonGroup.context";
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       variant = "solid",
       color = "brand",
-      size = "md",
+      size,
       isLoading = false,
       leftIcon,
       rightIcon,
       fullWidth = false,
-      disabled,
+      disabled = false,
       typography: typographyName = "body",
       className,
       style,
       iconOnly,
       children,
       render,
-      onKeyDown,
-      onKeyUp,
       ...rest
     },
     ref,
   ) => {
     const { theme } = useTheme();
     const typography = useTypography(typographyName);
-    const { style: sizeStyle, iconSize } = useSizeStyle(
-      size,
-      iconOnly,
-      "button",
-    );
+    const group = useButtonGroupContext();
 
-    const prefersReducedMotion = useReducedMotion();
+    const resolvedSize = size ?? group?.size ?? "md";
 
-    const isInteractive = !disabled && !isLoading;
+    const { style: sizeStyle } = useSizeStyle(resolvedSize, iconOnly, "button");
 
-    const [isKeyboardPressed, setIsKeyboardPressed] = useState(false);
+    const iconSize = useSizeToken(resolvedSize, "iconSize");
 
-    function handleKeyDown(e: KeyboardEvent<HTMLButtonElement>) {
-      onKeyDown?.(e);
-
-      if (isInteractive && ACTIVATION_KEYS.has(e.key)) {
-        setIsKeyboardPressed(true);
-      }
-    }
-
-    function handleKeyUp(e: KeyboardEvent<HTMLButtonElement>) {
-      onKeyUp?.(e);
-
-      if (ACTIVATION_KEYS.has(e.key)) {
-        setIsKeyboardPressed(false);
-      }
-    }
+    const isDisabled = disabled || isLoading;
+    const isInButtonGroup = !!group;
 
     const recipeClasses = resolveRecipe(theme.recipes.Button, {
       variant,
@@ -78,8 +52,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const resolvedClassName = cn(
       recipeClasses,
+
       fullWidth && "w-full",
-      isLoading && "animate-kui-pulse",
+      isLoading && "opacity-90 pointer-events-none",
       className,
     );
 
@@ -87,6 +62,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ...typography,
       ...sizeStyle,
       ...style,
+    };
+
+    const groupDataAttributes = {
+      "data-kui-button-group-item": isInButtonGroup || undefined,
+      "data-kui-group-attached": group?.attached || undefined,
+      "data-kui-group-orientation": group?.orientation || undefined,
     };
 
     const content: ReactNode = (
@@ -102,11 +83,33 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           />
         )}
 
-        {!isLoading && leftIcon}
+        {!isLoading && leftIcon && (
+          <span
+            className="inline-flex shrink-0 items-center justify-center"
+            style={{
+              width: iconSize,
+              height: iconSize,
+            }}
+            aria-hidden="true"
+          >
+            {leftIcon}
+          </span>
+        )}
 
         {iconOnly && isLoading ? null : children}
 
-        {!isLoading && rightIcon}
+        {!isLoading && rightIcon && (
+          <span
+            className="inline-flex shrink-0 items-center justify-center"
+            style={{
+              width: iconSize,
+              height: iconSize,
+            }}
+            aria-hidden="true"
+          >
+            {rightIcon}
+          </span>
+        )}
       </>
     );
 
@@ -114,42 +117,29 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       return render({
         className: resolvedClassName,
         style: resolvedStyle,
-        disabled: disabled || isLoading,
-        "aria-disabled": disabled || isLoading,
+        disabled: isDisabled,
+        "aria-disabled": isDisabled || undefined,
         "aria-busy": isLoading || undefined,
+        ...groupDataAttributes,
         children: content,
       });
     }
 
     return (
-      <motion.button
+      <button
         ref={ref}
-        disabled={disabled || isLoading}
+        disabled={isDisabled}
         className={resolvedClassName}
         style={resolvedStyle}
         aria-busy={isLoading || undefined}
-        aria-disabled={disabled}
-        animate={{
-          scale: isKeyboardPressed ? 0.975 : 1,
-        }}
+        aria-disabled={isDisabled || undefined}
+        data-kui-themeable
         type="button"
-        whileHover={isInteractive ? { scale: 1.015 } : undefined}
-        whileTap={isInteractive ? { scale: 0.975 } : undefined}
-        transition={
-          prefersReducedMotion
-            ? { duration: 0 }
-            : {
-                type: "spring",
-                stiffness: 500,
-                damping: 30,
-              }
-        }
-        onKeyDown={handleKeyDown}
-        onKeyUp={handleKeyUp}
+        {...groupDataAttributes}
         {...rest}
       >
         {content}
-      </motion.button>
+      </button>
     );
   },
 );

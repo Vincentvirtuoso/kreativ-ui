@@ -2,6 +2,7 @@
 @import "./animations.css";
 @import "tailwindcss";
 
+
 @theme inline {
   --color-brand: rgb(var(--kui-brand));
   --color-brand-hover: rgb(var(--kui-brand-hover));
@@ -68,54 +69,6 @@
   --animate-kui-collapse: kui-collapse 0.2s ease-in;
 
   --animate-kui-ping: kui-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
-[data-kreativ-theme] {
-  font-family: var(--kui-font, system-ui, -apple-system, sans-serif);
-  color: rgb(var(--kui-text, 0 0 0));
-  background: rgb(var(--kui-surface, 255 255 255));
-  min-height: 100vh;
-}
-
-[data-state-transition="error"] {
-  animation: kui-state-error 500ms ease-out 3;
-  animation-delay: 500ms;
-}
-
-[data-state-transition="success"] {
-  animation: kui-state-success 500ms ease-out 2;
-  animation-delay: 500ms;
-}
-[data-state-transition="warning"] {
-  animation: kui-state-warning 500ms ease-out 2;
-  animation-delay: 500ms;
-}
-
-.kui-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: rgb(var(--kui-text-muted) / 0.45) transparent;
-}
-
-.kui-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.kui-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.kui-scrollbar::-webkit-scrollbar-thumb {
-  background: rgb(var(--kui-text-muted) / 0.45);
-  border-radius: 999px;
-}
-
-.kui-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgb(var(--kui-text-muted) / 0.65);
-}
-
-.kui-scrollbar:hover {
-  scrollbar-color: rgb(var(--kui-text-muted) / 0.65) transparent;
 }
 
 input:-webkit-autofill,

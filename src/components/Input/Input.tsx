@@ -25,6 +25,7 @@ import { inputKindDefaults } from "./Input.constants";
 import type { InputProps } from "./Input.types";
 import { useOptionalFormField } from "../FormField/FormField.context";
 import { mergeRefs } from "@/utils/mergeRef";
+import { useButtonGroupContext } from "../ButtonGroup/ButtonGroup.context";
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
@@ -81,10 +82,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const { theme } = useTheme();
     const field = useOptionalFormField();
+    const group = useButtonGroupContext();
 
     const id = externalId ?? field?.id ?? autoId;
 
     const isRequired = field?.required ?? props.required;
+    const isInButtonGroup = !!group;
 
     const describedBy = field?.describedBy;
 
@@ -245,6 +248,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         fullWidth,
         disabled: disabled || isLoading,
         hasAdornment,
+        attached:group?.attached
       }),
       className,
     );
@@ -260,6 +264,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       ...sizeStyle,
       ...style,
     };
+     const groupDataAttributes = {
+       "data-kui-button-group-item": isInButtonGroup || undefined,
+       "data-kui-group-attached": group?.attached || undefined,
+       "data-kui-group-orientation": group?.orientation || undefined,
+     };
 
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
       setHasValue(Boolean(event.target.value));
@@ -304,6 +313,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         style={resolvedStyle}
         data-state={state}
         data-state-transition={statusTransition}
+        {...groupDataAttributes}
       >
         {startAdornment}
 

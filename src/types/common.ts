@@ -24,7 +24,7 @@ export interface Styleable {
   className?: string;
 }
 
-export type BaseTransition = "none" | "fade" | "rotate" | "slide" | "scale";
+export type ThemeAnimation = "none" | "fade" | "rotate" | "slide" | "scale";
 
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
@@ -38,10 +38,6 @@ export type ReportedValidity = {
   invalid: boolean;
   message?: string;
 };
-
-/* -------------------------------------------------------------------------- */
-/* Base component props                                                       */
-/* -------------------------------------------------------------------------- */
 
 export interface BaseProps {
   /**
@@ -152,6 +148,15 @@ export interface StatusProps {
   status?: FormFieldStatus;
 }
 
+export interface OrientationProps {
+  /**
+   * Layout direction of the group.
+   *
+   * @default "horizontal"
+   */
+  orientation?: Orientation;
+}
+
 /**
  * Generic controlled/uncontrolled props with custom property names.
  */
@@ -178,9 +183,9 @@ export type ControlledProps<
  */
 export type ValueProps<T = string> = ControlledProps<
   T,
-  'value',
-  'defaultValue',
-  'onValueChange'
+  "value",
+  "defaultValue",
+  "onValueChange"
 >;
 
 export interface TrimProps {
