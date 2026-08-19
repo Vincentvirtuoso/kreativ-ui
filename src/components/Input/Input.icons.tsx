@@ -12,7 +12,7 @@ import {
 import type { InputKind } from "./Input.types";
 
 export const inputKindIcons: Partial<
-  Record<InputKind, React.ComponentType<{ size?: number }>>
+  Record<InputKind, React.ComponentType<{}>>
 > = {
   email: Mail,
   tel: Phone,

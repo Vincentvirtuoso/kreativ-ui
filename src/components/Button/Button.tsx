@@ -5,11 +5,12 @@ import { forwardRef, type ReactNode } from "react";
 import { cn } from "@/utils/cn";
 import { useTheme } from "@/hooks/useTheme";
 import { useSizeStyle } from "@/hooks/useSizeStyle";
-import { useSizeToken, useTypography } from "@/hooks";
+import { useResponsiveStyles, useSizeToken, useTypography } from "@/hooks";
 import { resolveRecipe } from "@/theme/recipes/resolveRecipe";
 
 import type { ButtonProps } from "./Button.types";
 import { useButtonGroupContext } from "../ButtonGroup/ButtonGroup.context";
+import { ResponsiveStyle } from "../internal/ResponsiveStyle";
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -38,7 +39,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const resolvedSize = size ?? group?.size ?? "md";
 
-    const { style: sizeStyle } = useSizeStyle(resolvedSize, iconOnly, "button");
+    const { style: sizeStyle, responsiveStyles } = useSizeStyle(
+      resolvedSize,
+      iconOnly,
+      "button",
+    );
+
+    const { attribute: responsiveAttribute, style: responsiveCss } =
+      useResponsiveStyles(responsiveStyles);
 
     const iconSize = useSizeToken(resolvedSize, "iconSize");
 
@@ -52,7 +60,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const resolvedClassName = cn(
       recipeClasses,
-
       fullWidth && "w-full",
       isLoading && "opacity-90 pointer-events-none",
       className,
@@ -113,19 +120,18 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       </>
     );
 
-    if (render) {
-      return render({
+    const buttonElement = render ? (
+      render({
         className: resolvedClassName,
         style: resolvedStyle,
         disabled: isDisabled,
         "aria-disabled": isDisabled || undefined,
         "aria-busy": isLoading || undefined,
+        "data-kui-responsive": responsiveAttribute,
         ...groupDataAttributes,
         children: content,
-      });
-    }
-
-    return (
+      })
+    ) : (
       <button
         ref={ref}
         disabled={isDisabled}
@@ -134,12 +140,20 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         aria-busy={isLoading || undefined}
         aria-disabled={isDisabled || undefined}
         data-kui-themeable
+        data-kui-responsive={responsiveAttribute}
         type="button"
         {...groupDataAttributes}
         {...rest}
       >
         {content}
       </button>
+    );
+
+    return (
+      <>
+        {responsiveCss && <ResponsiveStyle css={responsiveCss} />}
+        {buttonElement}
+      </>
     );
   },
 );

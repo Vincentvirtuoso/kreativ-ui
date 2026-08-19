@@ -58,5 +58,7 @@ export const defaultSemanticTokens: SemanticTokens = {
     infoFg: defineToken("{colors.white}"),
 
     infoHover: defineSemanticToken("{colors.cyan.600}", "{colors.cyan.300}"),
+
+    shadowColor: defineSemanticToken("{colors.gray.200}", "{colors.gray.600}"),
   },
 };

@@ -29,6 +29,7 @@ export interface ButtonRenderProps {
   disabled?: boolean;
   "aria-disabled"?: boolean;
   "aria-busy"?: boolean;
+  "data-kui-responsive"?: string;
   children?: ReactNode;
 }
 

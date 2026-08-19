@@ -71,6 +71,24 @@ export const buttonColors = {
     soft: "bg-surface-raised text-text hover:bg-surface-sunken",
     link: "text-text",
   },
+  inherit: {
+    solid:
+      "[background-color:var(--kui-inherit-bg)] " +
+      "[color:var(--kui-inherit-fg)]",
+
+    outline:
+      "[border-color:var(--kui-inherit-border)] " +
+      "[color:var(--kui-inherit-fg)] " +
+      "bg-transparent",
+
+    ghost: "[color:var(--kui-inherit-fg)] " + "bg-transparent",
+
+    soft:
+      "[background-color:var(--kui-inherit-soft-bg)] " +
+      "[color:var(--kui-inherit-fg)]",
+
+    link: "[color:var(--kui-inherit-fg)] " + "bg-transparent",
+  },
 } as const;
 
 const buildCompoundVariants = () => {

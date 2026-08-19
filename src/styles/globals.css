@@ -1,7 +1,7 @@
 @import "./variables.css";
 @import "./animations.css";
+@import "./utilities.css";
 @import "tailwindcss";
-
 
 @theme inline {
   --color-brand: rgb(var(--kui-brand));
@@ -11,6 +11,7 @@
   --color-surface: rgb(var(--kui-surface));
   --color-surface-raised: rgb(var(--kui-surface-raised));
   --color-surface-sunken: rgb(var(--kui-surface-sunken));
+  --color-background: rgb(var(--kui-background));
 
   --color-border: rgb(var(--kui-border));
 
@@ -45,30 +46,35 @@
   --ease-kui-out: var(--kui-ease-out);
 }
 
-@theme {
-  --animate-kui-spin: kui-spin 0.6s linear infinite;
+@theme inline {
+  --animate-kui-spin: var(--kui-animations-spin);
 
-  --animate-kui-fade-in: kui-fade-in 0.15s ease-out;
+  --animate-kui-fade-in: var(--kui-animations-fade-in);
+  --animate-kui-fade-out: var(--kui-animations-fade-out);
 
-  --animate-kui-scale-in: kui-scale-in 0.15s ease-out;
-  --animate-kui-scale-out: kui-scale-out 0.15s ease-in;
+  --animate-kui-scale-in: var(--kui-animations-scale-in);
+  --animate-kui-scale-out: var(--kui-animations-scale-out);
 
-  --animate-kui-slide-up: kui-slide-up 0.2s ease-out;
-  --animate-kui-slide-down: kui-slide-down 0.2s ease-out;
-  --animate-kui-slide-left: kui-slide-left 0.2s ease-out;
-  --animate-kui-slide-right: kui-slide-right 0.2s ease-out;
+  --animate-kui-slide-up: var(--kui-animations-slide-up);
+  --animate-kui-slide-down: var(--kui-animations-slide-down);
+  --animate-kui-slide-left: var(--kui-animations-slide-left);
+  --animate-kui-slide-right: var(--kui-animations-slide-right);
+  --animate-kui-slide-in-next: var(--kui-animations-slide-in-next);
+  --animate-kui-slide-in-prev: var(--kui-animations-slide-in-prev);
 
-  --animate-kui-bounce: kui-bounce 0.8s infinite;
-  --animate-kui-pulse: kui-pulse 1.5s ease-in-out infinite;
+  --animate-kui-bounce: var(--kui-animations-bounce);
+  --animate-kui-pulse: var(--kui-animations-pulse);
+  --animate-kui-shake: var(--kui-animations-shake);
+  --animate-kui-shimmer: var(--kui-animations-shimmer);
 
-  --animate-kui-shake: kui-shake 0.25s ease-in-out;
+  --animate-kui-expand: var(--kui-animations-expand);
+  --animate-kui-collapse: var(--kui-animations-collapse);
 
-  --animate-kui-shimmer: kui-shimmer 1.5s linear infinite;
+  --animate-kui-ping: var(--kui-animations-ping);
 
-  --animate-kui-expand: kui-expand 0.2s ease-out;
-  --animate-kui-collapse: kui-collapse 0.2s ease-in;
-
-  --animate-kui-ping: kui-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-kui-state-error: var(--kui-animations-state-error);
+  --animate-kui-state-success: var(--kui-animations-state-success);
+  --animate-kui-state-warning: var(--kui-animations-state-warning);
 }
 
 input:-webkit-autofill,

@@ -9,6 +9,7 @@ import {
   SizeProps,
   StateProps,
   TrimProps,
+  TypographyProps,
   ValidateProps,
   ValueProps,
   VariantProps,
@@ -32,7 +33,8 @@ export interface TextareaCoreProps
     EmbeddedProps,
     StateProps,
     TrimProps,
-    ValidateProps<string> {
+    ValidateProps<string>,
+    TypographyProps {
   resize?: TextareaResize;
 
   autoResize?: boolean;

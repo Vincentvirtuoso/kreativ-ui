@@ -21,25 +21,8 @@ import { ClearIcon } from "../Input/Input.icons";
 import { resolveRecipe } from "@/theme/recipes/resolveRecipe";
 import { useSizeStyle, useTheme, useTypography } from "@/hooks";
 import type { TextareaCoreProps } from "./Textarea.types";
+import { mergeRefs } from "@/utils/mergeRef";
 
-function mergeRefs<T>(...refs: Array<Ref<T> | undefined>) {
-  return (node: T) => {
-    refs.forEach((ref) => {
-      if (!ref) return;
-
-      if (typeof ref === "function") {
-        ref(node);
-      } else {
-        (ref as RefObject<T | null>).current = node;
-      }
-    });
-  };
-}
-
-// Resolves the visible field state from the various signals that can drive
-// it: explicit props win over internal validation, which wins over nothing.
-// Kept as a pure function so the precedence rules are readable in one place
-// and testable without mounting the component.
 function resolveFieldState({
   error,
   success,
@@ -86,6 +69,7 @@ export const TextareaCore = forwardRef<HTMLTextAreaElement, TextareaCoreProps>(
 
       className,
       style: customStyle,
+      typography: typographyName = "body",
 
       size = "md",
       variant = "outline",
@@ -133,7 +117,7 @@ export const TextareaCore = forwardRef<HTMLTextAreaElement, TextareaCoreProps>(
     const internalRef = useRef<HTMLTextAreaElement>(null);
     const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    const typography = useTypography("body");
+    const typography = useTypography(typographyName);
 
     const { style: sizeStyle } = useSizeStyle(size, false, "textarea", {
       includeHeight: false,
@@ -412,7 +396,7 @@ export const TextareaCore = forwardRef<HTMLTextAreaElement, TextareaCoreProps>(
     );
 
     return (
-      <div className={cn(wrapperClassName, "items-start")}>
+      <div className={cn(wrapperClassName, "items-start py-2")}>
         <textarea
           ref={mergeRefs(internalRef, ref)}
           id={id}
@@ -427,7 +411,7 @@ export const TextareaCore = forwardRef<HTMLTextAreaElement, TextareaCoreProps>(
           aria-required={required}
           required={required}
           style={textareaStyle}
-          className={cn(textareaClasses, "py-3", className)}
+          className={cn(textareaClasses, className)}
           data-size={size}
           data-invalid={isInvalid || undefined}
           data-success={isSuccess || undefined}

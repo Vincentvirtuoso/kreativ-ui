@@ -11,6 +11,11 @@
   --kui-ease-default: cubic-bezier(0.4, 0, 0.2, 1);
   --kui-ease-in: cubic-bezier(0.4, 0, 1, 1);
   --kui-ease-out: cubic-bezier(0, 0, 0.2, 1);
+
+  --kui-inherit-bg: inherit;
+  --kui-inherit-fg: inherit;
+  --kui-inherit-border: currentColor;
+  --kui-inherit-soft-bg: transparent;
 }
 
 [data-kui-theme] {
@@ -19,27 +24,20 @@
 }
 
 [data-state-transition="error"] {
-  animation: kui-state-error 500ms ease-out 3;
-  animation-delay: 500ms;
+  animation: var(--kui-animations-state-error);
 }
 
 [data-state-transition="success"] {
-  animation: kui-state-success 500ms ease-out 2;
-  animation-delay: 500ms;
+  animation: var(--kui-animations-state-success);
 }
+
 [data-state-transition="warning"] {
-  animation: kui-state-warning 500ms ease-out 2;
-  animation-delay: 500ms;
+  animation: var(--kui-animations-state-warning);
 }
 
 .kui-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: rgb(var(--kui-text-muted) / 0.45) transparent;
-}
-
-.kui-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
 }
 
 .kui-scrollbar::-webkit-scrollbar-track {

@@ -8,6 +8,8 @@ import type {
   SizeProps,
   StateProps,
   TrimProps,
+  TypographyProps,
+  UndoRedoProps,
   ValueProps,
   VariantProps,
 } from "@/types";
@@ -45,9 +47,11 @@ export interface InputProps
     LoadingProps,
     FullWidthProps,
     ClearableProps,
+    UndoRedoProps,
     ValueProps<string | number | undefined>,
     StateProps,
-    TrimProps {
+    TrimProps,
+    TypographyProps {
   inputClassName?: string;
   kind?: InputKind;
   rounded?: boolean;

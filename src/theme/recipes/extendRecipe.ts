@@ -19,12 +19,9 @@ export function extendRecipes(
       ...base,
       ...recipeOverride,
 
-      ...(base?.compoundVariants || recipeOverride?.compoundVariants
+      ...(recipeOverride?.compoundVariants
         ? {
-            compoundVariants: [
-              ...(base?.compoundVariants ?? []),
-              ...(recipeOverride?.compoundVariants ?? []),
-            ],
+            compoundVariants: recipeOverride.compoundVariants,
           }
         : {}),
 

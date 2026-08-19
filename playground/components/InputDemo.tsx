@@ -8,6 +8,7 @@ import type {
   InputSize,
   InputVariant,
 } from "../../src";
+import { useUndoRedo } from "../../src/hooks/useUndoRedo";
 
 import { Playground } from "./shared/Playground";
 import { SegmentedControl } from "./shared/SegmentedControl";
@@ -31,22 +32,21 @@ const KINDS: InputKind[] = [
 
 const ICON_OPTIONS = {
   none: null,
-  User: <User size={16} />,
-  Mail: <Mail size={16} />,
-  Search: <Search size={16} />,
-  Lock: <Lock size={16} />,
-  Eye: <Eye size={16} />,
-  Loader2: <Loader2 size={16} className="animate-spin" />,
+  User: <User />,
+  Mail: <Mail />,
+  Search: <Search />,
+  Lock: <Lock />,
+  Eye: <Eye />,
+  Loader2: <Loader2 className="animate-spin" />,
 };
 
 export function InputDemo() {
-  // Core props
   const [variant, setVariant] = useState<InputVariant>("outline");
   const [size, setSize] = useState<InputSize>("md");
   const [validation, setValidation] = useState<FormFieldStatus>("none");
   const [kind, setKind] = useState<InputKind>("email");
+  const [maxHistory, setMaxHistory] = useState<number>(30);
 
-  // Flags
   const [required, setRequired] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [rounded, setRounded] = useState(false);
@@ -54,8 +54,8 @@ export function InputDemo() {
   const [clearable, setClearable] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
   const [hideKindIcon, setHideKindIcon] = useState(false);
+  const [undoable, setUndoable] = useState(false);
 
-  // FormField integration
   const [useFormField, setUseFormField] = useState(true);
   const [label, setLabel] = useState("Email address");
   const [description, setDescription] = useState(
@@ -65,13 +65,15 @@ export function InputDemo() {
     "Enter a valid email address.",
   );
 
-  // Additional input props
   const [placeholder, setPlaceholder] = useState("your@email.com");
-  const [value, setValue] = useState("");
   const [startIconKey, setStartIconKey] =
     useState<keyof typeof ICON_OPTIONS>("none");
   const [endIconKey, setEndIconKey] =
     useState<keyof typeof ICON_OPTIONS>("none");
+
+  const { value, push, undo, redo } = useUndoRedo("" as any, {
+    maxHistory: 30,
+  });
 
   const invalid = validation === "error";
   const success = validation === "success";
@@ -92,14 +94,17 @@ export function InputDemo() {
     kind,
     placeholder,
     value,
-    onChange: (e) => setValue(e.target.value),
+    onValueChange: (newValue) => push(newValue),
     startIcon: ICON_OPTIONS[startIconKey],
     endIcon: ICON_OPTIONS[endIconKey],
+
+    undoable,
+    onUndo: () => undo(),
+    onRedo: () => redo(),
   };
 
   const controls = (
     <>
-      {/* Core configuration */}
       <SegmentedControl
         label="variant"
         value={variant}
@@ -128,7 +133,6 @@ export function InputDemo() {
         onChange={setKind}
       />
 
-      {/* Flags */}
       <div className="mb-5">
         <p className="mb-2 font-mono text-[11px] text-text-muted">flags</p>
         <div className="flex flex-wrap gap-1.5">
@@ -162,14 +166,25 @@ export function InputDemo() {
           >
             FormField
           </Chip>
+          <Chip active={undoable} onClick={() => setUndoable((v) => !v)}>
+            undoable
+          </Chip>
         </div>
       </div>
 
-      {/* Input‑specific props */}
       <div className="mb-5">
         <p className="mb-2 font-mono text-[11px] text-text-muted">
           input props
         </p>
+        {undoable && (
+          <TextField
+            label="maxHistory"
+            kind="number"
+            value={maxHistory}
+            onChange={setMaxHistory}
+            className="w-25" placeholder="20"
+          />
+        )}
         <div className="grid grid-cols-2 gap-3">
           <TextField
             label="placeholder"
@@ -179,7 +194,7 @@ export function InputDemo() {
           <TextField
             label="value (controlled)"
             value={value}
-            onChange={setValue}
+            onChange={(v) => push(v)}
           />
           <SegmentedControl
             label="startIcon"
@@ -196,7 +211,6 @@ export function InputDemo() {
         </div>
       </div>
 
-      {/* FormField copy */}
       {useFormField && (
         <div>
           <p className="mb-2 font-mono text-[11px] text-text-muted">
@@ -234,7 +248,6 @@ export function InputDemo() {
     <Input {...inputProps} />
   );
 
-  // Build attribute lines for code preview
   const attrLines = [
     variant !== "outline" && `variant="${variant}"`,
     size !== "md" && `size="${size}"`,
@@ -247,6 +260,7 @@ export function InputDemo() {
     clearable && "clearable",
     !fullWidth && "fullWidth={false}",
     hideKindIcon && "hideKindIcon",
+    undoable && "undoable",
     placeholder && `placeholder="${placeholder}"`,
     value && `value="${value}"`,
     startIconKey !== "none" && `startIcon={<${startIconKey} />}`,

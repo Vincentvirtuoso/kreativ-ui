@@ -1,4 +1,4 @@
-import type { Theme, RecipeCollection } from "@/types";
+import type { RecipeCollection } from "@/types";
 import { defaultTokens } from "./tokens";
 import { defaultSemanticTokens } from "./semanticTokens";
 import { defaultTypography } from "./typography";
@@ -10,6 +10,7 @@ import { markdownEditorRecipe } from "./recipes/markdownEditor";
 import { defaultSizes } from "./sizes";
 import { checkboxRecipe } from "./recipes/checkbox";
 import { buttonGroupRecipe } from "./recipes/buttonGroup";
+import { defineTheme } from "../defineTheme";
 
 export const defaultRecipes: RecipeCollection = {
   Button: buttonRecipe,
@@ -21,13 +22,11 @@ export const defaultRecipes: RecipeCollection = {
   ButtonGroup: buttonGroupRecipe,
 };
 
-export const defaultTheme: Theme = {
+export const defaultTheme = defineTheme({
   tokens: defaultTokens,
   semanticTokens: defaultSemanticTokens,
   typography: defaultTypography,
   recipes: defaultRecipes,
-
   intensity: 50,
-
   sizes: defaultSizes,
-};
+});

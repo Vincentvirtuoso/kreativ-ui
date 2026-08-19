@@ -62,13 +62,13 @@ The theme system resolves values at runtime using CSS variables. When you switch
 
 The theme consists of several independent layers:
 
-```
+```text
 Theme
 ├── tokens          → primitive design values
 ├── semanticTokens  → role-based values (mode-aware)
 ├── typography      → text presentation presets
 ├── recipes         → component visual behavior
-├── sizes           → component dimensions and spacing
+├── sizes            → component dimensions and spacing
 └── intensity       → color intensity scaling
 ```
 
@@ -94,44 +94,152 @@ Examples of primitive tokens include:
 
 Primitive tokens are defined using `defineToken` or `defineTokens`.
 
+---
+
 ### Semantic Tokens
 
-Semantic tokens represent UI meaning rather than raw values. They reference primitive tokens and provide mode‑specific values.
+Semantic tokens represent UI meaning rather than raw values. They reference primitive tokens and provide mode-specific values.
 
 ```ts
 semanticTokens.colors.brand = {
   value: {
     light: "{colors.blue.500}",
-    dark: "{colors.blue.400}"
-  }
+    dark: "{colors.blue.400}",
+  },
 };
 
 semanticTokens.colors.text = {
   value: {
     light: "{colors.gray.900}",
-    dark: "{colors.gray.50}"
-  }
+    dark: "{colors.gray.50}",
+  },
 };
 ```
 
-Semantic tokens make components easier to maintain because they reference meaningful roles instead of hard‑coded colors. Changing the brand color updates every component that uses the `brand` semantic token.
+Semantic tokens make components easier to maintain because they reference meaningful roles instead of hard-coded colors. Changing the brand color updates every component that uses the `brand` semantic token.
+
+---
 
 ### Sizes
 
-The centralized size system controls component dimensions and layout properties. Built‑in sizes include:
+The centralized size system controls component dimensions and layout properties.
 
-| Size | Height | Padding X | Font Size | Gap | Icon Size | Radius |
-|------|--------|-----------|-----------|-----|-----------|--------|
-| `xs` | 1.75rem | 0.5rem | 0.75rem | 0.25rem | 0.875rem | 0.65rem |
-| `sm` | 2rem | 0.75rem | 0.8125rem | 0.375rem | 1rem | 0.8rem |
-| `md` | 2.5rem | 1rem | 0.875rem | 0.5rem | 1.125rem | 1rem |
-| `lg` | 3rem | 1.5rem | 1rem | 0.625rem | 1.25rem | 1.15rem |
+Built-in sizes include:
+
+| Size | Height  | Padding X | Font Size | Gap      | Icon Size | Radius  |
+| ---- | ------- | --------- | --------- | -------- | --------- | ------- |
+| `xs` | 1.75rem | 0.5rem    | 0.75rem   | 0.25rem  | 0.875rem  | 0.65rem |
+| `sm` | 2rem    | 0.75rem   | 0.8125rem | 0.375rem | 1rem      | 0.8rem  |
+| `md` | 2.5rem  | 1rem      | 0.875rem  | 0.5rem   | 1.125rem  | 1rem    |
+| `lg` | 3rem    | 1.5rem    | 1rem      | 0.625rem | 1.25rem   | 1.15rem |
 
 You can extend the size system with custom sizes.
 
+Sizes can also be supplied responsively using the theme's configured breakpoints:
+
+```tsx
+<Button
+  size={{
+    base: "sm",
+    md: "md",
+    lg: "lg",
+  }}
+>
+  Button
+</Button>
+```
+
+In this example:
+
+- `sm` is used by default.
+- `md` is applied at the `md` breakpoint.
+- `lg` is applied at the `lg` breakpoint.
+
+Responsive sizing is handled by Kreativ UI rather than requiring component-specific responsive CSS.
+
+---
+
+### Responsive Values
+
+Kreativ UI provides a generic `ResponsiveValue<T>` type for values that can change across breakpoints.
+
+A responsive value can either be a single value:
+
+```ts
+size = "md";
+```
+
+or a breakpoint map:
+
+```ts
+size={{
+  base: "sm",
+  md: "md",
+  lg: "lg",
+}}
+```
+
+The general structure is:
+
+```ts
+type ResponsiveValue<T> =
+  | T
+  | {
+      base?: T;
+      sm?: T;
+      md?: T;
+      lg?: T;
+      xl?: T;
+      "2xl"?: T;
+    };
+```
+
+The exact breakpoint keys are determined by the theme's configured breakpoint tokens.
+
+Responsive values are resolved progressively using CSS media queries. The `base` value provides the default style, while breakpoint values override it at their respective minimum viewport widths.
+
+For example:
+
+```tsx
+<Button
+  size={{
+    base: "xs",
+    sm: "sm",
+    lg: "lg",
+  }}
+>
+  Responsive Button
+</Button>
+```
+
+Conceptually, this produces:
+
+```css
+/* base */
+height: ...;
+
+/* sm */
+@media (min-width: ...) {
+  height: ...;
+}
+
+/* lg */
+@media (min-width: ...) {
+  height: ...;
+}
+```
+
+This approach keeps responsive behavior inside the component API while still allowing the browser to perform the actual breakpoint switching through CSS.
+
+Responsive values are not limited to sizes. The same pattern can be used by other APIs that need breakpoint-aware values.
+
+---
+
 ### Typography
 
-Typography controls text presentation independently from component sizing. A typography preset defines:
+Typography controls text presentation independently from component sizing.
+
+A typography preset defines:
 
 - `fontFamily`
 - `fontSize`
@@ -141,7 +249,7 @@ Typography controls text presentation independently from component sizing. A typ
 
 This separation is a key architectural principle:
 
-```
+```text
 Component
 ├── Recipe       → visual variant/color behavior
 ├── Size         → dimensions and layout
@@ -150,9 +258,13 @@ Component
 
 Using `size="lg"` and `typography="bodySmall"` together gives you a large button with small text — the size controls the button's dimensions while typography controls the text appearance.
 
+---
+
 ### Recipes
 
-Recipes define component visual behavior such as variants and semantic colors. Each component can have its own recipe, and recipes can be extended or overridden through the theme.
+Recipes define component visual behavior such as variants and semantic colors.
+
+Each component can have its own recipe, and recipes can be extended or overridden through the theme.
 
 ---
 
@@ -160,7 +272,7 @@ Recipes define component visual behavior such as variants and semantic colors. E
 
 Kreativ UI provides a set of theme extension helpers for composing custom themes without manually manipulating the internal theme structure.
 
-### `extendTheme`
+## `extendTheme`
 
 The recommended way to create a custom theme configuration:
 
@@ -184,15 +296,13 @@ const theme = extendTheme({
     // custom component recipes
   },
 });
-
-<UIProvider theme={theme}>
-  <App />
-</UIProvider>
 ```
 
-### Tokens
+---
 
-#### `defineToken`
+## Tokens
+
+### `defineToken`
 
 Creates a single primitive token definition:
 
@@ -202,7 +312,7 @@ import { defineToken } from "@splenddev/kreativ-ui";
 const bodyFont = defineToken("Inter, sans-serif");
 ```
 
-#### `defineTokens`
+### `defineTokens`
 
 Creates a collection of token definitions:
 
@@ -216,7 +326,7 @@ const fonts = defineTokens({
 });
 ```
 
-#### `extendTokens`
+### `extendTokens`
 
 Extends existing token definitions:
 
@@ -228,9 +338,11 @@ const customFonts = extendTokens({
 });
 ```
 
-### Semantic Tokens
+---
 
-#### `extendSemanticToken`
+## Semantic Tokens
+
+### `extendSemanticToken`
 
 Extends semantic token definitions:
 
@@ -247,9 +359,11 @@ const customSemanticColors = extendSemanticToken({
 });
 ```
 
-### Sizes
+---
 
-#### `defineSize`
+## Sizes
+
+### `defineSize`
 
 Creates a reusable size definition:
 
@@ -266,7 +380,7 @@ const xlSize = defineSize({
 });
 ```
 
-#### `defineSizes`
+### `defineSizes`
 
 Defines multiple size definitions:
 
@@ -285,7 +399,7 @@ const customSizes = defineSizes({
 });
 ```
 
-#### `extendSizes`
+### `extendSizes`
 
 Extends the existing size system:
 
@@ -304,9 +418,29 @@ const sizes = extendSizes({
 });
 ```
 
-### Typography
+### Responsive Sizes
 
-#### `defineTypography`
+Once a size exists in the theme, components can consume it responsively without creating separate size definitions:
+
+```tsx
+<Button
+  size={{
+    base: "sm",
+    md: "md",
+    lg: "xl",
+  }}
+>
+  Button
+</Button>
+```
+
+This keeps the size scale centralized while allowing components to select different size tokens at different breakpoints.
+
+---
+
+## Typography
+
+### `defineTypography`
 
 Creates a typography preset:
 
@@ -321,7 +455,7 @@ const heading = defineTypography({
 });
 ```
 
-#### `extendTypography`
+### `extendTypography`
 
 Extends existing typography presets:
 
@@ -339,9 +473,11 @@ const typography = extendTypography({
 });
 ```
 
-### Recipes
+---
 
-#### `defineRecipe`
+## Recipes
+
+### `defineRecipe`
 
 Defines a component recipe:
 
@@ -353,7 +489,7 @@ const ButtonRecipe = defineRecipe({
 });
 ```
 
-#### `extendRecipe`
+### `extendRecipe`
 
 Extends an existing component recipe:
 
@@ -365,29 +501,27 @@ const customButtonRecipe = extendRecipe({
 });
 ```
 
----
-
 ## ☀️ UIProvider
 
 The `UIProvider` component provides the theme context and manages the active color mode. It must wrap any part of your application that uses Kreativ UI components.
 
 ### Modes
 
-| Mode | Description |
-|------|-------------|
-| `light` | Forces light mode |
-| `dark` | Forces dark mode |
+| Mode     | Description                                    |
+| -------- | ---------------------------------------------- |
+| `light`  | Forces light mode                              |
+| `dark`   | Forces dark mode                               |
 | `system` | Follows the user's operating system preference |
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactNode` | – | Application content |
-| `theme` | `Theme` | default theme | Custom theme configuration |
-| `defaultMode` | `"light" \| "dark" \| "system"` | `"system"` | Initial color mode |
-| `as` | `ElementType` | `"div"` | Root element type |
-| `fallbackSize` | `string` | `"md"` | Fallback size when theme size is missing |
+| Prop           | Type                            | Default       | Description                              |
+| -------------- | ------------------------------- | ------------- | ---------------------------------------- |
+| `children`     | `ReactNode`                     | –             | Application content                      |
+| `theme`        | `Theme`                         | default theme | Custom theme configuration               |
+| `defaultMode`  | `"light" \| "dark" \| "system"` | `"system"`    | Initial color mode                       |
+| `as`           | `ElementType`                   | `"div"`       | Root element type                        |
+| `fallbackSize` | `string`                        | `"md"`        | Fallback size when theme size is missing |
 
 ### Example
 
@@ -396,12 +530,12 @@ import { UIProvider } from "@splenddev/kreativ-ui";
 
 <UIProvider defaultMode="system">
   <App />
-</UIProvider>
+</UIProvider>;
 ```
 
 ---
 
-## `useTheme`
+### `useTheme`
 
 Access and change the current color mode anywhere in your app:
 
@@ -432,7 +566,7 @@ A ready‑to‑use theme switcher that integrates with `UIProvider`.
 ```tsx
 import { ThemeToggler } from "@splenddev/kreativ-ui";
 
-<ThemeToggler />
+<ThemeToggler />;
 ```
 
 ### With System Mode
@@ -472,7 +606,7 @@ import { SunMedium, MoonStar, LaptopMinimal } from "lucide-react";
     dark: <MoonStar size={18} />,
     system: <LaptopMinimal size={18} />,
   }}
-/>
+/>;
 ```
 
 ### Cycle Mode with Animation
@@ -489,35 +623,35 @@ Supported transition types: `none`, `fade`, `slide`, `scale`, `rotate`.
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `ThemeTogglerVariant` | `"ghost"` | Variant for inactive buttons |
-| `activeVariant` | `ThemeTogglerVariant` | `"solid"` | Variant for active button |
-| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | `"sm"` | Button size |
-| `iconOnly` | `boolean` | `false` | Hide labels, show only icons |
-| `allowSystem` | `boolean` | `false` | Show system theme option |
-| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |
-| `rounded` | `boolean` | `true` | Rounded container corners |
-| `unstyled` | `boolean` | `false` | Remove wrapper styles |
-| `display` | `"buttons" \| "cycle"` | `"buttons"` | Show all buttons or a single cycling button |
-| `transition` | `{ type?: TransitionType; duration?: number; easing?: string }` | `{ type: "none" }` | Animation configuration for cycle mode |
-| `labels` | `Partial<Record<"light" \| "dark" \| "system", string>>` | – | Override labels |
-| `icons` | `Partial<Record<"light" \| "dark" \| "system", ReactNode>>` | – | Override icons |
-| `buttonProps` | `Partial<ButtonProps>` | – | Props passed to every internal button |
-| `className` | `string` | – | Additional wrapper class |
+| Prop            | Type                                                            | Default            | Description                                 |
+| --------------- | --------------------------------------------------------------- | ------------------ | ------------------------------------------- |
+| `variant`       | `ThemeTogglerVariant`                                           | `"ghost"`          | Variant for inactive buttons                |
+| `activeVariant` | `ThemeTogglerVariant`                                           | `"solid"`          | Variant for active button                   |
+| `size`          | `"xs" \| "sm" \| "md" \| "lg" \| "xl"`                          | `"sm"`             | Button size                                 |
+| `iconOnly`      | `boolean`                                                       | `false`            | Hide labels, show only icons                |
+| `allowSystem`   | `boolean`                                                       | `false`            | Show system theme option                    |
+| `orientation`   | `"horizontal" \| "vertical"`                                    | `"horizontal"`     | Layout direction                            |
+| `rounded`       | `boolean`                                                       | `true`             | Rounded container corners                   |
+| `unstyled`      | `boolean`                                                       | `false`            | Remove wrapper styles                       |
+| `display`       | `"buttons" \| "cycle"`                                          | `"buttons"`        | Show all buttons or a single cycling button |
+| `transition`    | `{ type?: TransitionType; duration?: number; easing?: string }` | `{ type: "none" }` | Animation configuration for cycle mode      |
+| `labels`        | `Partial<Record<"light" \| "dark" \| "system", string>>`        | –                  | Override labels                             |
+| `icons`         | `Partial<Record<"light" \| "dark" \| "system", ReactNode>>`     | –                  | Override icons                              |
+| `buttonProps`   | `Partial<ButtonProps>`                                          | –                  | Props passed to every internal button       |
+| `className`     | `string`                                                        | –                  | Additional wrapper class                    |
 
 ---
 
 ## 🧩 Button
 
-A versatile, theme-aware button component with support for variants, sizes, typography, loading states, icons, full-width layouts, and custom rendering.
+A versatile, theme-aware button component with support for variants, sizes, typography, responsive sizing, loading states, icons, full-width layouts, and custom rendering.
 
 ### Basic Usage
 
 ```tsx
 import { Button } from "@splenddev/kreativ-ui";
 
-<Button>Click me</Button>
+<Button>Click me</Button>;
 ```
 
 By default, the Button uses:
@@ -546,6 +680,9 @@ By default, the Button uses:
 <Button color="brand">Brand</Button>
 <Button color="success">Success</Button>
 <Button color="destructive">Delete</Button>
+<Button color="warning">Warning</Button>
+<Button color="info">Info</Button>
+<Button color="neutral">Neutral</Button>
 ```
 
 ### Sizes
@@ -557,6 +694,22 @@ By default, the Button uses:
 <Button size="lg">Large</Button>
 ```
 
+Sizes can also be responsive:
+
+```tsx
+<Button
+  size={{
+    base: "sm",
+    md: "md",
+    lg: "lg",
+  }}
+>
+  Responsive Button
+</Button>
+```
+
+The `base` value is used by default, while breakpoint values are applied at their corresponding theme breakpoints.
+
 ### Typography
 
 Button typography is controlled independently from its size:
@@ -567,7 +720,7 @@ Button typography is controlled independently from its size:
 <Button typography="headingSmall">Heading Style</Button>
 ```
 
-Example combining size and typography:
+You can combine size and typography independently:
 
 ```tsx
 <Button size="lg" typography="bodySmall">
@@ -582,17 +735,27 @@ Example combining size and typography:
 ```
 
 When loading:
-- A loading indicator is displayed
-- The Button becomes disabled
-- The Button receives `aria-busy="true"`
-- Normal icon rendering is suppressed
+
+- A loading indicator is displayed.
+- The Button becomes disabled.
+- The Button receives `aria-busy="true"`.
+- Normal icon rendering is suppressed.
 
 ### Icons
 
 ```tsx
-<Button leftIcon={<SearchIcon />}>Search</Button>
-<Button rightIcon={<ArrowRightIcon />}>Continue</Button>
-<Button leftIcon={<DownloadIcon />} rightIcon={<ArrowRightIcon />}>
+<Button leftIcon={<SearchIcon />}>
+  Search
+</Button>
+
+<Button rightIcon={<ArrowRightIcon />}>
+  Continue
+</Button>
+
+<Button
+  leftIcon={<DownloadIcon />}
+  rightIcon={<ArrowRightIcon />}
+>
   Download
 </Button>
 ```
@@ -619,6 +782,16 @@ When loading:
 <Button disabled>Unavailable</Button>
 ```
 
+### Combining Props
+
+Button features can be composed freely:
+
+```tsx
+<Button variant="outline" color="success" size="lg" leftIcon={<CheckIcon />}>
+  Confirm
+</Button>
+```
+
 ### Custom Rendering
 
 The `render` prop provides an advanced escape hatch for rendering the Button's resolved styles and content using another element or component:
@@ -635,9 +808,19 @@ The `render` prop provides an advanced escape hatch for rendering the Button's r
 </Button>
 ```
 
-The render function receives the resolved Button properties (`className`, `style`, `disabled`, `aria-busy`, `children`).
+The render function receives the resolved Button properties, including:
 
-**Next.js Server Component Note:** Since `render` is a function prop, it should be used from a Client Component:
+- `className`
+- `style`
+- `disabled`
+- `aria-disabled`
+- `aria-busy`
+- `data-kui-responsive`
+- `children`
+
+#### Next.js Server Component Note
+
+Since `render` is a function prop, it should be used from a Client Component:
 
 ```tsx
 "use client";
@@ -661,22 +844,22 @@ export function TemplatesButton() {
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `ButtonVariant` | `"solid"` | Visual variant |
-| `color` | `ButtonColor` | `"brand"` | Semantic color |
-| `size` | `ButtonSize` | `"md"` | Dimensions and icon sizing |
-| `typography` | `string` | `"body"` | Typography preset |
-| `isLoading` | `boolean` | `false` | Shows loading indicator and disables interaction |
-| `leftIcon` | `ReactNode` | – | Icon before content |
-| `rightIcon` | `ReactNode` | – | Icon after content |
-| `iconOnly` | `boolean` | `false` | Optimizes layout for icon-only content |
-| `fullWidth` | `boolean` | `false` | Fills available width |
-| `disabled` | `boolean` | `false` | Disables interaction |
-| `render` | `(props: ButtonRenderProps) => ReactElement` | – | Custom rendering escape hatch |
-| `className` | `string` | – | Additional CSS classes |
-| `style` | `React.CSSProperties` | – | Inline style overrides |
-| `children` | `ReactNode` | – | Button content |
+| Prop         | Type                                         | Default   | Description                                      |
+| ------------ | -------------------------------------------- | --------- | ------------------------------------------------ |
+| `variant`    | `ButtonVariant`                              | `"solid"` | Visual variant                                   |
+| `color`      | `ButtonColor`                                | `"brand"` | Semantic color                                   |
+| `size`       | `ResponsiveValue<ButtonSize>`                | `"md"`    | Component dimensions and icon sizing             |
+| `typography` | `string`                                     | `"body"`  | Typography preset                                |
+| `isLoading`  | `boolean`                                    | `false`   | Shows loading indicator and disables interaction |
+| `leftIcon`   | `ReactNode`                                  | –         | Icon before content                              |
+| `rightIcon`  | `ReactNode`                                  | –         | Icon after content                               |
+| `iconOnly`   | `boolean`                                    | `false`   | Optimizes layout for icon-only content           |
+| `fullWidth`  | `boolean`                                    | `false`   | Fills available width                            |
+| `disabled`   | `boolean`                                    | `false`   | Disables interaction                             |
+| `render`     | `(props: ButtonRenderProps) => ReactElement` | –         | Custom rendering escape hatch                    |
+| `className`  | `string`                                     | –         | Additional CSS classes                           |
+| `style`      | `React.CSSProperties`                        | –         | Inline style overrides                           |
+| `children`   | `ReactNode`                                  | –         | Button content                                   |
 
 All standard HTML `<button>` attributes and event handlers are also supported.
 
@@ -691,7 +874,7 @@ A flexible text input with support for variants, sizes, validation states, adorn
 ```tsx
 import { Input } from "@splenddev/kreativ-ui";
 
-<Input placeholder="Enter your name" />
+<Input placeholder="Enter your name" />;
 ```
 
 ### Variants
@@ -770,28 +953,29 @@ const [value, setValue] = useState("");
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `"outline" \| "filled" \| "ghost"` | `"outline"` | Visual style |
-| `inputSize` | `"sm" \| "md" \| "lg"` | `"md"` | Height, padding, font size |
-| `kind` | `InputKind` | `"text"` | Sets defaults for type, inputMode, autoComplete, placeholder, and icon |
-| `hideKindIcon` | `boolean` | `false` | Suppress the default icon from `kind` |
-| `error` | `boolean` | `false` | Danger styling and `aria-invalid` |
-| `success` | `boolean` | `false` | Success styling |
-| `disabled` | `boolean` | `false` | Disables the input |
-| `isLoading` | `boolean` | `false` | Shows spinner and marks read‑only |
-| `clearable` | `boolean` | `false` | Shows clear button when value is present |
-| `onClear` | `() => void` | – | Called after clear |
-| `rounded` | `boolean` | `false` | Fully rounded wrapper |
-| `fullWidth` | `boolean` | `true` | Stretch to container width |
-| `startIcon` | `ReactNode` | – | Content before the input |
-| `endIcon` | `ReactNode` | – | Content after the input |
-| `className` | `string` | – | Additional wrapper class |
-| `inputClassName` | `string` | – | Additional class for the native input element |
+| Prop             | Type                               | Default     | Description                                                            |
+| ---------------- | ---------------------------------- | ----------- | ---------------------------------------------------------------------- |
+| `variant`        | `"outline" \| "filled" \| "ghost"` | `"outline"` | Visual style                                                           |
+| `inputSize`      | `"sm" \| "md" \| "lg"`             | `"md"`      | Height, padding, font size                                             |
+| `kind`           | `InputKind`                        | `"text"`    | Sets defaults for type, inputMode, autoComplete, placeholder, and icon |
+| `hideKindIcon`   | `boolean`                          | `false`     | Suppress the default icon from `kind`                                  |
+| `error`          | `boolean`                          | `false`     | Danger styling and `aria-invalid`                                      |
+| `success`        | `boolean`                          | `false`     | Success styling                                                        |
+| `disabled`       | `boolean`                          | `false`     | Disables the input                                                     |
+| `isLoading`      | `boolean`                          | `false`     | Shows spinner and marks read‑only                                      |
+| `clearable`      | `boolean`                          | `false`     | Shows clear button when value is present                               |
+| `onClear`        | `() => void`                       | –           | Called after clear                                                     |
+| `rounded`        | `boolean`                          | `false`     | Fully rounded wrapper                                                  |
+| `fullWidth`      | `boolean`                          | `true`      | Stretch to container width                                             |
+| `startIcon`      | `ReactNode`                        | –           | Content before the input                                               |
+| `endIcon`        | `ReactNode`                        | –           | Content after the input                                                |
+| `className`      | `string`                           | –           | Additional wrapper class                                               |
+| `inputClassName` | `string`                           | –           | Additional class for the native input element                          |
 
 All standard `<input>` attributes (except `size`) are forwarded to the underlying `<input>`.
 
 ---
+
 ## 🧩 FormField
 
 `FormField` is a compound component for building accessible form fields. It provides shared field context for labels, descriptions, controls, and validation messages while automatically coordinating IDs and accessibility attributes.
@@ -806,49 +990,50 @@ import { FormField, Input } from "@splenddev/kreativ-ui";
 <FormField>
   <FormField.Label>Email address</FormField.Label>
 
-  <FormField.Description>
-    We'll only send receipts here.
-  </FormField.Description>
+  <FormField.Description>We'll only send receipts here.</FormField.Description>
 
   <FormField.Control>
     <Input kind="email" placeholder="you@company.com" />
   </FormField.Control>
-</FormField>
-````
+</FormField>;
+```
+
 ### ⚠️ Important: Use `FormField.Control`
 
 **`FormField.Control` should be used around the actual form control** when using `FormField`.
 
- `FormField` provides the field context, but `FormField.Control` is responsible for connecting that context to the underlying control. This includes applying the generated field ID and relevant accessibility attributes such as `aria-describedby`, `aria-invalid`, and `aria-required`.
+`FormField` provides the field context, but `FormField.Control` is responsible for connecting that context to the underlying control. This includes applying the generated field ID and relevant accessibility attributes such as `aria-describedby`, `aria-invalid`, and `aria-required`.
 
- ```tsx
- <FormField>
-   <FormField.Label>Email</FormField.Label>
+```tsx
+<FormField>
+  <FormField.Label>Email</FormField.Label>
 
-   <FormField.Control>
-     <Input kind="email" />
-   </FormField.Control>
- </FormField>
- ```
+  <FormField.Control>
+    <Input kind="email" />
+  </FormField.Control>
+</FormField>
+```
 
 > Avoid placing the control directly inside `FormField`:
 
- ```tsx
- {/* ❌ Avoid */}
- <FormField>
-   <FormField.Label>Email</FormField.Label>
-   <Input kind="email" />
- </FormField>
- ```
-> Without `FormField.Control`, the control is not connected to the `FormField` accessibility context.
+```tsx
+{
+  /* ❌ Avoid */
+}
+<FormField>
+  <FormField.Label>Email</FormField.Label>
+  <Input kind="email" />
+</FormField>;
+```
 
+> Without `FormField.Control`, the control is not connected to the `FormField` accessibility context.
 
 ---
 
 The compound API consists of:
 
 | Component               | Purpose                                                                        |
-| -- | -- |
+| ----------------------- | ------------------------------------------------------------------------------ |
 | `FormField`             | Provides field context, IDs, validation state, and accessibility relationships |
 | `FormField.Label`       | Associates a visible label with the field                                      |
 | `FormField.Description` | Provides supporting or descriptive text                                        |
@@ -875,13 +1060,13 @@ If an `id` is not supplied, `FormField` generates a unique ID automatically.
 
 The generated field IDs are used to coordinate:
 
-* the control ID
-* label association
-* description association
-* validation message association
-* `aria-describedby`
-* `aria-invalid`
-* `aria-required`
+- the control ID
+- label association
+- description association
+- validation message association
+- `aria-describedby`
+- `aria-invalid`
+- `aria-required`
 
 ### Props
 
@@ -936,10 +1121,7 @@ The field becomes invalid because its status is `"error"`.
 ### Controlled Message
 
 ```tsx
-<FormField
-  status="error"
-  message="Please enter a valid email address"
->
+<FormField status="error" message="Please enter a valid email address">
   <FormField.Label>Email address</FormField.Label>
 
   <FormField.Control>
@@ -972,9 +1154,7 @@ A custom `FormField.Message` can also be placed inside the field.
     <Input kind="email" />
   </FormField.Control>
 
-  <FormField.Message>
-    Please enter a valid email address.
-  </FormField.Message>
+  <FormField.Message>Please enter a valid email address.</FormField.Message>
 </FormField>
 ```
 
@@ -1080,9 +1260,7 @@ For accessibility, form controls should generally have an accessible name.
 <FormField>
   <FormField.Label>Password</FormField.Label>
 
-  <FormField.Description>
-    Use at least 8 characters.
-  </FormField.Description>
+  <FormField.Description>Use at least 8 characters.</FormField.Description>
 
   <FormField.Control>
     <Input type="password" />
@@ -1169,9 +1347,7 @@ takes precedence over a validation message reported by the connected control.
 A custom:
 
 ```tsx
-<FormField.Message>
-  ...
-</FormField.Message>
+<FormField.Message>...</FormField.Message>
 ```
 
 is handled separately as an explicit message component and prevents the root from rendering its automatic message component.
@@ -1257,12 +1433,12 @@ Use a standalone component such as `Input` when the surrounding UI does not requ
 
 Use `FormField` when you need a coordinated:
 
-* label
-* description
-* validation state
-* validation message
-* required state
-* accessibility relationship
+- label
+- description
+- validation state
+- validation message
+- required state
+- accessibility relationship
 
 The `FormField` system is designed to keep these concerns connected without requiring consumers to manually manage the generated IDs and ARIA relationships.
 
@@ -1287,7 +1463,7 @@ import { Select } from "@splenddev/kreativ-ui";
     <Select.Item value="ca">Canada</Select.Item>
     <Select.Item value="mx">Mexico</Select.Item>
   </Select.Content>
-</Select>
+</Select>;
 ```
 
 ### Controlled Select
@@ -1332,22 +1508,22 @@ function ControlledSelect() {
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string` | – | Controlled selected value |
-| `defaultValue` | `string` | – | Uncontrolled initial value |
-| `onValueChange` | `(value?: string) => void` | – | Called when selection changes |
-| `placeholder` | `string` | – | Text shown when no value is selected |
-| `required` | `boolean` | `false` | Marks the field as required |
-| `name` | `string` | – | Name for the hidden input used in form submissions |
-| `disabled` | `boolean` | `false` | Disables the entire select |
-| `clearable` | `boolean` | `false` | Shows a clear button |
-| `variant` | `"outline" \| "filled" \| "ghost"` | `"outline"` | Visual style |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size of the trigger and content |
-| `error` | `boolean` | `false` | Shows error state |
-| `success` | `boolean` | `false` | Shows success state |
-| `rounded` | `boolean` | `false` | Applies fully rounded corners to the trigger |
-| `className` | `string` | – | Additional class names for the root container |
+| Prop            | Type                               | Default     | Description                                        |
+| --------------- | ---------------------------------- | ----------- | -------------------------------------------------- |
+| `value`         | `string`                           | –           | Controlled selected value                          |
+| `defaultValue`  | `string`                           | –           | Uncontrolled initial value                         |
+| `onValueChange` | `(value?: string) => void`         | –           | Called when selection changes                      |
+| `placeholder`   | `string`                           | –           | Text shown when no value is selected               |
+| `required`      | `boolean`                          | `false`     | Marks the field as required                        |
+| `name`          | `string`                           | –           | Name for the hidden input used in form submissions |
+| `disabled`      | `boolean`                          | `false`     | Disables the entire select                         |
+| `clearable`     | `boolean`                          | `false`     | Shows a clear button                               |
+| `variant`       | `"outline" \| "filled" \| "ghost"` | `"outline"` | Visual style                                       |
+| `size`          | `"sm" \| "md" \| "lg"`             | `"md"`      | Size of the trigger and content                    |
+| `error`         | `boolean`                          | `false`     | Shows error state                                  |
+| `success`       | `boolean`                          | `false`     | Shows success state                                |
+| `rounded`       | `boolean`                          | `false`     | Applies fully rounded corners to the trigger       |
+| `className`     | `string`                           | –           | Additional class names for the root container      |
 
 ### Compound Components
 

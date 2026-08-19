@@ -186,6 +186,28 @@ export interface AnimationTokens {
 }
 
 /**
+ * A flat map of responsive breakpoint tokens.
+ *
+ * Breakpoints define the minimum viewport width at which a responsive
+ * style becomes active.
+ *
+ * Values are CSS lengths, typically expressed in px or rem.
+ *
+ * @example
+ * ```ts
+ * const breakpoints: BreakpointTokens = {
+ *   sm: { value: "640px" },
+ *   md: { value: "768px" },
+ *   lg: { value: "1024px" },
+ *   xl: { value: "1280px" },
+ * };
+ * ```
+ */
+export interface BreakpointTokens {
+  [key: string]: TokenDefinition<string>;
+}
+
+/**
  * Primitive (raw) design tokens.
  * These are mode‑agnostic values that serve as the foundation for semantic tokens.
  * Each category is optional; you may define only the ones you need.
@@ -216,8 +238,9 @@ export interface DesignTokens {
   letterSpacings?: LetterSpacingTokens;
   shadows?: ShadowTokens;
   animations?: AnimationTokens;
+  breakpoints?:BreakpointTokens;
 
-  [key: string]: unknown; // for future extension
+  [key: string]: unknown; 
 }
 
 /**

@@ -1,28 +1,23 @@
-import { UIProvider, type ThemeOverride } from "../src";
+import { UIProvider, extendTheme, type ThemeOverride } from "../src";
 import ComponentsPlayground from "./components/ComponentsPlayground";
 import { useState } from "react";
 import { ThemeStudio } from "./components/ThemeStudio";
 
 export function App() {
-  const [theme, setTheme] = useState<ThemeOverride>({
-    sizes: {
-      xl: {
-        height: "4.5rem",
-        paddingX: "2.5rem",
-        fontSize: "1.125rem",
-        gap: "0.75rem",
-        radius: "1rem",
-        iconSize: "1.5rem",
+  const [theme, setTheme] = useState<ThemeOverride>(() =>
+    extendTheme({
+      sizes: {
+        xl: {
+          height: "4.5rem",
+          paddingX: "2.5rem",
+          fontSize: "1.125rem",
+          gap: "0.75rem",
+          radius: "1rem",
+          iconSize: "1.5rem",
+        },
       },
-    },
-    recipes: {
-      Button: {
-        compoundVariants: [
-          { conditions: { color: "neutral" }, className: "text-text-muted" },
-        ],
-      },
-    },
-  });
+    }),
+  );
 
   return (
     <UIProvider
@@ -41,7 +36,7 @@ export function App() {
         <ThemeStudio
           theme={theme}
           onChange={(nextTheme) => {
-            setTheme(nextTheme);
+            setTheme(extendTheme(nextTheme));
           }}
         />
 

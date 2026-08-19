@@ -4,7 +4,6 @@ import {
   forwardRef,
   useEffect,
   useId,
-  useMemo,
   useRef,
   useState,
   type ReactNode,
@@ -14,9 +13,11 @@ import { cn } from "@/utils";
 import { resolveRecipe } from "@/theme/recipes/resolveRecipe";
 import {
   useClearableField,
+  useKeyboardShortcuts,
   useSizeStyle,
   useStatusTransition,
   useTheme,
+  useTypography,
 } from "@/hooks";
 
 import { ClearIcon, Eye, EyeOff, inputKindIcons, Spinner } from "./Input.icons";
@@ -26,6 +27,7 @@ import type { InputProps } from "./Input.types";
 import { useOptionalFormField } from "../FormField/FormField.context";
 import { mergeRefs } from "@/utils/mergeRef";
 import { useButtonGroupContext } from "../ButtonGroup/ButtonGroup.context";
+import { Adornment } from "../Adornment";
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
@@ -51,6 +53,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
       clearable = false,
       onClear,
+      undoable = false,
+      onUndo,
+      onRedo,
 
       kind = "text",
       hideKindIcon = false,
@@ -72,6 +77,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       defaultValue,
 
       style,
+      typography: typographyName = "body",
 
       ...props
     },
@@ -79,10 +85,25 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const autoId = useId();
     const internalRef = useRef<HTMLInputElement>(null);
+    const shortcutRef = useKeyboardShortcuts(
+      undoable ?? false,
+      {
+        "ctrl+z": () => {
+          const current = internalRef.current?.value ?? "";
+          onUndo?.(current);
+        },
+        "ctrl+shift+z": () => {
+          const current = internalRef.current?.value ?? "";
+          onRedo?.(current);
+        },
+      },
+      [onUndo, onRedo],
+    );
 
     const { theme } = useTheme();
     const field = useOptionalFormField();
     const group = useButtonGroupContext();
+    const typography = useTypography(typographyName);
 
     const id = externalId ?? field?.id ?? autoId;
 
@@ -136,21 +157,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const defaultStartIcon =
       !hideKindIcon && KindIcon ? <KindIcon /> : undefined;
 
-    const startAdornment = useMemo(() => {
-      const icon = startIcon ?? defaultStartIcon;
-      if (!icon) return null;
-      return (
-        <span
-          className="flex shrink-0 items-center justify-center"
-          style={{
-            width: iconSize,
-            height: iconSize,
-          }}
-        >
-          {icon}
-        </span>
-      );
-    }, [startIcon, defaultStartIcon, iconSize]);
+    const startAdornment = startIcon ?? defaultStartIcon;
 
     const builtInEnd: ReactNode[] = [];
 
@@ -218,24 +225,27 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       );
     }
 
-    const endAdornment: ReactNode = isLoading ? (
-      <Spinner size={iconSize || 14} />
+    const endAdornment = isLoading ? (
+      <Adornment position="end">
+        <Spinner size={iconSize || 14} />
+      </Adornment>
     ) : endIcon || builtInEnd.length > 0 ? (
-      <div className="flex shrink-0 items-center gap-1.5">
+      <Adornment position="end">
         {endIcon && (
           <span
-            className="flex items-center justify-center"
+            className="flex shrink-0 items-center justify-center"
             style={{
               width: iconSize,
               height: iconSize,
             }}
+            aria-hidden="true"
           >
             {endIcon}
           </span>
         )}
 
         {builtInEnd}
-      </div>
+      </Adornment>
     ) : null;
 
     const hasAdornment = Boolean(startAdornment) || Boolean(endAdornment);
@@ -248,7 +258,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         fullWidth,
         disabled: disabled || isLoading,
         hasAdornment,
-        attached:group?.attached
+        attached: group?.attached,
       }),
       className,
     );
@@ -261,14 +271,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     );
 
     const resolvedStyle = {
+      ...typography,
       ...sizeStyle,
       ...style,
     };
-     const groupDataAttributes = {
-       "data-kui-button-group-item": isInButtonGroup || undefined,
-       "data-kui-group-attached": group?.attached || undefined,
-       "data-kui-group-orientation": group?.orientation || undefined,
-     };
+    const groupDataAttributes = {
+      "data-kui-button-group-item": isInButtonGroup || undefined,
+      "data-kui-group-attached": group?.attached || undefined,
+      "data-kui-group-orientation": group?.orientation || undefined,
+    };
 
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
       setHasValue(Boolean(event.target.value));
@@ -315,11 +326,22 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         data-state-transition={statusTransition}
         {...groupDataAttributes}
       >
-        {startAdornment}
-
+        {startAdornment && (
+          <Adornment position="start">
+            <span
+              className="flex shrink-0 items-center justify-center"
+              style={{
+                width: iconSize,
+                height: iconSize,
+              }}
+            >
+              {startAdornment}
+            </span>
+          </Adornment>
+        )}
         <input
           {...props}
-          ref={mergeRefs(internalRef, ref)}
+          ref={mergeRefs(internalRef, ref, shortcutRef)}
           id={id}
           type={effectiveType}
           inputMode={

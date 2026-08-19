@@ -9,30 +9,70 @@ export const defaultTokens: DesignTokens = {
       500: defineToken("#1A80E6"),
       600: defineToken("#1773CF"),
     },
+
     red: {
       300: defineToken("#EB4747"),
       400: defineToken("#E83030"),
       500: defineToken("#E61A1A"),
       600: defineToken("#CF1717"),
     },
+
     green: {
       300: defineToken("#26D997"),
       400: defineToken("#22C388"),
       500: defineToken("#16A249"),
       600: defineToken("#12875C"),
     },
+
     amber: {
       300: defineToken("#F7B23B"),
       400: defineToken("#F6A823"),
       500: defineToken("#F59F0A"),
       600: defineToken("#D38909"),
     },
+
     cyan: {
       300: defineToken("#6CC3EF"),
       400: defineToken("#47B4EB"),
       500: defineToken("#1791CF"),
       600: defineToken("#137BAE"),
     },
+
+    indigo: {
+      300: defineToken("#818CF8"),
+      400: defineToken("#6366F1"),
+      500: defineToken("#4F46E5"),
+      600: defineToken("#4338CA"),
+    },
+
+    emerald: {
+      300: defineToken("#6EE7B7"),
+      400: defineToken("#34D399"),
+      500: defineToken("#10B981"),
+      600: defineToken("#059669"),
+    },
+
+    violet: {
+      300: defineToken("#A78BFA"),
+      400: defineToken("#8B5CF6"),
+      500: defineToken("#7C3AED"),
+      600: defineToken("#6D28D9"),
+    },
+
+    rose: {
+      300: defineToken("#FDA4AF"),
+      400: defineToken("#FB7185"),
+      500: defineToken("#F43F5E"),
+      600: defineToken("#E11D48"),
+    },
+
+    orange: {
+      300: defineToken("#FDBA74"),
+      400: defineToken("#FB923C"),
+      500: defineToken("#F97316"),
+      600: defineToken("#EA580C"),
+    },
+
     gray: {
       50: defineToken("#FAFAFA"),
       100: defineToken("#EBEBEB"),
@@ -47,6 +87,7 @@ export const defaultTokens: DesignTokens = {
       950: defineToken("#141414"),
       1000: defineToken("#0A0A0A"),
     },
+
     white: defineToken("#FFFFFF"),
     black: defineToken("#000000"),
   },
@@ -103,6 +144,40 @@ export const defaultTokens: DesignTokens = {
     wide: defineToken("0.025em"),
   },
   animations: {
-    "slide-in-right": defineToken("slide-in-right 0.5s ease-in-out"),
+    spin: defineToken("kui-spin 0.6s linear infinite"),
+
+    "fade-in": defineToken("kui-fade-in 0.15s ease-out"),
+    "fade-out": defineToken("kui-fade-out 0.15s ease-in"),
+
+    "scale-in": defineToken("kui-scale-in 0.15s ease-out"),
+    "scale-out": defineToken("kui-scale-out 0.15s ease-in"),
+
+    "slide-up": defineToken("kui-slide-up 0.2s ease-out"),
+    "slide-down": defineToken("kui-slide-down 0.2s ease-out"),
+    "slide-left": defineToken("kui-slide-left 0.2s ease-out"),
+    "slide-right": defineToken("kui-slide-right 0.2s ease-out"),
+    "slide-in-next": defineToken("kui-slide-in-next 0.2s ease-out"),
+    "slide-in-prev": defineToken("kui-slide-in-prev 0.2s ease-out"),
+    
+    bounce: defineToken("kui-bounce 0.8s infinite"),
+    pulse: defineToken("kui-pulse 1.5s ease-in-out infinite"),
+    shake: defineToken("kui-shake 0.25s ease-in-out"),
+    shimmer: defineToken("kui-shimmer 1.5s linear infinite"),
+
+    expand: defineToken("kui-expand 0.2s ease-out"),
+    collapse: defineToken("kui-collapse 0.2s ease-in"),
+
+    ping: defineToken("kui-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite"),
+
+    "state-error": defineToken("kui-state-error 500ms ease-out 3 500ms"),
+    "state-success": defineToken("kui-state-success 500ms ease-out 2 500ms"),
+    "state-warning": defineToken("kui-state-warning 500ms ease-out 2 500ms"),
+  },
+  breakpoints: {
+    sm: defineToken("640px"),
+    md: defineToken("768px"),
+    lg: defineToken("1024px"),
+    xl: defineToken("1280px"),
+    "2xl": defineToken("1536px"),
   },
 };

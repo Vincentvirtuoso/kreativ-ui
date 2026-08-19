@@ -1,3 +1,5 @@
+export * from './Adornment'
+
 export * from "./Button";
 export * from "./ButtonGroup";
 
