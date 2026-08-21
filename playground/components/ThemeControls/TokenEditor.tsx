@@ -118,12 +118,12 @@ export function TokenEditor({ theme, onChange }: TokenEditorProps) {
               <div className="rounded-lg border border-border bg-surface p-4">
                 <div className="mb-4 flex items-center gap-2">
                   <span className="h-3 w-3 rounded-full bg-brand" />
-                  <span className="h-2 w-24 rounded-full bg-border" />
+                  <span className="h-2 w-24 rounded-full bg-surface-sunken" />
                 </div>
 
                 <div className="space-y-2">
-                  <div className="h-2 w-3/4 rounded-full bg-border" />
-                  <div className="h-2 w-1/2 rounded-full bg-border" />
+                  <div className="h-2 w-3/4 rounded-full bg-surface-sunken" />
+                  <div className="h-2 w-1/2 rounded-full bg-surface-sunken" />
                 </div>
 
                 <div className="mt-5 flex gap-2">

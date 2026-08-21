@@ -32,3 +32,5 @@ export interface ButtonGroupTextProps
 
 export interface ButtonGroupLabelProps
   extends HTMLAttributes<HTMLSpanElement>, Omit<BaseProps, "unstyled"> {}
+
+export interface ButtonGroupItemProps extends HTMLAttributes<HTMLDivElement> {}

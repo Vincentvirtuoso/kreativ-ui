@@ -10,6 +10,7 @@ import { ButtonGroupSeparator } from "./ButtonGroupSeparator";
 import { ButtonGroupText } from "./ButtonGroupText";
 import { ButtonGroupLabel } from "./ButtonGroupLabel";
 import { useSizeToken } from "@/hooks";
+import { ButtonGroupItem } from "./ButtonGroupItem";
 
 const ButtonGroupRoot = forwardRef<HTMLDivElement, ButtonGroupProps>(
   (
@@ -51,7 +52,10 @@ const ButtonGroupRoot = forwardRef<HTMLDivElement, ButtonGroupProps>(
           data-kui-button-group=""
           data-orientation={orientation}
           data-attached={attached || undefined}
-          className={cn(recipeClasses, className)}
+          className={cn(
+            recipeClasses,
+            className,
+          )}
           style={
             {
               "--kui-button-group-separator-size": separatorSizeToken,
@@ -72,6 +76,7 @@ export const ButtonGroup = Object.assign(ButtonGroupRoot, {
   Separator: ButtonGroupSeparator,
   Text: ButtonGroupText,
   Label: ButtonGroupLabel,
+  Item: ButtonGroupItem,
 });
 
 ButtonGroup.displayName = "ButtonGroup";

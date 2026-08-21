@@ -10,7 +10,9 @@ import { markdownEditorRecipe } from "./recipes/markdownEditor";
 import { defaultSizes } from "./sizes";
 import { checkboxRecipe } from "./recipes/checkbox";
 import { buttonGroupRecipe } from "./recipes/buttonGroup";
+import { switchRecipe } from "./recipes/switch";
 import { defineTheme } from "../defineTheme";
+import { containerReccipe } from "./recipes/container";
 
 export const defaultRecipes: RecipeCollection = {
   Button: buttonRecipe,
@@ -20,6 +22,8 @@ export const defaultRecipes: RecipeCollection = {
   MarkdownEditor: markdownEditorRecipe,
   Checkbox: checkboxRecipe,
   ButtonGroup: buttonGroupRecipe,
+  Switch: switchRecipe,
+  Container: containerReccipe,
 };
 
 export const defaultTheme = defineTheme({

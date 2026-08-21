@@ -9,8 +9,8 @@ import { useResponsiveStyles, useSizeToken, useTypography } from "@/hooks";
 import { resolveRecipe } from "@/theme/recipes/resolveRecipe";
 
 import type { ButtonProps } from "./Button.types";
-import { useButtonGroupContext } from "../ButtonGroup/ButtonGroup.context";
 import { ResponsiveStyle } from "../internal/ResponsiveStyle";
+import { useOptionalButtonGroupContext } from "../ButtonGroup";
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -35,7 +35,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const { theme } = useTheme();
     const typography = useTypography(typographyName);
-    const group = useButtonGroupContext();
+    const group = useOptionalButtonGroupContext();
 
     const resolvedSize = size ?? group?.size ?? "md";
 

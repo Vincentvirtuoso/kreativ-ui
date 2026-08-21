@@ -32,3 +32,49 @@ export function resolveResponsiveValue<T, B extends string = string>(
     ) as Record<string, T>,
   };
 }
+
+export function toResponsiveClasses<T>(
+  value: ResolvedResponsiveValue<T>,
+  resolve: (value: T) => string,
+): string {
+  const classes: string[] = [];
+
+  if (value.base !== undefined) {
+    classes.push(resolve(value.base));
+  }
+
+  for (const [breakpoint, item] of Object.entries(value.responsive)) {
+    classes.push(
+      item
+        ? item
+            .toString()
+            .split(" ")
+            .map((className) => `${breakpoint}:${className}`)
+            .join(" ")
+        : "",
+    );
+  }
+
+  return classes.filter(Boolean).join(" ");
+}
+
+export function mergeResponsiveValue<T, B extends string = string>(
+  defaults: ResponsiveValue<T, B>,
+  value?: ResponsiveValue<T, B>,
+): ResolvedResponsiveValue<T> {
+  const defaultValue = resolveResponsiveValue(defaults);
+
+  if (value === undefined) {
+    return defaultValue;
+  }
+
+  const overrideValue = resolveResponsiveValue(value);
+
+  return {
+    base: overrideValue.base ?? defaultValue.base,
+    responsive: {
+      ...defaultValue.responsive,
+      ...overrideValue.responsive,
+    },
+  };
+}

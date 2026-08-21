@@ -3,11 +3,13 @@ export function getAttrs(
   extra: string[] = [],
   exclude: string[] = [],
   extraAttrs?: Record<string, string | null>,
-) {
+  styleProps: string[] = [], // new: style properties to read
+): Record<string, string | null> {
   const target =
     (el?.querySelector("input, textarea, [role='combobox']") as HTMLElement) ??
     el;
 
+  // --- Attributes ---
   const base: Record<string, string | null> = {
     id: target?.getAttribute("id") ?? null,
     "aria-invalid": target?.getAttribute("aria-invalid") ?? null,
@@ -19,7 +21,16 @@ export function getAttrs(
     extra.map((k) => [k, target?.getAttribute(k) ?? null]),
   );
 
-  const result = { ...base, ...extras, ...extraAttrs };
+  // --- Computed styles ---
+  let styles: Record<string, string | null> = {};
+  if (target && styleProps.length > 0) {
+    const computed = window.getComputedStyle(target);
+    styles = Object.fromEntries(
+      styleProps.map((prop) => [prop, computed.getPropertyValue(prop) || null]),
+    );
+  }
+
+  const result = { ...base, ...extras, ...styles, ...extraAttrs };
 
   const excludeSet = new Set(exclude);
   return Object.fromEntries(

@@ -1,3 +1,4 @@
+import { Container } from "@/components";
 import { ReactNode, useEffect, useRef, useState } from "react";
 
 interface PlaygroundProps {
@@ -40,9 +41,8 @@ export function Playground({
       </header>
 
       <div className="grid min-w-0 grid-cols-[300px_minmax(0,1fr)] gap-6 max-lg:grid-cols-1">
-        <div className="rounded-xl border border-border bg-surface p-5">
-          {controls}
-        </div>
+        <Container>{controls}</Container>
+        {/* <div className="rounded-xl border border-border bg-surface p-5"></div> */}
         <div className="min-w-0">
           <div
             ref={wrapperRef}

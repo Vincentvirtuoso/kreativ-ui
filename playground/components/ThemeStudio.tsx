@@ -31,7 +31,7 @@ export function ThemeStudio({ theme, onChange }: Props) {
     <section className=" space-y-8 rounded-lg text-text">
       <header
         ref={headerRef}
-        className={`sticky top-0 z-10 transition-colors duration-200 ${isScrolled ? "bg-background" : "bg-transparent"} mb-6 px-4 pt-4 pb-2 border-b border-border`}
+        className={`sticky top-0 z-10 transition-colors duration-200 ${isScrolled ? "bg-background" : "bg-transparent"} mb-4 px-4 pt-4 pb-2 border-b border-border`}
       >
         <p className="mb-1 font-mono text-md text-brand uppercase">
           Kreativ UI{" "}

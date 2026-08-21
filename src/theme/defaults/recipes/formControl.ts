@@ -10,7 +10,9 @@ export const formControlBase =
 
 export const formControlVariants = {
   outline: "border border-border bg-transparent text-text",
+
   filled: "border border-transparent bg-surface-raised text-text",
+
   ghost: "border border-transparent bg-transparent text-text",
 } as const;
 
@@ -18,14 +20,22 @@ const standaloneStates = {
   none: "hover:border-brand focus-within:ring-2 focus-within:ring-brand/20",
 
   error:
-    "border-destructive hover:border-destructive focus-within:ring-2 focus-within:ring-destructive/20",
+    "border-destructive hover:border-destructive " +
+    "focus-within:ring-2 focus-within:ring-destructive/20",
 
   success:
-    "border-success hover:border-success focus-within:ring-2 focus-within:ring-success/20",
+    "border-success hover:border-success " +
+    "focus-within:ring-2 focus-within:ring-success/20",
 
   warning:
-    "border-warning hover:border-warning focus-within:ring-2 focus-within:ring-warning/20",
+    "border-warning hover:border-warning " +
+    "focus-within:ring-2 focus-within:ring-warning/20",
 } as const;
+
+const borderlessControl =
+  "rounded-none border-0! shadow-none! " +
+  "hover:border-0! hover:bg-transparent! " +
+  "focus-within:ring-0! focus-within:ring-offset-0! focus-within-outline-none!";
 
 export const formControlRecipe = defineRecipe({
   base: formControlBase,
@@ -34,10 +44,12 @@ export const formControlRecipe = defineRecipe({
     variant: formControlVariants,
 
     embedded: {
-      true:
-        "rounded-none border-0 shadow-none " +
-        "hover:border-0 hover:bg-transparent " +
-        "focus-within:ring-0 focus-within:ring-offset-0",
+      true: borderlessControl,
+      false: "",
+    },
+
+    groupItem: {
+      true: borderlessControl,
       false: "",
     },
 
@@ -77,19 +89,66 @@ export const formControlRecipe = defineRecipe({
 
   compoundVariants: [
     {
-      conditions: { embedded: true, state: "none" },
+      conditions: {
+        embedded: true,
+        state: "none",
+      },
       className: "border-0! shadow-none! focus-within:ring-0! hover:border-0!",
     },
+
     {
-      conditions: { embedded: true, state: "error" },
+      conditions: {
+        embedded: true,
+        state: "error",
+      },
       className: "border-0! shadow-none! focus-within:ring-0! hover:border-0!",
     },
+
     {
-      conditions: { embedded: true, state: "success" },
+      conditions: {
+        embedded: true,
+        state: "success",
+      },
       className: "border-0! shadow-none! focus-within:ring-0! hover:border-0!",
     },
+
     {
-      conditions: { embedded: true, state: "warning" },
+      conditions: {
+        embedded: true,
+        state: "warning",
+      },
+      className: "border-0! shadow-none! focus-within:ring-0! hover:border-0!",
+    },
+
+    {
+      conditions: {
+        groupItem: true,
+        state: "none",
+      },
+      className: "border-0! shadow-none! focus-within:ring-0! hover:border-0!",
+    },
+
+    {
+      conditions: {
+        groupItem: true,
+        state: "error",
+      },
+      className: "border-0! shadow-none! focus-within:ring-0! hover:border-0!",
+    },
+
+    {
+      conditions: {
+        groupItem: true,
+        state: "success",
+      },
+      className: "border-0! shadow-none! focus-within:ring-0! hover:border-0!",
+    },
+
+    {
+      conditions: {
+        groupItem: true,
+        state: "warning",
+      },
       className: "border-0! shadow-none! focus-within:ring-0! hover:border-0!",
     },
 
@@ -125,16 +184,29 @@ export const formControlRecipe = defineRecipe({
       className:
         "border-0! hover:border-0! focus-within:ring-0! cursor-default",
     },
+
+    {
+      conditions: {
+        groupItem: true,
+        disabled: true,
+      },
+      className:
+        "border-0! hover:border-0! focus-within:ring-0! cursor-default",
+    },
   ],
 
   defaultVariants: {
     variant: "outline",
     state: "none",
+
     embedded: false,
+    groupItem: false,
+
     rounded: false,
     fullWidth: true,
     disabled: false,
     hasAdornment: false,
-    attached:false,
+
+    attached: false,
   },
 });

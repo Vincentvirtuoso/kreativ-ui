@@ -32,7 +32,7 @@ export type BaseVariant = "solid" | "outline" | "ghost" | "soft";
  * Default responsive breakpoints supported by the design system.
  * These breakpoints are used to define responsive behavior across different screen sizes.
  * The order from smallest to largest is: `"sm"`, `"md"`, `"lg"`, `"xl"`, `"2xl"`.
- * 
+ *
  * - `"sm"`: small screens (e.g., mobile phones)
  * - `"md"`: medium screens (e.g., tablets)
  * - `"lg"`: large screens (e.g., desktops)
@@ -238,13 +238,6 @@ export interface ClearableProps {
  */
 export interface UndoRedoProps {
   /**
-   * When `true`, enables undo/redo via keyboard shortcuts (Ctrl+Z / Ctrl+Shift+Z)
-   * and optionally displays undo/redo buttons.
-   * @default false
-   */
-  undoable?: boolean;
-
-  /**
    * Callback invoked when an undo action is performed.
    * The new value is passed to allow external state synchronisation.
    */
@@ -279,6 +272,13 @@ export interface StateProps {
    * @default false
    */
   warning?: boolean;
+
+  /**
+   * When `true`, automatically scrolls the input into view when it
+   * transitions into an error state.
+   * @default false
+   */
+  scrollIntoViewOnError?: boolean;
 }
 
 /**
@@ -320,15 +320,114 @@ export type ControlledProps<
   TValueProp extends string = "value",
   TDefaultProp extends string = "defaultValue",
   TOnChangeProp extends string = "onValueChange",
+  TIsRequired extends boolean = false,
+> = TIsRequired extends true
+  ? {
+      /** Controlled value. */
+      [K in TValueProp]: T;
+    } & {
+      /** Initial value for uncontrolled usage. */
+      [K in TDefaultProp]: T;
+    } & {
+      /** Called when the value changes. */
+      [K in TOnChangeProp]: (value: T) => void;
+    }
+  : {
+      /** Controlled value. */
+      [K in TValueProp]?: T;
+    } & {
+      /** Initial value for uncontrolled usage. */
+      [K in TDefaultProp]?: T;
+    } & {
+      /** Called when the value changes. */
+      [K in TOnChangeProp]?: (value: T) => void;
+    };
+
+/**
+ * Props for a controlled or uncontrolled stateful component.
+ *
+ * @typeParam T - The state value type.
+ * @typeParam TStateProp - The controlled state prop name.
+ * @typeParam TSetStateProp - The state change callback prop name.
+ */
+/**
+ * Defines optional state control props for a component: a state value and its setter.
+ *
+ * This is useful for components that can be used in both controlled and uncontrolled modes,
+ * where the caller may provide state and setter optionally.
+ *
+ * @template T - The type of the state value (default: `boolean`).
+ * @template TStateProp - The name of the state prop (default: `"state"`).
+ * @template TSetStateProp - The name of the setter prop (default: `"setState"` based on `TStateProp`).
+ *
+ * @example
+ * ```ts
+ * interface MyComponentProps extends StateControlProps<string, "value", "onValueChange"> {
+ *   label: string;
+ * }
+ * // Result:
+ * // {
+ * //   label: string;
+ * //   value?: string;
+ * //   onValueChange?: (value: string) => void;
+ * // }
+ * ```
+ *
+ * @example
+ * ```ts
+ * // Default prop names: "state" and "setState"
+ * type Props = StateControlProps<number>;
+ * // => { state?: number; setState?: (value: number) => void }
+ * ```
+ */
+export type StateControlProps<
+  T = boolean,
+  TStateProp extends string = "state",
+  TSetStateProp extends string = `set${Capitalize<TStateProp>}`,
 > = {
-  /** Controlled value. */
-  [K in TValueProp]?: T;
+  [K in TStateProp]?: T;
 } & {
-  /** Initial value for uncontrolled usage. */
-  [K in TDefaultProp]?: T;
+  [K in TSetStateProp]?: (value: T) => void;
+};
+
+/**
+ * Defines **required** state control props for a component: a mandatory state value and its setter.
+ *
+ * Use this when your component **must** be controlled externally – the caller is forced to provide
+ * the state and the setter function.
+ *
+ * @template T - The type of the state value (default: `boolean`).
+ * @template TStateProp - The name of the state prop (default: `"state"`).
+ * @template TSetStateProp - The name of the setter prop (default: `"setState"` based on `TStateProp`).
+ *
+ * @example
+ * ```ts
+ * interface ControlledInputProps extends RequiredStateControlProps<string, "value", "onChange"> {
+ *   placeholder?: string;
+ * }
+ * // Result:
+ * // {
+ * //   placeholder?: string;
+ * //   value: string;
+ * //   onChange: (value: string) => void;
+ * // }
+ * ```
+ *
+ * @example
+ * ```ts
+ * // Default prop names: "state" and "setState"
+ * type Props = RequiredStateControlProps<number>;
+ * // => { state: number; setState: (value: number) => void }
+ * ```
+ */
+export type RequiredStateControlProps<
+  T = boolean,
+  TStateProp extends string = "state",
+  TSetStateProp extends string = `set${Capitalize<TStateProp>}`,
+> = {
+  [K in TStateProp]: T;
 } & {
-  /** Called when the value changes. */
-  [K in TOnChangeProp]?: (value: T) => void;
+  [K in TSetStateProp]: (value: T) => void;
 };
 
 /**
@@ -336,12 +435,12 @@ export type ControlledProps<
  * Uses `value`, `defaultValue`, and `onValueChange` as the controlled props.
  * @template T - The value type (defaults to `string`).
  */
-export type ValueProps<T = string> = ControlledProps<
-  T,
-  "value",
-  "defaultValue",
-  "onValueChange"
->;
+export type ValueProps<
+  T = string,
+  TIsRequired extends boolean = false,
+> = TIsRequired extends true
+  ? ControlledProps<T, "value", "defaultValue", "onValueChange", true>
+  : ControlledProps<T, "value", "defaultValue", "onValueChange">;
 
 /**
  * Props for components that can trim whitespace from the value.

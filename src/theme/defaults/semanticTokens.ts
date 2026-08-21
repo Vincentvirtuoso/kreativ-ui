@@ -13,7 +13,7 @@ export const defaultSemanticTokens: SemanticTokens = {
 
     surface: defineSemanticToken("{colors.white}", "{colors.gray.900}"),
 
-    surfaceRaised: defineSemanticToken("{colors.white}", "{colors.gray.800}"),
+    surfaceRaised: defineSemanticToken("{colors.gray.50}", "{colors.gray.800}"),
 
     surfaceSunken: defineSemanticToken(
       "{colors.gray.100}",

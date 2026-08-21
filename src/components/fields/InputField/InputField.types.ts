@@ -1,5 +1,5 @@
-import { FormFieldStatus } from "@/components/FormField";
-import { InputProps } from "@/components/Input";
+import { FormFieldStatus } from "@/components/forms/FormField";
+import { InputProps } from "@/components/forms/Input";
 import { ReactNode, LabelHTMLAttributes } from "react";
 
 /**

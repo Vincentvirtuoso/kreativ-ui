@@ -5,7 +5,7 @@ import { SegmentedControl } from "./shared/SegmentedControl";
 import { Chip } from "./shared/Chip";
 import { Playground } from "./shared/Playground";
 import { getAttrs } from "./shared/getAttributes";
-import { ButtonGroup, ButtonGroupSpacing, InputField } from "@/components";
+import { ButtonGroup, ButtonGroupSpacing, Input, InputField } from "@/components";
 import { Orientation } from "@/types";
 
 type Size = "sm" | "md" | "lg";
@@ -87,8 +87,9 @@ export function ButtonGroupDemo() {
       aria-label="Search group"
     >
       {showLabel && <ButtonGroup.Label>Search</ButtonGroup.Label>}
-      <InputField placeholder="Search…" />
-
+      <ButtonGroup.Item>
+        <Input placeholder="Search…" />
+      </ButtonGroup.Item>
 
       <Button size={overrideButtonSize ? "lg" : undefined}>Search</Button>
 

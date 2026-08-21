@@ -1,9 +1,9 @@
 "use client";
 
-import { FormField } from "@/components/FormField";
+import { FormField } from "@/components/forms/FormField";
 import { forwardRef } from "react";
 import { InputFieldProps } from "./InputField.types";
-import { Input } from "@/components/Input";
+import { Input } from "@/components/forms/Input";
 
 export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
   (

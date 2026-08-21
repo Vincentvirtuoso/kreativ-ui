@@ -102,6 +102,11 @@ export const defaultTokens: DesignTokens = {
     10: defineToken("2.5rem"),
     12: defineToken("3rem"),
     16: defineToken("4rem"),
+    xs: defineToken("0.25rem"),
+    sm: defineToken("0.5rem"),
+    md: defineToken("1rem"),
+    lg: defineToken("1.5rem"),
+    xl: defineToken("2rem"),
   },
   radii: {
     none: defineToken("0"),
@@ -158,7 +163,7 @@ export const defaultTokens: DesignTokens = {
     "slide-right": defineToken("kui-slide-right 0.2s ease-out"),
     "slide-in-next": defineToken("kui-slide-in-next 0.2s ease-out"),
     "slide-in-prev": defineToken("kui-slide-in-prev 0.2s ease-out"),
-    
+
     bounce: defineToken("kui-bounce 0.8s infinite"),
     pulse: defineToken("kui-pulse 1.5s ease-in-out infinite"),
     shake: defineToken("kui-shake 0.25s ease-in-out"),

@@ -1,6 +1,6 @@
 "use client";
 
-import { FormFieldStatus } from "@/components/FormField/FormField.types";
+import { FormFieldStatus } from "@/components/forms/FormField/FormField.types";
 import { useEffect, useRef, useState } from "react";
 
 type TransitionStatus = Exclude<FormFieldStatus, "none"> | undefined;

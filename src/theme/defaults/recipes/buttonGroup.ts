@@ -1,7 +1,9 @@
 import { defineRecipe } from "@/theme/recipes";
 
 export const buttonGroupRecipe = defineRecipe({
-  base: "inline-flex items-center relative isolate",
+  base: ["inline-flex items-center relative isolate", "kui-button-group"].join(
+    " ",
+  ),
 
   variants: {
     orientation: {
@@ -27,7 +29,7 @@ export const buttonGroupRecipe = defineRecipe({
     attached: false,
     spacing: "md",
   },
-
+  
   compoundVariants: [
     {
       conditions: {

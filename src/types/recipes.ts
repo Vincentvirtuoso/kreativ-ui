@@ -182,6 +182,8 @@ export type DefaultRecipeCollection = {
   MarkdownEditor: RecipeDefinition;
   Checkbox: RecipeDefinition;
   ButtonGroup: RecipeDefinition;
+  Switch: RecipeDefinition;
+  Container: RecipeDefinition;
 };
 
 /**

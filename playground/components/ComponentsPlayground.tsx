@@ -14,8 +14,16 @@ import { ButtonPlayground } from "./ButtonPlayground";
 import { Chip } from "./shared/Chip";
 import { ButtonGroupDemo } from "./ButtonGroupDemo";
 import { cn } from "@/utils";
+import { FlexPlayground } from "./FlexPlayground";
+import { GridPlayground } from "./GridPlayground";
 
 const SECTIONS = [
+  { key: "grid", label: "Grid", render: () => <GridPlayground /> },
+  {
+    key: "layout",
+    label: "Layout",
+    render: () => <FlexPlayground />,
+  },
   {
     key: "theme-toggle",
     label: "Theme Toggle",

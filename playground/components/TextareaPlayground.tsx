@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Textarea } from "@/components/Textarea";
-import { InputSize, InputVariant } from "@/components/Input/Input.types";
-import { TextareaResize } from "@/components/Textarea/Textarea.types";
-import { FormField } from "@/components/FormField";
+import { Textarea } from "@/components/forms/Textarea";
+import { InputSize, InputVariant } from "@/components/forms/Input/Input.types";
+import { TextareaResize } from "@/components/forms/Textarea/Textarea.types";
+import { FormField } from "@/components/forms/FormField";
 import { Playground } from "./shared/Playground";
 import { SegmentedControl } from "./shared/SegmentedControl";
 import { Chip } from "./shared/Chip";
@@ -96,6 +96,7 @@ export function TextareaPlayground() {
       validate={validationRule}
       validateOn={validateOn}
       allowMarkdown={allowMarkdown}
+      typography="mono"
       //   vali
     />
   );

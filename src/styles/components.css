@@ -1,0 +1,9 @@
+.kui-button-group
+  > [data-kui-button-group-item]:has(
+    [data-kui-button-group-item-embedded]:focus-within
+  ) {
+  z-index: 10;
+  background: var(--kui-surface-raised);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--kui-brand) 20%, transparent);
+}

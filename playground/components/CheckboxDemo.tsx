@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import { Checkbox } from "@/components/Checkbox";
-import { InputSize } from "@/components/Input/Input.types";
-import { FormField, FormFieldStatus } from "@/components/FormField";
+import { Checkbox } from "@/components/forms/Checkbox";
+import { InputSize } from "@/components/forms/Input/Input.types";
+import { FormField, FormFieldStatus } from "@/components/forms/FormField";
 
 import { Playground } from "./shared/Playground";
 import { SegmentedControl } from "./shared/SegmentedControl";
