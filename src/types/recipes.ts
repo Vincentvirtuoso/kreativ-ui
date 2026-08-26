@@ -184,6 +184,7 @@ export type DefaultRecipeCollection = {
   ButtonGroup: RecipeDefinition;
   Switch: RecipeDefinition;
   Container: RecipeDefinition;
+  Link: RecipeDefinition;
 };
 
 /**

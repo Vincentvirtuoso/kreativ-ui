@@ -13,6 +13,7 @@ import { buttonGroupRecipe } from "./recipes/buttonGroup";
 import { switchRecipe } from "./recipes/switch";
 import { defineTheme } from "../defineTheme";
 import { containerReccipe } from "./recipes/container";
+import { linkRecipe } from "./recipes/link";
 
 export const defaultRecipes: RecipeCollection = {
   Button: buttonRecipe,
@@ -24,6 +25,7 @@ export const defaultRecipes: RecipeCollection = {
   ButtonGroup: buttonGroupRecipe,
   Switch: switchRecipe,
   Container: containerReccipe,
+  Link: linkRecipe,
 };
 
 export const defaultTheme = defineTheme({
