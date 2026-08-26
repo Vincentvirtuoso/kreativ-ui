@@ -16,8 +16,10 @@ import { ButtonGroupDemo } from "./ButtonGroupDemo";
 import { cn } from "@/utils";
 import { FlexPlayground } from "./FlexPlayground";
 import { GridPlayground } from "./GridPlayground";
+import { CardPlayground } from "./CardPlayground";
 
 const SECTIONS = [
+  { key: "card", label: "Card", render: () => <CardPlayground /> },
   { key: "grid", label: "Grid", render: () => <GridPlayground /> },
   {
     key: "layout",
@@ -98,6 +100,7 @@ export function ComponentsPlayground() {
           ))}
         </nav>
       </header>
+      
       <div className="p-5">{activeSection.render()}</div>
     </div>
   );
