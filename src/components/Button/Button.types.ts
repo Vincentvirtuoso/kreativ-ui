@@ -23,7 +23,17 @@ export type ButtonVariant = BaseVariant | "link";
 
 export type ButtonColor = BaseColor;
 
-export interface ButtonRenderProps {
+export interface ButtonRenderProps
+  extends Omit<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    | "onDrag"
+    | "onDragStart"
+    | "onDragEnd"
+    | "onAnimationStart"
+    | "onAnimationEnd"
+    | "onAnimationIteration"
+    | "color"
+  > {
   className?: string;
   style?: CSSProperties;
   disabled?: boolean;
