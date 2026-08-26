@@ -97,7 +97,6 @@ export function VariantsEditor({
     [variants, onChange, onReset],
   );
 
-  console.log(variantEntries);
 
   return (
     <div className="p-3">

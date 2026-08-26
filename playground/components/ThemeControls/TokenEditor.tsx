@@ -172,7 +172,7 @@ export function TokenEditor({ theme, onChange }: TokenEditorProps) {
                   onClick={() => setActiveGroup(group.name)}
                   aria-pressed={isActive}
                   className={[
-                    "group relative rounded-lg border p-2 text-left bg-brand-fg",
+                    "group relative rounded-lg border p-2 text-left bg-brand-fg dark:bg-surface",
                     "transition-all duration-150",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand",
                     isActive

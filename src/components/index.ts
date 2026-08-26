@@ -7,6 +7,8 @@ export * from "./ThemeToggler";
 
 export * from "./forms";
 
-export * from './layout'
+export * from "./layout";
 
 export * from "./fields";
+
+export * from "./typography";

@@ -30,18 +30,8 @@ export function RecipePanel({
   updateRecipe,
   removeRecipeProperty,
 }: RecipePanelProps) {
-  console.log("[RecipePanel] Render", {
-    component,
-    recipeKeys: recipe ? Object.keys(recipe) : [],
-    compoundsLength: recipe?.compoundVariants?.length ?? 0,
-  });
-
   const handleBaseChange = useCallback(
     (value: string) => {
-      console.log("[RecipePanel.handleBaseChange] Called", {
-        component,
-        value,
-      });
       updateRecipe(component, { base: value || undefined });
     },
     [component, updateRecipe],
@@ -49,10 +39,6 @@ export function RecipePanel({
 
   const handleVariantsChange = useCallback(
     (variants: Record<string, any>) => {
-      console.log("[RecipePanel.handleVariantsChange] Called", {
-        component,
-        variantsLength: Object.keys(variants).length,
-      });
       updateRecipe(component, {
         variants: Object.keys(variants).length > 0 ? variants : undefined,
       });
@@ -62,10 +48,6 @@ export function RecipePanel({
 
   const handleDefaultVariantsChange = useCallback(
     (defaultVariants: Record<string, any>) => {
-      console.log("[RecipePanel.handleDefaultVariantsChange] Called", {
-        component,
-        defaultVariantsLength: Object.keys(defaultVariants).length,
-      });
       updateRecipe(component, {
         defaultVariants:
           Object.keys(defaultVariants).length > 0 ? defaultVariants : undefined,
@@ -76,11 +58,6 @@ export function RecipePanel({
 
   const handleCompoundVariantsChange = useCallback(
     (compoundVariants: RecipeCompoundVariant[]) => {
-      console.log("[RecipePanel.handleCompoundVariantsChange] Called", {
-        component,
-        compoundsLength: compoundVariants.length,
-        compoundsArray: compoundVariants,
-      });
       updateRecipe(component, {
         compoundVariants:
           compoundVariants.length > 0 ? compoundVariants : undefined,

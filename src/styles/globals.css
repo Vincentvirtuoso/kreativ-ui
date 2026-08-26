@@ -1,7 +1,8 @@
+@import "tailwindcss";
 @import "./variables.css";
 @import "./animations.css";
 @import "./utilities.css";
-@import "tailwindcss";
+@import "./components.css";
 
 @theme inline {
   --color-brand: rgb(var(--kui-brand));
