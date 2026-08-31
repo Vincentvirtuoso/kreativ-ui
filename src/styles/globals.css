@@ -5,35 +5,35 @@
 @import "./components.css";
 
 @theme inline {
-  --color-brand: rgb(var(--kui-brand));
-  --color-brand-hover: rgb(var(--kui-brand-hover));
-  --color-brand-fg: rgb(var(--kui-brand-fg));
+  --color-kui-brand: rgb(var(--kui-brand));
+  --color-kui-brand-hover: rgb(var(--kui-brand-hover));
+  --color-kui-brand-fg: rgb(var(--kui-brand-fg));
 
-  --color-surface: rgb(var(--kui-surface));
-  --color-surface-raised: rgb(var(--kui-surface-raised));
-  --color-surface-sunken: rgb(var(--kui-surface-sunken));
-  --color-background: rgb(var(--kui-background));
+  --color-kui-surface: rgb(var(--kui-surface));
+  --color-kui-surface-raised: rgb(var(--kui-surface-raised));
+  --color-kui-surface-sunken: rgb(var(--kui-surface-sunken));
+  --color-kui-background: rgb(var(--kui-background));
 
-  --color-border: rgb(var(--kui-border));
+  --color-kui-border: rgb(var(--kui-border));
 
-  --color-text: rgb(var(--kui-text));
-  --color-text-muted: rgb(var(--kui-text-muted));
+  --color-kui-text: rgb(var(--kui-text));
+  --color-kui-text-muted: rgb(var(--kui-text-muted));
 
-  --color-destructive: rgb(var(--kui-destructive));
-  --color-destructive-fg: rgb(var(--kui-destructive-fg));
-  --color-destructive-hover: rgb(var(--kui-destructive-hover));
+  --color-kui-destructive: rgb(var(--kui-destructive));
+  --color-kui-destructive-fg: rgb(var(--kui-destructive-fg));
+  --color-kui-destructive-hover: rgb(var(--kui-destructive-hover));
 
-  --color-success: rgb(var(--kui-success));
-  --color-success-fg: rgb(var(--kui-success-fg));
-  --color-success-hover: rgb(var(--kui-success-hover));
+  --color-kui-success: rgb(var(--kui-success));
+  --color-kui-success-fg: rgb(var(--kui-success-fg));
+  --color-kui-success-hover: rgb(var(--kui-success-hover));
 
-  --color-warning: rgb(var(--kui-warning));
-  --color-warning-fg: rgb(var(--kui-warning-fg));
-  --color-warning-hover: rgb(var(--kui-warning-hover));
+  --color-kui-warning: rgb(var(--kui-warning));
+  --color-kui-warning-fg: rgb(var(--kui-warning-fg));
+  --color-kui-warning-hover: rgb(var(--kui-warning-hover));
 
-  --color-info: rgb(var(--kui-info));
-  --color-info-fg: rgb(var(--kui-info-fg));
-  --color-info-hover: rgb(var(--kui-info-hover));
+  --color-kui-info: rgb(var(--kui-info));
+  --color-kui-info-fg: rgb(var(--kui-info-fg));
+  --color-kui-info-hover: rgb(var(--kui-info-hover));
 
   --radius: var(--kui-radii-md);
   --font-sans: var(--kui-font);
